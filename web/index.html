@@ -44,7 +44,7 @@
     <div class="banner" id="banner" hidden></div>
     <section class="view" id="v-graph">
       <h1 class="view-h">Граф знаний</h1>
-      <details class="lead g-help"><summary>Как читать граф</summary>Темы сгруппированы в блоки, блоки — в зоны. Зоны посчитаны по плотности перекрёстных ссылок между статьями. Ленты показывают, сколько связей между блоками. Издалека видны зоны и блоки, при приближении — темы. Кнопки ниже подсвечивают выбранные зоны и блоки; щелчок по теме открывает статью, двойной щелчок по блоку приближает его.</details>
+      <details class="lead g-help"><summary>Как читать граф</summary>Темы сгруппированы в блоки, блоки — в зоны. Зоны посчитаны по плотности перекрёстных ссылок между статьями. Издалека видны зоны и блоки, при приближении — темы. Кнопки ниже подсвечивают выбранные зоны и блоки; щелчок по теме открывает статью, двойной щелчок по блоку приближает его.</details>
       <div class="g-layout">
       <div class="graph-shell">
         <svg id="kgraph" role="img" aria-label="Граф связанных тем"></svg>
@@ -70,7 +70,7 @@
       </div>
       <div class="legend" id="zoneChips" aria-label="Подсветить зоны"></div>
       <div class="legend" id="legend" aria-label="Подсветить блоки"></div>
-      <div class="g-row g-rib">
+      <div class="g-row g-rib" hidden>
         <label class="stat" style="display:inline"><input type="checkbox" id="ribOn"> ленты связей между блоками</label>
         <label class="stat" style="display:inline" for="ribThr">от</label> <input type="range" id="ribThr" min="1" max="12" value="3" aria-label="Минимум связей для ленты"> <b class="stat" id="ribThrV">3</b>
       </div>
@@ -90,7 +90,7 @@
         <div id="tmode" role="group" aria-label="Режим"><button type="button" data-m="to" aria-pressed="true">Маршрут к теме</button><button type="button" data-m="all" aria-pressed="false">Все предпосылки темы</button><button type="button" data-m="multi" aria-pressed="false">Несколько тем</button></div>
         <label class="stat" style="display:inline"><input type="checkbox" id="tOnly"> только маршрут</label>
         <label class="stat" style="display:inline"><input type="checkbox" id="tCore"> только ядро</label>
-        <label class="stat" style="display:inline" title="Между парой рамок (уровень × зона) показывать одну связь; связи внутри рамки — все"><input type="checkbox" id="tOne" checked> одна связь между рамками</label>
+        <label class="stat" style="display:inline" title="В режимах «Все предпосылки темы» и «Несколько тем»: между парой рамок (уровень × зона) рисовать одну связь; связи внутри рамки — все"><input type="checkbox" id="tOne" checked> одна связь между рамками</label>
         <button type="button" class="btn" id="tClear">Сбросить выбор</button><button type="button" class="btn" id="tfit">Показать всё</button>
       </div>
       <div class="tree-wrap">

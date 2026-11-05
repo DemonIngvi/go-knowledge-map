@@ -114,7 +114,7 @@ function initTree(){
   const one_=document.getElementById('tOne');one_.checked=TR.oneLink;one_.onchange=e=>{TR.oneLink=e.target.checked;try{localStorage.setItem('gokb-tree-one',TR.oneLink?'1':'0');}catch(x){}paintTree();};
   document.getElementById('tCore').onchange=e=>{TR.coreOnly=e.target.checked;paintTree();};
   const vb_=document.getElementById('tVert');vb_.setAttribute('aria-pressed',TR.vert);vb_.onclick=()=>{TR.vert=!TR.vert;try{localStorage.setItem('gokb-tree-vert',TR.vert?'1':'0');}catch(e){}
-    const old=document.getElementById('tsvg');old.replaceWith(old.cloneNode(false));TR.built=false;TR.touched=false;TR.bgKeep=null;renderTree();};
+    const old=document.getElementById('tsvg');old.replaceWith(old.cloneNode(false));TR.built=false;TR.touched=false;renderTree();};
   document.getElementById('tClear').onclick=()=>{TR.sel=null;TR.selB=null;TR.multi=new Set();paintTree();};}
 
 const ancestors=(i,full)=>{if(!full){const s=new Set([i]);let x=i;while(TR.main[x]>=0){x=TR.main[x];s.add(x);}return s;}const s=new Set([i]),st=[i];while(st.length){const x=st.pop();TR.par[x].forEach(p=>{if(!s.has(p)){s.add(p);st.push(p);}});}return s;};
@@ -133,8 +133,9 @@ function paintTree(){
   svgT.classList.toggle('pathmode',!!set);svgT.classList.toggle('onlypath',!!set&&TR.onlyPath);
   TR.nodeEls.forEach((g,i)=>{const t=T[i];const x=st(t.id);g.classList.remove('st-ok','st-soon','st-due','st-fail');if(x!=='new')g.classList.add('st-'+x);
     g.classList.toggle('on',!!set&&set.has(i));g.classList.toggle('sel',TR.multi.has(i));g.classList.toggle('dim-core',TR.coreOnly&&t.l!==1);});
-  // прореживание (просьба владельца): между парой рамок дерева «уровень × зона» рисуем одну связь, внутри рамки — все.
-  // Лучшая связь: главная предпосылка, затем не транзитивная, затем ближайшие уровни. Работает и для фона, и для подсвеченного маршрута.
+  // прореживание отрисовки (просьба владельца) — только в режимах «Все предпосылки темы» и «Несколько тем»:
+  // между парой рамок «уровень × зона» рисуем одну связь, к уже достижимой рамке — не рисуем; внутри рамки — все.
+  // Сами связи (предпосылки, маршрут, список тем) не меняются — скрывается только линия. Фон и «Маршрут к теме» не трогаем.
   const gk=i=>T[i].s+'|'+ZB[T[i].b];
   const thin=list=>{const best=new Map();list.forEach(e=>{const k=gk(e.i)+'>'+gk(e.j);if(k.split('>')[0]===k.split('>')[1])return;
     const sc=(e.isMain?0:100)+(TR.trans.has(e.i+'|'+e.j)?50:0)+(T[e.j].s-T[e.i].s);const c=best.get(k);if(!c||sc<c.sc)best.set(k,{e,sc});});
@@ -145,10 +146,9 @@ function paintTree(){
     return new Set([...best.values()].map(x=>x.e));};
   const same=e=>gk(e.i)===gk(e.j);
   const isOn=e=>!!set&&set.has(e.i)&&set.has(e.j)&&(TR.mode!=='to'||e.isMain);
-  if(!TR.bgKeep)TR.bgKeep=thin(TR.edgeEls);
-  const onKeep=thin(TR.edgeEls.filter(isOn));
+  const one=TR.oneLink&&!!set&&TR.mode!=='to';const onKeep=one?thin(TR.edgeEls.filter(isOn)):null;
   TR.edgeEls.forEach(e=>{const on=isOn(e);e.p.classList.toggle('on',on);
-    e.p.classList.toggle('cut',TR.oneLink&&!same(e)&&!(on?onKeep.has(e):TR.bgKeep.has(e)));});
+    e.p.classList.toggle('cut',one&&on&&!same(e)&&!onKeep.has(e));});
   const panel=document.getElementById('tpanel');
   if(!set){panel.innerHTML='<p class="stat">'+(TR.mode==='multi'?'Щёлкайте темы — каждая добавляется к выбору, подсвечиваются все их предпосылки. Повторный щелчок убирает тему.':TR.mode==='all'?'Щёлкните тему — подсветятся все темы нижних уровней (и более базовые на том же), которые нужно закрыть перед ней. Ctrl+щелчок добавляет цели.':'Щёлкните тему — подсветится маршрут от начальных тем до неё. Ctrl+щелчок добавляет ещё цели: маршрут построится ко всем сразу.')+'</p><p class="stat">Двойной щелчок открывает статью.</p>';return;}
   const list=topoOrder([...set]).map(i=>T[i]).filter(t=>!TR.coreOnly||t.l===1);

@@ -10,29 +10,37 @@ const edges=[];{const seen=new Set();
 const bsize={};T.forEach(t=>bsize[t.b]=(bsize[t.b]||0)+1);
 const pair={};edges.forEach(([i,j])=>{const a=T[i].b,b=T[j].b;if(a===b)return;const k=[a,b].sort().join('~');pair[k]=(pair[k]||0)+1;});
 const wN=(a,b)=>(pair[[a,b].sort().join('~')]||0)/Math.sqrt(bsize[a]*bsize[b]);
-const BR=b=>46+20*Math.sqrt(bsize[b]);
+const BR=b=>64+34*Math.sqrt(bsize[b]);
 const ZI=Object.fromEntries(ZONES.map(z=>[z.id,z]));
 
 // ---------- раскладка блоков: притяжение к центру зоны, связанные блоки ближе ----------
 const BP={};
 (function(){const ids=BLOCKS.map(b=>b.id);
-  ids.forEach(b=>{const c=ZI[ZB[b]].c;BP[b]={x:c[0]+(rnd()-.5)*200,y:c[1]+(rnd()-.5)*200,r:BR(b),vx:0,vy:0};});
+  const ZK=.74,zc=z=>[ZI[z].c[0]*ZK,ZI[z].c[1]*ZK];
+  ids.forEach(b=>{const c=zc(ZB[b]);BP[b]={x:c[0]+(rnd()-.5)*200,y:c[1]+(rnd()-.5)*200,r:BR(b),vx:0,vy:0};});
   for(let it=0;it<900;it++){const al=1-it/900;
-    ids.forEach(a=>{const A=BP[a],c=ZI[ZB[a]].c;let fx=(c[0]-A.x)*.02,fy=(c[1]-A.y)*.02;
+    ids.forEach(a=>{const A=BP[a],c=zc(ZB[a]);let fx=(c[0]-A.x)*.02,fy=(c[1]-A.y)*.02;
       ids.forEach(b=>{if(a===b)return;const Bb=BP[b];const dx=A.x-Bb.x,dy=A.y-Bb.y,d=Math.hypot(dx,dy)||1;const same=ZB[a]===ZB[b];
-        const min=A.r+Bb.r+(same?26:230);if(d<min){fx+=dx/d*(min-d)*.5;fy+=dy/d*(min-d)*.5;}
-        const w=wN(a,b);if(w>0){const target=A.r+Bb.r+(same?30:140),k=.004*w*(same?3:1);fx-=dx/d*(d-target)*k;fy-=dy/d*(d-target)*k;}});
+        const min=A.r+Bb.r+(same?22:175);if(d<min){fx+=dx/d*(min-d)*.5;fy+=dy/d*(min-d)*.5;}
+        const w=wN(a,b);if(w>0){const target=A.r+Bb.r+(same?26:120),k=.004*w*(same?3:1);fx-=dx/d*(d-target)*k;fy-=dy/d*(d-target)*k;}});
       A.vx=A.vx*.6+fx*al;A.vy=A.vy*.6+fy*al;});
     ids.forEach(a=>{BP[a].x+=BP[a].vx;BP[a].y+=BP[a].vy;});}})();
 
 // ---------- темы внутри круга блока ----------
-const nodes=T.map(t=>{const c=BP[t.b];const a=rnd()*Math.PI*2,r=rnd()*c.r*.6;return{t,x:c.x+Math.cos(a)*r,y:c.y+Math.sin(a)*r,vx:0,vy:0};});
+const nodes=T.map(t=>{const c=BP[t.b];const a=rnd()*Math.PI*2,r=rnd()*c.r*.6;return{t,x:c.x+Math.cos(a)*r,y:c.y+Math.sin(a)*r,vx:0,vy:0,w:(t.short||t.t).length*7.2+14};});
 (function(){const inner=edges.filter(([a,b])=>T[a].b===T[b].b);
-  for(let it=0;it<350;it++){const al=1-it/350;
-    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){if(T[i].b!==T[j].b)continue;const p=nodes[i],q=nodes[j];const dx=p.x-q.x,dy=p.y-q.y,d2=dx*dx+dy*dy+.01,d=Math.sqrt(d2);let f=900/d2;if(d<30)f+=(30-d)*.4/d;p.vx+=dx/d*f;p.vy+=dy/d*f;q.vx-=dx/d*f;q.vy-=dy/d*f;}
+  for(let it=0;it<500;it++){const al=1-it/500;
+    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){if(T[i].b!==T[j].b)continue;const p=nodes[i],q=nodes[j];const dx=p.x-q.x,dy=p.y-q.y,d2=dx*dx+dy*dy+.01,d=Math.sqrt(d2);let f=2600/d2;p.vx+=dx/d*f;p.vy+=dy/d*f;q.vx-=dx/d*f;q.vy-=dy/d*f;
+      const ex=dx/((p.w+q.w)/2),ey=dy/24,e=Math.hypot(ex,ey);if(e<1){const k=(1-e)*6/(e||.01);p.vx+=ex*k*.5;p.vy+=ey*k;q.vx-=ex*k*.5;q.vy-=ey*k;}}
     inner.forEach(([a,b])=>{const p=nodes[a],q=nodes[b];const dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy)||1,f=(d-40)*.01;p.vx+=dx/d*f;p.vy+=dy/d*f;q.vx-=dx/d*f;q.vy-=dy/d*f;});
-    nodes.forEach(p=>{const c=BP[p.t.b];const dx=p.x-c.x,dy=p.y-c.y,d=Math.hypot(dx,dy)||1,lim=c.r-20;if(d>lim){p.vx-=dx/d*(d-lim)*.3;p.vy-=dy/d*(d-lim)*.3;}
-      p.vx+=(c.x-p.x)*.004;p.vy+=(c.y-p.y)*.004;p.x+=p.vx*al;p.y+=p.vy*al;p.vx*=.5;p.vy*=.5;});}})();
+    nodes.forEach(p=>{const c=BP[p.t.b];const dx=p.x-c.x,dy=p.y-c.y,d=Math.hypot(dx,dy)||1,lim=c.r-26;if(d>lim){p.vx-=dx/d*(d-lim)*.3;p.vy-=dy/d*(d-lim)*.3;}const top=c.y-c.r+58;if(p.y<top)p.vy+=(top-p.y)*.3;
+      p.vx+=(c.x-p.x)*.004;p.vy+=(c.y-p.y)*.004;p.x+=p.vx*al;p.y+=p.vy*al;p.vx*=.5;p.vy*=.5;});}
+  for(let it=0;it<300;it++){let moved=0;
+    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){if(T[i].b!==T[j].b)continue;const p=nodes[i],q=nodes[j];
+      const ox=(p.w+q.w)/2-Math.abs(p.x-q.x),oy=24-Math.abs(p.y-q.y);if(ox<=0||oy<=0)continue;moved++;
+      if(oy<ox*.6){const sy=(p.y<q.y?-1:1)*oy/2*1.02;p.y+=sy;q.y-=sy;}else{const sx=(p.x<q.x?-1:1)*ox/2*1.02;p.x+=sx;q.x-=sx;}}
+    nodes.forEach(p=>{const c=BP[p.t.b];const dx=p.x-c.x,dy=p.y-c.y,d=Math.hypot(dx,dy)||1,lim=c.r-20;if(d>lim){p.x=c.x+dx/d*lim;p.y=c.y+dy/d*lim;}});
+    if(!moved)break;}})();
 
 // ---------- оболочки зон ----------
 function hull(pts){pts=pts.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);const lo=[],up=[];
@@ -57,7 +65,7 @@ minX-=40;maxX+=40;minY-=20;maxY+=40;
 
 // ленты между блоками: пучок между зонами идёт через «ворота» на линии центров зон
 const ribEls=[];
-Object.entries(pair).forEach(([k,c])=>{const [a,b]=k.split('~');const A0=BP[a],B0=BP[b],same=ZB[a]===ZB[b];
+false&&Object.entries(pair).forEach(([k,c])=>{const [a,b]=k.split('~');const A0=BP[a],B0=BP[b],same=ZB[a]===ZB[b];
   const za=ZC[ZB[a]],zb=ZC[ZB[b]];
   const g1=same?null:[za[0]+(zb[0]-za[0])*.32,za[1]+(zb[1]-za[1])*.32],g2=same?null:[zb[0]+(za[0]-zb[0])*.32,zb[1]+(za[1]-zb[1])*.32];
   const edge=(C,P)=>{const dx=P[0]-C.x,dy=P[1]-C.y,d=Math.hypot(dx,dy)||1;return{x:C.x+dx/d*C.r,y:C.y+dy/d*C.r};};
@@ -77,9 +85,8 @@ BLOCKS.forEach(b=>{const c=BP[b.id];
   ci.addEventListener('dblclick',e=>{e.preventDefault();zoomTo(c.x,c.y,c.r*2.8);});});
 
 // связи тем и сами темы
-// связи внутри блока не рисуем: блок и так показан кругом (по просьбе владельца); edgeEls выровнен по edges, для них null
-const edgeEls=edges.map(([i,j])=>{const a=nodes[i],c=nodes[j];if(a.t.b===c.t.b)return null;
-  return el('line',{x1:a.x,y1:a.y,x2:c.x,y2:c.y,class:'g-edge'+(ZB[a.t.b]===ZB[c.t.b]?' inz':'')},gE);});
+// связи на графе не рисуем совсем (просьба владельца): только зоны, блоки и темы; edgeEls выровнен по edges
+const edgeEls=edges.map(()=>null);
 const nodeEls=nodes.map(n=>{const g=el('g',{class:'g-node l'+n.t.l+(st(n.t.id)!=='new'?' st-'+st(n.t.id):''),transform:'translate('+n.x+','+n.y+')',tabindex:0,role:'link','aria-label':n.t.t},gN);g.style.setProperty('--h',BI[n.t.b].h);
   el('circle',{r:n.t.l===1?6.5:n.t.l===2?5:3.6},g);const tx=el('text',{y:n.t.l===1?17:14},g);tx.textContent=n.t.short||n.t.t;return g;});
 const adj=nodes.map(()=>new Set());edges.forEach(([i,j])=>{adj[i].add(j);adj[j].add(i);});
