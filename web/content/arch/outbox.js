@@ -1,0 +1,83 @@
+// Transactional Outbox и Inbox
+
+// Статья
+KB.add({
+ id:"outbox",
+ t:"Transactional Outbox и Inbox",
+ short:"Outbox",
+ b:"arch",
+ s:5,
+ l:1,
+ a:["outbox","transactional outbox","inbox","dual write","CDC","идемпотентность"],
+ x:`**Проблема двойной записи (dual write)**: сервис сохраняет заказ в PostgreSQL и публикует событие в Kafka. Если упасть между двумя операциями, данные и события разойдутся. Распределённой транзакции между базой и Kafka нет.
+
+## Outbox
+1. **В той же транзакции**, что и бизнес-изменение, пишем событие в таблицу {{outbox}}.
+2. Отдельный процесс (relay) читает outbox и публикует в [[kafka-core]], а после подтверждения помечает запись отправленной.
+3. Relay-ов несколько ради отказоустойчивости. Чтобы они не публиковали одно и то же, используют **{{SELECT ... FOR UPDATE SKIP LOCKED}}** ([[pg-skip-locked]]) или CDC через Debezium, который читает [[pg-wal|WAL]].
+
+Гарантия получается **at-least-once**: событие может уйти дважды ([[kafka-delivery]]). Чистите таблицу outbox, иначе она разрастётся ([[pg-vacuum]]).
+
+## Inbox
+Зеркальный приём на стороне потребителя: **id сообщения записывается в таблицу inbox в одной транзакции с обработкой**. Повтор с тем же id пропускается. Получается эффективно exactly-once обработка.
+
+Outbox — обязательная часть надёжной [[data-bus|шины]] и [[saga|саг]].`,
+ m:[
+  ["microservices.io: Transactional outbox","https://microservices.io/patterns/data/transactional-outbox.html"],
+  [
+   "Debezium Outbox Event Router",
+   "https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html"
+  ]
+ ]
+});
+
+// Тест: [вопрос, верный ответ, неверный, неверный, неверный, пояснение]
+KB.q("outbox",[
+ [
+  "Какую проблему решает outbox?",
+  "Двойную запись: изменение в базе и публикацию события нельзя сделать одной транзакцией",
+  "Медленные запросы",
+  "Дубли в Kafka полностью",
+  "Шифрование событий",
+  "Событие пишется в таблицу outbox в той же транзакции."
+ ],
+ [
+  "Как несколько relay-процессов разбирают outbox без конфликтов?",
+  "SELECT ... FOR UPDATE SKIP LOCKED",
+  "Advisory lock на всю таблицу всегда",
+  "TRUNCATE после чтения",
+  "Каждый читает всё и публикует",
+  "SKIP LOCKED раздаёт разные строки разным воркерам."
+ ],
+ [
+  "Какую гарантию даёт outbox?",
+  "At-least-once: событие может уйти дважды, потребитель должен быть идемпотентным",
+  "Exactly-once без условий",
+  "At-most-once",
+  "Никакой",
+  "Дедупликацию на приёме даёт inbox."
+ ]
+]);
+
+// Схемы и код к статье
+KB.v("outbox",[
+ {
+  type:"seq",
+  after:"Outbox",
+  cap:"Событие и заказ фиксируются одной транзакцией; relay публикует асинхронно, потребитель отбрасывает дубли через inbox.",
+  actors:["Сервис","PostgreSQL","Relay","Kafka","Потребитель"],
+  steps:[
+   [0,1,"BEGIN"],
+   [0,1,"INSERT orders"],
+   [0,1,"INSERT outbox"],
+   [0,1,"COMMIT — атомарно","a"],
+   ["sect","асинхронно"],
+   [2,1,"SKIP LOCKED"],
+   [2,3,"OrderCreated"],
+   [3,2,"ack","d"],
+   [2,1,"mark sent"],
+   [3,4,"OrderCreated"],
+   [4,4,"inbox: дубль? пропустить"]
+  ]
+ }
+]);

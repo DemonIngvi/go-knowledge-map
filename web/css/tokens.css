@@ -1,0 +1,28 @@
+/* Цветовые и шрифтовые токены, светлая и тёмная темы */
+/* Layout: липкая шапка с вкладками; слева дерево блоков, справа граф / план / статья / термины */
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --surface-2:#eef2f5; --fg:#14202b; --muted:#566573; --line:#d9e0e7;
+  --accent:#0a7ea4; --accent-fg:#ffffff; --accent-soft:#dcf0f7; --mark:#fff2b8;
+  --node-s:62%; --node-l:44%; --hull-a:.07; --zone-a:.055; --zl-l:42%; --rib-a:.30; --edge:#9aa8b5;
+  --warn:#b45309; --warn-soft:#fdecd3; --good:#15803d; --good-soft:#dcf3e3; --bad:#b91c1c; --bad-soft:#fbe0e0;
+  --m-new:#c2cbd4; --m-ok1:#1e40af; --m-ok2:#3b82f6; --m-ok3:#93c5fd; --m-soon:#f87b6b; --m-due:#9f1239;
+  --code-bg:#f8fafc; --c-kw:#0b6e99; --c-st:#a1501b; --c-cm:#7a8794; --c-nu:#b4235a; --c-fn:#6d3fc0; --c-bi:#0f766e;
+  --f-display:"Unbounded", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Golos Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  --side:290px; --hdr:58px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e141a; --surface:#151d25; --surface-2:#1b2530; --fg:#e2e9ef; --muted:#93a3b2; --line:#283541;
+  --accent:#4cc2e6; --accent-fg:#06222c; --accent-soft:#123544; --mark:#4a4120;
+  --node-l:64%; --hull-a:.10; --zone-a:.09; --zl-l:74%; --rib-a:.38; --edge:#566676;
+  --warn:#f5a54a; --warn-soft:#3d2a12; --good:#4ade80; --good-soft:#123222; --bad:#f87171; --bad-soft:#3a1717;
+  --m-new:#3b4753; --m-ok1:#3b82f6; --m-ok2:#7fb0fb; --m-ok3:#bcd7fd; --m-soon:#ff9b8c; --m-due:#e11d48;
+  --code-bg:#10171e; --c-kw:#5ccfe6; --c-st:#ffb86b; --c-cm:#6f8193; --c-nu:#f78fb3; --c-fn:#c4a7ff; --c-bi:#5eead4; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0e141a; --surface:#151d25; --surface-2:#1b2530; --fg:#e2e9ef; --muted:#93a3b2; --line:#283541;
+  --accent:#4cc2e6; --accent-fg:#06222c; --accent-soft:#123544; --mark:#4a4120;
+  --node-l:64%; --hull-a:.10; --zone-a:.09; --zl-l:74%; --rib-a:.38; --edge:#566676;
+  --warn:#f5a54a; --warn-soft:#3d2a12; --good:#4ade80; --good-soft:#123222; --bad:#f87171; --bad-soft:#3a1717;
+  --m-new:#3b4753; --m-ok1:#3b82f6; --m-ok2:#7fb0fb; --m-ok3:#bcd7fd; --m-soon:#ff9b8c; --m-due:#e11d48;
+  --code-bg:#10171e; --c-kw:#5ccfe6; --c-st:#ffb86b; --c-cm:#6f8193; --c-nu:#f78fb3; --c-fn:#c4a7ff; --c-bi:#5eead4; color-scheme:dark }

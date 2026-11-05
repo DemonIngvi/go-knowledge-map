@@ -1,6 +1,10 @@
-tools/
-progress.json
-progress.json.bak
-progress-*.tmp
+/.gosdk/
+/tools/
+/progress.json
+/progress.json.bak
+/progress-*.tmp
 *.exe
-dist/
+*~
+/dist/
+/prototype/
+/_coupling.json

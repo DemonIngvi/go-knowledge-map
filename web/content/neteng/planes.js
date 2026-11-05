@@ -1,0 +1,95 @@
+// Data plane и control plane
+
+// Статья
+KB.add({
+ id:"planes",
+ t:"Data plane и control plane",
+ short:"Data / control plane",
+ b:"neteng",
+ s:10,
+ l:2,
+ a:["dataplane","data plane","control plane","control plabne","management plane","FIB","RIB"],
+ x:`Любая сетевая (и не только сетевая) система делится на две плоскости.
+
+## Control plane — «думает»
+**Принимает решения, куда отправлять трафик**: протоколы маршрутизации ([[bgp]], [[ospf]], [[isis]], [[ldp-mpls|LDP]]) обмениваются информацией с соседями, строят **RIB** (таблицу маршрутов со всеми вариантами) и выбирают лучшие маршруты. Работает на процессоре устройства, медленно по меркам пакетов, но редко.
+
+## Data plane (forwarding plane) — «делает»
+**Пересылает каждый пакет** по готовой таблице **FIB** (результату работы control plane), часто аппаратно в ASIC на скорости линии. Здесь работают поиск по самому длинному префиксу ([[ip]], [[trie]]), ACL ([[acl]]), подмена адресов.
+
+**Management plane** — настройка и мониторинг: SSH, SNMP, API.
+
+## Почему это разделение важно
+- **Отказ control plane не всегда останавливает трафик**: data plane продолжает пересылать по последней таблице (graceful restart, non-stop forwarding).
+- Перегрузка CPU устройства, например флуд пакетами, адресованными самому маршрутизатору, роняет сессии протоколов, и тогда трафик падает. Поэтому control plane защищают политиками (CoPP).
+
+## Та же идея в облачной инфраструктуре
+- **Kubernetes**: control plane — API-сервер, etcd, scheduler, контроллеры ([[k8s-core]]); data plane — kubelet, kube-proxy и сами поды.
+- **Service mesh**: istiod — control plane, sidecar Envoy — data plane ([[service-mesh]]).
+- **SDN, eBPF (Cilium)**: политики вычисляет агент, а пакеты обрабатывает программа eBPF в ядре.
+
+Путь пакета через data plane целиком — [[packet-path]].`,
+ m:[
+  [
+   "Cloudflare: What is the control plane / data plane",
+   "https://www.cloudflare.com/learning/network-layer/what-is-the-control-plane/"
+  ],
+  ["Сети для самых маленьких (linkmeup)","https://linkmeup.gitbook.io/sdsm"]
+ ]
+});
+
+// Тест: [вопрос, верный ответ, неверный, неверный, неверный, пояснение]
+KB.q("planes",[
+ [
+  "Что делает control plane маршрутизатора?",
+  "Принимает решения о маршрутах и строит таблицы",
+  "Пересылает каждый пакет",
+  "Хранит логи",
+  "Шифрует трафик",
+  "Data plane пересылает пакеты по готовой таблице."
+ ],
+ [
+  "Что в Kubernetes относится к control plane?",
+  "API-сервер, etcd, scheduler, контроллеры",
+  "Поды приложений",
+  "kube-proxy",
+  "Контейнеры",
+  "Data plane — узлы и поды."
+ ],
+ [
+  "Что произойдёт с трафиком при кратком отказе control plane маршрутизатора?",
+  "Data plane может продолжить пересылку по последней таблице",
+  "Трафик мгновенно остановится",
+  "Таблицы удалятся",
+  "Маршрутизатор перезагрузится",
+  "Graceful restart, non-stop forwarding."
+ ]
+]);
+
+// Схемы и код к статье
+KB.v("planes",[
+ {
+  type:"flow",
+  h:230,
+  after:"Control plane",
+  cap:"Control plane редко и «медленно» вычисляет таблицу. Data plane по готовой таблице пересылает каждый пакет на скорости линии.",
+  groups:[[16,12,648,96,"Control plane — CPU маршрутизатора"],[16,124,648,96,"Data plane — ASIC"]],
+  nodes:[
+   ["bgp",32,48,120,44,"BGP"],
+   ["ospf",172,48,120,44,"OSPF / IS-IS"],
+   ["rib",340,48,140,44,"RIB|все маршруты","acc"],
+   ["best",510,48,140,44,"выбор лучших"],
+   ["in",32,160,120,44,"пакет in"],
+   ["fib",250,160,180,44,"FIB lookup|longest prefix","solid"],
+   ["out",510,160,140,44,"порт out"]
+  ],
+  edges:[
+   ["bgp","rib",""],
+   ["ospf","rib",""],
+   ["rib","best",""],
+   ["best","fib","установка","dv"],
+   ["in","fib","","a"],
+   ["fib","out","","a"]
+  ]
+ }
+]);

@@ -1,6 +1,7 @@
 // Сервер «Карты знаний Go-бэкенда»: отдаёт страницу и хранит прогресс в progress.json.
 //
-// Запуск: gokb-server.exe [-addr 127.0.0.1:8090] [-root ПАПКА] [-open=false]
+// Запуск: gokb-server.exe [-addr 127.0.0.1:8090] [-web ПАПКА] [-data ФАЙЛ] [-open=false]
+// По умолчанию страница берётся из папки web рядом с программой, прогресс — progress.json рядом с ней же.
 package main
 
 import (
@@ -16,8 +17,10 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -104,21 +107,18 @@ func main() {
 	exe, _ := os.Executable()
 	defRoot := filepath.Dir(exe)
 	addr := flag.String("addr", "127.0.0.1:8090", "адрес сервера")
-	root := flag.String("root", defRoot, "папка с index.html и progress.json")
+	web := flag.String("web", filepath.Join(defRoot, "web"), "папка со страницей (index.html, css, js, content)")
+	data := flag.String("data", filepath.Join(defRoot, "progress.json"), "файл прогресса")
 	open := flag.Bool("open", true, "открыть страницу в браузере")
 	flag.Parse()
 
-	index := filepath.Join(*root, "index.html")
-	if _, err := os.Stat(index); err != nil {
-		log.Fatalf("не найден %s: %v", index, err)
+	if _, err := os.Stat(filepath.Join(*web, "index.html")); err != nil {
+		log.Fatalf("не найдена страница %s: %v", filepath.Join(*web, "index.html"), err)
 	}
-	st := &store{path: filepath.Join(*root, "progress.json")}
+	st := &store{path: *data}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Cache-Control", "no-store")
-		http.ServeFile(w, r, index)
-	})
+	mux.Handle("GET /", staticFiles(*web))
 	mux.HandleFunc("GET /api/progress", func(w http.ResponseWriter, r *http.Request) {
 		b, err := st.read()
 		if err != nil {
@@ -188,6 +188,29 @@ func main() {
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	_ = srv.Shutdown(shutdownCtx)
+}
+
+// staticFiles отдаёт файлы страницы без листинга каталогов и без выхода за пределы папки.
+func staticFiles(dir string) http.Handler {
+	root, _ := filepath.Abs(dir)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		p := path.Clean("/" + r.URL.Path)
+		if p == "/" {
+			p = "/index.html"
+		}
+		full := filepath.Join(root, filepath.FromSlash(p))
+		if rel, err := filepath.Rel(root, full); err != nil || strings.HasPrefix(rel, "..") {
+			http.NotFound(w, r)
+			return
+		}
+		fi, err := os.Stat(full)
+		if err != nil || fi.IsDir() {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Cache-Control", "no-cache")
+		http.ServeFile(w, r, full)
+	})
 }
 
 func alreadyRunning(url string) bool {

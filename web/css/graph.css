@@ -1,0 +1,99 @@
+/* граф */
+.graph-shell{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;height:calc(100vh - 210px);min-height:440px}
+#kgraph{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#kgraph.dragging{cursor:grabbing}
+.g-hull{fill:hsl(var(--h) var(--node-s) var(--node-l)/var(--hull-a));stroke:hsl(var(--h) var(--node-s) var(--node-l)/.35);stroke-width:1.2}
+.g-hlabel{font:700 15px var(--f-display);fill:hsl(var(--h) var(--node-s) calc(var(--node-l) - 4%));text-anchor:middle;pointer-events:none}
+.g-edge{stroke:var(--edge);stroke-opacity:.35;stroke-width:1;fill:none}
+.g-edge.in{stroke:hsl(var(--h) var(--node-s) var(--node-l));stroke-opacity:.45}
+.g-node{cursor:pointer}
+.g-node circle{fill:hsl(var(--h) var(--node-s) var(--node-l));stroke:var(--surface);stroke-width:2}
+.g-node text{font:500 11px var(--f-body);fill:var(--fg);text-anchor:middle;paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.g-node.l1 text{font-weight:700;font-size:12px}
+.g-node.done circle{stroke:var(--accent);stroke-width:3}
+svg.focus .g-node,svg.focus .g-edge,svg.focus .g-hull,svg.focus .g-hlabel{opacity:.12;transition:opacity .15s}
+svg.focus .g-node.hl,svg.focus .g-edge.hl{opacity:1}
+svg.focus .g-edge.hl{stroke-opacity:.9;stroke-width:1.8}
+svg.focus .g-hull.hl,svg.focus .g-hlabel.hl{opacity:1}
+.g-tools{position:absolute;right:max(12px,env(safe-area-inset-right,0px));top:12px;display:flex;flex-direction:column;gap:6px}
+.g-tools button,.chip{font:600 13px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
+.g-tools button{width:36px;height:36px;padding:0;font-size:18px}
+.g-tip{position:absolute;left:12px;bottom:12px;right:12px;pointer-events:none;font-size:13px;color:var(--muted);max-width:60ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-weight:500;font-size:12.5px;padding:4px 10px;border-radius:999px}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.g-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+select{font:14px var(--f-body);padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+
+/* карта памяти на графе */
+.mem-legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12.5px;color:var(--muted);margin:0 0 10px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.mem-legend .sw{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-2px;margin-right:5px}
+.mem-legend .grp{display:inline-flex;align-items:center;gap:3px}
+#memBtn[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+svg.memmap .g-node circle{fill:var(--m-new);stroke:var(--surface);stroke-width:2;stroke-dasharray:none}
+svg.memmap .g-node[data-m="ok1"] circle{fill:var(--m-ok1)}
+svg.memmap .g-node[data-m="ok2"] circle{fill:var(--m-ok2)}
+svg.memmap .g-node[data-m="ok3"] circle{fill:var(--m-ok3)}
+svg.memmap .g-node[data-m="soon"] circle{fill:var(--m-soon)}
+svg.memmap .g-node[data-m="due"] circle{fill:var(--m-due);stroke:var(--m-due);stroke-width:3;stroke-opacity:.35}
+svg.memmap .g-hull{fill:color-mix(in srgb,var(--m-new) 10%,transparent);stroke:var(--m-new)}
+svg.memmap .g-hull[data-m="ok1"]{fill:color-mix(in srgb,var(--m-ok1) 9%,transparent);stroke:var(--m-ok1)}
+svg.memmap .g-hull[data-m="ok2"]{fill:color-mix(in srgb,var(--m-ok2) 10%,transparent);stroke:var(--m-ok2)}
+svg.memmap .g-hull[data-m="ok3"]{fill:color-mix(in srgb,var(--m-ok3) 14%,transparent);stroke:var(--m-ok3)}
+svg.memmap .g-hull[data-m="soon"]{fill:color-mix(in srgb,var(--m-soon) 13%,transparent);stroke:var(--m-soon);stroke-width:2}
+svg.memmap .g-hull[data-m="due"]{fill:color-mix(in srgb,var(--m-due) 12%,transparent);stroke:var(--m-due);stroke-width:2.4}
+svg.memmap .g-hlabel{fill:var(--fg)}
+.g-hstat{font:500 12px var(--f-mono);fill:var(--muted);text-anchor:middle;pointer-events:none;display:none}
+svg.memmap .g-hstat{display:block}
+
+/* зоны, ленты и семантический масштаб */
+.g-zone{fill:hsl(var(--zh) 45% 50%/var(--zone-a,.055));stroke:hsl(var(--zh) 40% 50%/.35);stroke-width:1.6;stroke-dasharray:2 6;stroke-linecap:round}
+.g-zlabel{font:700 24px var(--f-display);fill:hsl(var(--zh) 40% var(--zl-l));text-anchor:middle;pointer-events:none}
+.g-zsub{font:500 13px var(--f-mono);fill:var(--muted);text-anchor:middle;pointer-events:none}
+.g-hull{cursor:zoom-in}
+.g-hcount{font:500 11px var(--f-mono);fill:var(--muted);text-anchor:middle;pointer-events:none}
+.g-rib{fill:none;stroke-linecap:round;stroke:hsl(var(--h) 30% 50%/var(--rib-a,.30))}
+.g-ribn{font:600 11px var(--f-mono);fill:var(--muted);text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--bg);stroke-width:3px}
+.g-edge{stroke-width:.8}
+svg.far .g-node text,svg.far .g-edge{display:none}
+svg.far .g-node circle{opacity:.6}
+svg.near .g-ribn{display:none}
+svg.near .g-rib{opacity:.35}
+svg.focus .g-rib,svg.focus .g-ribn,svg.focus .g-zone,svg.focus .g-hcount,svg.focus .g-hstat{opacity:.12;transition:opacity .15s}
+svg.focus .g-rib.hl,svg.focus .g-ribn.hl,svg.focus .g-zone.hl,svg.focus .g-hcount.hl,svg.focus .g-hstat.hl{opacity:1}
+svg.focus .g-rib.hl{stroke:hsl(var(--h) 60% 50%/.75)}
+svg.focus .g-edge.hl{display:inline}
+svg.focus.far .g-node.hl text{display:inline}
+.zchip .zdot{width:12px;height:12px;border-radius:3px;background:hsl(var(--zh) 45% 55%)}
+.zchip{font-weight:600}
+.g-rib input[type=range]{width:110px;vertical-align:middle;accent-color:var(--accent)}
+.g-hstat{fill:var(--fg)}
+svg.memmap .g-zone[data-m="ok1"]{fill:color-mix(in srgb,var(--m-ok1) 7%,transparent);stroke:var(--m-ok1)}
+svg.memmap .g-zone[data-m="ok2"]{fill:color-mix(in srgb,var(--m-ok2) 8%,transparent);stroke:var(--m-ok2)}
+svg.memmap .g-zone[data-m="ok3"]{fill:color-mix(in srgb,var(--m-ok3) 10%,transparent);stroke:var(--m-ok3)}
+svg.memmap .g-zone[data-m="soon"]{fill:color-mix(in srgb,var(--m-soon) 9%,transparent);stroke:var(--m-soon)}
+svg.memmap .g-zone[data-m="due"]{fill:color-mix(in srgb,var(--m-due) 8%,transparent);stroke:var(--m-due)}
+/* матрица связности */
+.mx-box{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 16px 14px}
+.mx-box summary{cursor:pointer;font-weight:600;padding:10px 0}
+.mx-wrap{overflow-x:auto}
+.mx{border-collapse:collapse;font:500 10.5px var(--f-mono)}
+.mx td{width:24px;height:24px;padding:0;border:1px solid var(--surface);text-align:center;color:transparent;background:color-mix(in srgb,var(--accent) calc(var(--v) * 85%),var(--surface))}
+.mx td.v:hover{outline:2px solid var(--fg);color:var(--fg)}
+.mx td.self{background:var(--surface-2)}
+.mx th{font:600 10.5px var(--f-mono);color:var(--muted);padding:0 6px;white-space:nowrap;text-align:right}
+.mx th.top{writing-mode:vertical-rl;transform:rotate(180deg);text-align:left;height:110px;padding:4px 0}
+.mx td.zl{border-left:2px solid var(--fg)}.mx td.zt{border-top:2px solid var(--fg)}
+
+/* подсказки без приближения: подписи и кружки наведённой темы и соседей в постоянном экранном размере */
+svg.focus .g-node.hl text{display:inline;font-size:calc(12.5px * var(--k,1));stroke-width:calc(3.4px * var(--k,1))}
+svg.focus .g-node.hl circle{opacity:1;r:max(6px,calc(5px * var(--k,1)))}
+svg.focus .g-node.hot text{font-size:calc(15px * var(--k,1));font-weight:700}
+svg.focus .g-node.hot circle{r:max(9px,calc(8px * var(--k,1)));stroke:var(--fg);stroke-width:calc(2px * var(--k,1))}
+.gcard{position:absolute;z-index:3;pointer-events:none;max-width:320px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:0 10px 28px rgba(0,0,0,.16);display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.4}
+.gcard b{font-size:14.5px}
+.gc-meta{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:12.5px}
+.gc-st{font:500 12px var(--f-mono);color:var(--accent)}
+.gc-h{font-weight:600;font-size:12px;color:var(--muted);margin-top:4px}
+.gc-list{font-size:12.5px}
+

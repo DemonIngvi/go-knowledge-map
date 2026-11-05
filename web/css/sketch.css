@@ -1,0 +1,11 @@
+/* режим «Эскиз»: линии от руки и рукописные подписи */
+html.sketch .vz .vz-node,html.sketch .vz .vz-e,html.sketch .vz .vz-grp,html.sketch .vz .vz-life,html.sketch .vz .vz-sect,html.sketch .vz .vz-gb,html.sketch .vz .vz-bar,html.sketch .vz .vz-line,html.sketch .vz .vz-area,html.sketch .vz .vz-note,html.sketch .vz .vz-tag,html.sketch .vz .vz-sectbg,html.sketch .vz .vz-grid,html.sketch .vz .vz-axis,html.sketch .vz .vz-hl,html.sketch .vz ellipse{filter:url(#vzsk)}
+html.sketch .vz .vz-node{stroke:color-mix(in srgb,var(--fg) 70%,transparent);stroke-width:1.7;stroke-linejoin:round}
+html.sketch .vz .vz-e{stroke-width:1.7;stroke-linecap:round}
+html.sketch .vz .vz-t,html.sketch .vz .vz-tw{font:700 17px "Caveat",cursive}
+html.sketch .vz .vz-s,html.sketch .vz .vz-sw,html.sketch .vz .vz-s2,html.sketch .vz .vz-tg,html.sketch .vz .vz-gt{font:600 15px "Caveat",cursive}
+html.sketch .vz .vz-ml,html.sketch .vz .vz-nt,html.sketch .vz .vz-ct,html.sketch .vz .vz-bv{font:600 16px "Caveat",cursive}
+html.sketch .vz .vz-gl,html.sketch .vz .vz-sl,html.sketch .vz .vz-ax,html.sketch .vz .vz-axl,html.sketch .vz .vz-hlt,html.sketch .vz .vz-bl{font:600 15px "Caveat",cursive;text-transform:none;letter-spacing:0}
+html.sketch .vz-wrap{background:color-mix(in srgb,var(--surface) 92%,var(--mark))}
+.sk-btn{margin-left:auto;align-self:center;font:600 13px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:4px 12px;cursor:pointer}
+.sk-btn[aria-pressed="true"]{color:var(--fg);border-color:var(--accent);background:var(--accent-soft)}

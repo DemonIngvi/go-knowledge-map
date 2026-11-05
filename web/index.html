@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Карта знаний Go-бэкенда</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@500;700&family=Caveat:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/graph.css">
+<link rel="stylesheet" href="css/plan.css">
+<link rel="stylesheet" href="css/article.css">
+<link rel="stylesheet" href="css/review.css">
+<link rel="stylesheet" href="css/viz.css">
+<link rel="stylesheet" href="css/sketch.css">
+<link rel="stylesheet" href="css/tree.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="vzsk" x="-4%" y="-8%" width="108%" height="116%"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
+<header>
+  <button class="menu-btn" id="menuBtn" aria-label="Открыть оглавление">☰ Темы</button>
+  <div class="brand">Карта знаний Go-бэкенда <small>GO · STACK</small></div>
+  <nav class="tabs" aria-label="Разделы">
+    <a href="#graph" data-v="graph">Граф</a>
+    <a href="#tree" data-v="tree">Дерево</a>
+    <a href="#plan" data-v="plan">План обучения</a>
+    <a href="#terms" data-v="terms">Термины</a>
+    <a href="#review" data-v="review">Повторение</a>
+  </nav>
+  <div class="spacer"></div>
+  <a class="rv-pill" id="rvPill" href="#review" title="Темы, которые пора повторить">↻ повторить: 0</a>
+  <div class="stat" id="stat"></div>
+  <a class="store local" id="storeBadge" href="#review">○ браузер</a>
+</header>
+
+<div class="wrap">
+  <aside id="side">
+    <input class="search" id="q" type="search" placeholder="Поиск: тема или термин" autocomplete="off" aria-label="Поиск по темам и терминам">
+    <div id="nav"></div>
+  </aside>
+  <main>
+    <div class="banner" id="banner" hidden></div>
+    <section class="view" id="v-graph">
+      <h1 class="view-h">Граф знаний</h1>
+      <p class="lead">Темы сгруппированы в блоки, блоки — в зоны. Зоны посчитаны по плотности перекрёстных ссылок между статьями. Ленты показывают, сколько связей между блоками. Издалека видны зоны и блоки, при приближении — темы. Кнопки ниже подсвечивают выбранные зоны и блоки; щелчок по блоку приближает его, по теме — открывает статью.</p>
+      <div class="g-row">
+        <label for="stageSel" class="stat" style="display:inline">Этап плана:</label>
+        <select id="stageSel"><option value="">все этапы</option></select>
+        <label for="statusSel" class="stat" style="display:inline">Статус:</label>
+        <select id="statusSel"><option value="">любой</option><option value="new">не изучено</option><option value="ok">свежие знания</option><option value="stale">устарело или не сдано</option></select>
+        <label class="stat" style="display:inline"><input type="checkbox" id="coreOnly"> только ядро</label>
+        <button type="button" class="chip" id="memBtn" aria-pressed="false" title="Раскрасить граф по свежести знаний">◐ Карта памяти</button>
+      </div>
+      <div class="mem-legend" id="memLegend" hidden>
+        <span class="grp"><span class="sw" style="background:var(--m-new)"></span>не изучено</span>
+        <span class="grp"><span class="sw" style="background:var(--m-ok1)"></span><span class="sw" style="background:var(--m-ok2)"></span><span class="sw" style="background:var(--m-ok3)"></span>свежо: чем темнее, тем дальше срок</span>
+        <span class="grp"><span class="sw" style="background:var(--m-soon)"></span>срок подходит: осталось меньше 20% интервала</span>
+        <span class="grp"><span class="sw" style="background:var(--m-due)"></span>срок истёк или тест не сдан</span>
+        <span id="memSum"></span>
+      </div>
+      <div class="legend" id="zoneChips" aria-label="Подсветить зоны"></div>
+      <div class="legend" id="legend" aria-label="Подсветить блоки"></div>
+      <div class="g-row g-rib">
+        <label class="stat" style="display:inline"><input type="checkbox" id="ribOn"> ленты связей между блоками</label>
+        <label class="stat" style="display:inline" for="ribThr">от</label> <input type="range" id="ribThr" min="1" max="12" value="3" aria-label="Минимум связей для ленты"> <b class="stat" id="ribThrV">3</b>
+      </div>
+      <div class="graph-shell">
+        <svg id="kgraph" role="img" aria-label="Граф связанных тем"></svg>
+        <div class="g-tools"><button id="zin" aria-label="Приблизить">+</button><button id="zout" aria-label="Отдалить">−</button><button id="zfit" aria-label="Показать всё">⤢</button></div>
+        <div class="g-tip" id="gtip"></div>
+        <div class="gcard" id="gcard" hidden></div>
+      </div>
+      <details class="mx-box"><summary>Матрица связности блоков</summary>
+        <p class="lead">Число перекрёстных ссылок между блоками; чем темнее клетка, тем сильнее связь относительно размеров блоков. Жирные линии — границы зон. Наведите на клетку, чтобы подсветить пару на графе.</p>
+        <div id="mx" class="mx-wrap"></div>
+      </details>
+    </section>
+
+    <section class="view" id="v-tree" hidden>
+      <h1 class="view-h">Дерево знаний</h1>
+      <p class="lead">Темы разложены по слоям глубины — этапам плана, слева направо. Стрелка ведёт от темы, которую нужно знать раньше, к теме, которая на неё опирается. Щёлкните тему, чтобы подсветить маршрут; двойной щелчок открывает статью.</p>
+      <div class="t-tools">
+        <div id="tmode" role="group" aria-label="Режим"><button type="button" data-m="to" aria-pressed="true">Маршрут к теме</button><button type="button" data-m="from" aria-pressed="false">Что открывает тема</button><button type="button" data-m="ab" aria-pressed="false">Путь A → B</button></div>
+        <label class="stat" style="display:inline"><input type="checkbox" id="tAll"> все предпосылки</label>
+        <label class="stat" style="display:inline"><input type="checkbox" id="tOnly"> только маршрут</label>
+        <label class="stat" style="display:inline"><input type="checkbox" id="tCore"> только ядро</label>
+        <button type="button" class="btn" id="tClear">Сбросить выбор</button><button type="button" class="btn" id="tfit">Показать всё</button>
+      </div>
+      <div class="tree-wrap">
+        <div class="tree-shell"><svg id="tsvg" role="img" aria-label="Дерево тем по этапам"></svg><div class="gcard" id="tcard" hidden></div></div>
+        <div class="tpanel" id="tpanel"></div>
+      </div>
+    </section>
+
+    <section class="view" id="v-plan" hidden>
+      <h1 class="view-h">План обучения</h1>
+      <p class="lead">Десять этапов по порядку. Этапы 1–8 — основа, которую ждут от middle/senior Go-разработчика; этапы 9–10 расширяют кругозор, их можно брать точечно, когда тема встретилась в работе. Отметки ставятся по результатам тестов; где хранится прогресс, показывает значок в шапке («файл» — через gokb-server, «браузер» — только в этом браузере).</p>
+      <div class="keys"><span><b>●</b> ядро — спрашивают на собеседованиях</span><span>○ важно в работе</span><span>· кругозор</span></div>
+      <div class="stages" id="stages"></div>
+    </section>
+
+    <section class="view" id="v-terms" hidden>
+      <h1 class="view-h">Термины</h1>
+      <p class="lead">Все термины из видео и из вашего списка. Каждый ведёт на статью, где он разобран.</p>
+      <div class="terms" id="termsList"></div>
+    </section>
+
+    <section class="view" id="v-review" hidden>
+      <h1 class="view-h">Повторение</h1>
+      <p class="lead">Тема считается изученной, когда сдан её тест: нужно ответить правильно хотя бы на 2 вопроса из 3. После сдачи запускается таймер. Когда он истекает, знание считается устаревшим, и тему пора повторить: перечитать статью и снова пройти тест. Каждая сдача на 3 из 3 увеличивает интервал, сдача на 2 из 3 оставляет его прежним, провал сбрасывает таймер.</p>
+      <p class="ivals" id="ivals"></p>
+      <div class="counts" id="counts"></div>
+      <div id="rvBody"></div>
+    </section>
+
+    <section class="view" id="v-session" hidden><div class="sess" id="sess"></div></section>
+
+    <section class="view" id="v-topic" hidden><article class="article" id="art"></article></section>
+  </main>
+</div>
+<script src="js/core/kb.js"></script>
+<script src="content/manifest.js"></script>
+<script src="js/loader.js"></script>
+</body>
+</html>
