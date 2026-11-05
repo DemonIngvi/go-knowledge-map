@@ -11,6 +11,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"net"
 	"net/http"
@@ -112,13 +113,19 @@ func main() {
 	open := flag.Bool("open", true, "открыть страницу в браузере")
 	flag.Parse()
 
-	if _, err := os.Stat(filepath.Join(*web, "index.html")); err != nil {
+	// страница: папка web, а если её нет и exe портативный — вшитая копия
+	var pages http.Handler
+	if _, err := os.Stat(filepath.Join(*web, "index.html")); err == nil {
+		pages = staticFiles(*web)
+	} else if efs := embeddedWeb(); efs != nil {
+		pages = embeddedFiles(efs)
+	} else {
 		log.Fatalf("не найдена страница %s: %v", filepath.Join(*web, "index.html"), err)
 	}
 	st := &store{path: *data}
 
 	mux := http.NewServeMux()
-	mux.Handle("GET /", staticFiles(*web))
+	mux.Handle("GET /", pages)
 	mux.HandleFunc("GET /api/progress", func(w http.ResponseWriter, r *http.Request) {
 		b, err := st.read()
 		if err != nil {
@@ -210,6 +217,23 @@ func staticFiles(dir string) http.Handler {
 		}
 		w.Header().Set("Cache-Control", "no-cache")
 		http.ServeFile(w, r, full)
+	})
+}
+
+// embeddedFiles отдаёт вшитые файлы без листинга каталогов.
+func embeddedFiles(efs fs.FS) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		p := strings.TrimPrefix(path.Clean("/"+r.URL.Path), "/")
+		if p == "" {
+			p = "index.html"
+		}
+		fi, err := fs.Stat(efs, p)
+		if err != nil || fi.IsDir() {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Cache-Control", "no-cache")
+		http.ServeFileFS(w, r, efs, p)
 	})
 }
 
