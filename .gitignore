@@ -1,0 +1,6 @@
+tools/
+progress.json
+progress.json.bak
+progress-*.tmp
+*.exe
+dist/
