@@ -75,3 +75,16 @@ KB.v("qos",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("qos",{ex:`## Проверить класс
+{{kubectl get pod orders-7f9 -o jsonpath='{.status.qosClass}'}} → Guaranteed, Burstable или BestEffort.
+
+## Guaranteed
+requests = limits по CPU и памяти у всех контейнеров пода; с целым числом CPU и static CPU manager — выделенные ядра ([[cpu-manager]]).`,
+cs:`## Обобщённый случай из практики: важный сервис вытеснили первым
+**Ситуация.** На узле закончилась память. Под платёжного сервиса был без requests (BestEffort), «чтобы помещался куда угодно».
+
+**Что пошло не так.** kubelet при нехватке памяти вытесняет в первую очередь BestEffort, затем Burstable с превышением requests. Платёжный сервис вытеснялся раньше пакетных задач.
+
+**Как исправили.** Requests для всех продовых подов, Guaranteed и PriorityClass для критичных; ResourceQuota с обязательными requests в неймспейсе.`});

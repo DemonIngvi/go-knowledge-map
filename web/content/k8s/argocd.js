@@ -77,3 +77,23 @@ KB.v("argocd",[
   edges:[["g","a","pull"],["a","k","sync","a"],["m","a","self-heal","dwc"],["a","st","","dv"]]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("argocd",{ex:`## Приложение
+~~~
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+spec:
+  source: { repoURL: https://git.example.com/deploy.git, path: orders/overlays/prod, targetRevision: main }
+  destination: { server: https://kubernetes.default.svc, namespace: orders }
+  syncPolicy: { automated: { prune: true, selfHeal: true } }
+~~~
+
+## Посмотреть расхождение
+{{argocd app diff orders}} — что в кластере отличается от Git.`,
+cs:`## Обобщённый случай из практики: prune удалил чужие ресурсы
+**Ситуация.** Две Application указывали на один и тот же неймспейс с перекрывающимися ресурсами после переименования каталога в репозитории.
+
+**Что пошло не так.** Одна Application считала ресурсы «лишними» и с {{prune: true}} удаляла их, другая создавала заново — сервис перезапускался по кругу.
+
+**Как исправили.** Одно приложение — один владелец ресурсов, проект Argo CD с ограничением неймспейсов, {{Prune=false}} для критичных ресурсов (PVC, CRD), ревью изменений в структуре репозитория ([[gitops]]).`});

@@ -76,3 +76,14 @@ KB.v("victoriametrics",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("victoriametrics",{ex:`## Совместимость с Prometheus
+{{vmagent -promscrape.config=prometheus.yml -remoteWrite.url=http://vminsert:8480/insert/0/prometheus/}} — те же конфиги скрейпа, запись в кластер VictoriaMetrics.
+
+## Активные ряды
+{{curl vmselect:8481/select/0/prometheus/api/v1/status/tsdb}} — топ метрик по числу рядов; лимит {{-maxLabelsPerTimeseries}}.`,
+cs:`## Обобщённый случай из практики: Prometheus не вмещал метрики
+**Ситуация.** Один Prometheus держал 15 млн активных рядов, требовал 128 ГБ памяти и долго стартовал после перезапуска; хранение — только 15 дней.
+
+**Как решили.** Перешли на vmagent и кластер VictoriaMetrics с долгим хранением: потребление памяти и диска заметно снизилось, запросы PromQL и дашборды Grafana остались прежними. Вывод: проверять совместимость отдельных функций PromQL (MetricsQL расширяет язык и в мелочах отличается) и мерить на своих данных ([[prometheus]], [[grafana-stack]]).`});

@@ -125,3 +125,25 @@ KB.v("k8s-core",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("k8s-core",{ex:`## Основное за минуту
+{{kubectl get deploy,rs,pods -l app=orders -o wide}}, {{kubectl describe pod orders-7f9…}} — события, причины перезапуска; {{kubectl logs -p}} — лог предыдущего контейнера.
+
+## Пробы
+~~~
+readinessProbe: { httpGet: { path: /readyz, port: 8080 }, periodSeconds: 5 }
+livenessProbe:  { httpGet: { path: /healthz, port: 8080 }, periodSeconds: 10, failureThreshold: 6 }
+startupProbe:   { httpGet: { path: /healthz, port: 8080 }, failureThreshold: 30, periodSeconds: 2 }
+~~~
+
+## Сохранность при обслуживании
+PodDisruptionBudget {{minAvailable: 2}} — drain узла не выключит все поды сразу.`,
+cs:`## Обобщённый случай из практики: liveness проба, которая усиливала аварию
+**Ситуация.** Liveness проба проверяла доступность базы и Redis.
+
+**Что пошло не так.** Redis стал медленным на минуту. Пробы провалились, kubelet начал перезапускать все поды; новые поды при старте прогревали кэш из базы и перегрузили её. Минутная проблема превратилась в получасовую аварию.
+
+**Причина.** Liveness должна отвечать на вопрос «процесс завис?», а не «здоровы ли зависимости».
+
+**Как исправили.** Liveness — только процесс, зависимости — в readiness и в коде; startupProbe для медленного старта ([[load-balancing]], [[resilience]]).`});

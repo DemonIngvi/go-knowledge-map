@@ -81,3 +81,32 @@ KB.v("gitlab-ci",[
   edges:[["l","t",""],["t","b",""],["v","b","","d"],["b","s",""],["s","d","","a"]]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("gitlab-ci",{ex:`## Пайплайн Go-сервиса
+~~~
+stages: [test, build, deploy]
+test:
+  image: golang:1.25
+  cache: { key: { files: [go.sum] }, paths: [.go/pkg/mod] }
+  variables: { GOPATH: "$CI_PROJECT_DIR/.go" }
+  script: [go vet ./..., go test -race -cover ./...]
+build:
+  stage: build
+  rules: [{ if: '$CI_COMMIT_BRANCH == "main"' }]
+  script: [docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .]
+~~~
+
+## Окружения
+{{environment: production}} с {{when: manual}} и защищённым окружением — деплой в прод только для разрешённых ролей.`,
+cs:`## Codecov: подменённый скрипт в CI
+**Источник**: [Codecov Security Update (2021)](https://about.codecov.io/security-update/).
+
+**Ситуация.** Тысячи проектов в CI скачивали и запускали Bash Uploader Codecov командой вида {{curl … | bash}}.
+
+**Что пошло не так.** Атакующие получили доступ к хранилищу и изменили скрипт: он отправлял переменные окружения CI — токены, ключи, учётные данные — на внешний сервер. Изменение оставалось незамеченным около двух месяцев.
+
+**Вывод.**
+- Не запускать скачанные скрипты без проверки контрольной суммы или подписи; фиксировать версии инструментов.
+- Минимум секретов в переменных CI; короткоживущие учётные данные по OIDC.
+- При компрометации инструмента CI — ротация всех секретов, которые были доступны задачам ([[vault]]).`});

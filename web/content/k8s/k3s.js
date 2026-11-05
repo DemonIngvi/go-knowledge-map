@@ -72,3 +72,16 @@ kubectl autoscale deployment orders --cpu-percent=60 --min=2 --max=6
 k3d cluster delete dev`
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("k3s",{ex:`## Кластер для тестов за минуту
+{{k3d cluster create dev --agents 2 -p "8080:80@loadbalancer"}}; {{k3d image import orders:dev -c dev}} — образ без реестра.
+
+## Интеграционный тест в CI
+Testcontainers поднимает k3s-контейнер, тест применяет манифесты и проверяет, что под стал Ready ([[go-test]]).`,
+cs:`## Обобщённый случай из практики: «у меня в k3s работает»
+**Ситуация.** Разработчики тестировали манифесты на k3s локально, а прод — управляемый Kubernetes в облаке.
+
+**Что пошло не так.** На проде Ingress не создался, а PersistentVolumeClaim завис в Pending: локально работали встроенные Traefik и local-path provisioner, которых в облаке нет; имена storage class и ingress class отличались.
+
+**Как исправили.** Явные {{ingressClassName}} и {{storageClassName}} в манифестах через overlay для каждого окружения, проверка в CI на кластере, близком к проду ([[kustomize]]).`});

@@ -98,3 +98,30 @@ KB.v("docker",[
   edges:[]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("docker",{ex:`## Многоэтапная сборка Go
+~~~
+FROM golang:1.25 AS build
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /app ./cmd/orders
+
+FROM gcr.io/distroless/static-debian12:nonroot
+COPY --from=build /app /app
+ENTRYPOINT ["/app"]
+~~~
+Образ — около 15 МБ, без shell, пользователь не root. Слой с зависимостями кэшируется, пока не меняется go.sum.
+
+## Что внутри образа
+{{docker history orders:1.4}}, {{dive orders:1.4}} — размер слоёв; {{trivy image orders:1.4}} — уязвимости.`,
+cs:`## Обобщённый случай из практики: секрет в слое образа
+**Ситуация.** В Dockerfile копировали {{.npmrc}} с токеном для приватного реестра, а следующей командой удаляли его.
+
+**Что пошло не так.** Образ опубликовали в общедоступный реестр. Файл был удалён в последнем слое, но остался в предыдущем — токен достали за минуты.
+
+**Причина.** Каждая инструкция создаёт слой, удаление не стирает данные из прошлых слоёв.
+
+**Как исправили.** Ротация токена, {{RUN --mount=type=secret}} в BuildKit, сканирование образов на секреты в CI, {{.dockerignore}} ([[vault]], [[gitlab-ci]]).`});

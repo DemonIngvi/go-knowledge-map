@@ -102,3 +102,24 @@ patches:
         value: 6`
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("kustomize",{ex:`## База и overlay
+~~~
+# overlays/prod/kustomization.yaml
+resources: [../../base]
+images: [{ name: orders, newTag: "1.4.2" }]
+patches:
+  - target: { kind: Deployment, name: orders }
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 6
+~~~
+{{kubectl kustomize overlays/prod}} — посмотреть итог.`,
+cs:`## Обобщённый случай из практики: ConfigMap изменился, а поды нет
+**Ситуация.** Изменили настройку в ConfigMap, применили — сервис продолжал работать по-старому.
+
+**Причина.** Поды читают ConfigMap при старте (через env), и изменение ConfigMap не перезапускает Deployment.
+
+**Как исправили.** {{configMapGenerator}} в Kustomize: имя ConfigMap получает хэш содержимого, изменение меняет ссылку в Deployment и запускает раскатку; заодно старая версия остаётся для отката.`});

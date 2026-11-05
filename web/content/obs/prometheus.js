@@ -101,3 +101,22 @@ func instrument(route string, h http.HandlerFunc) http.HandlerFunc {
 // histogram_quantile(0.99, sum by (le, route) (rate(http_request_duration_seconds_bucket[5m])))`
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("prometheus",{ex:`## Метрика задержки в Go
+~~~
+var dur = promauto.NewHistogramVec(prometheus.HistogramOpts{
+	Name: "http_request_duration_seconds",
+	Buckets: []float64{.005, .01, .025, .05, .1, .25, .5, 1, 2.5},
+}, []string{"route", "code"})
+~~~
+Лейбл {{route}} — шаблон {{/orders/{id}}}, а не фактический путь.
+
+## p99 в PromQL
+{{histogram_quantile(0.99, sum by (le, route) (rate(http_request_duration_seconds_bucket[5m])))}}`,
+cs:`## Обобщённый случай из практики: Prometheus упал от кардинальности
+**Ситуация.** В метрику HTTP-запросов добавили лейбл {{path}} с фактическим путём.
+
+**Что пошло не так.** Пути содержали идентификаторы ({{/orders/18273}}), каждый создавал новый временной ряд. За сутки — десятки миллионов рядов, Prometheus исчерпал память и перезапускался по кругу, мониторинг пропал целиком.
+
+**Как исправили.** Лейбл — шаблон маршрута, лимиты {{sample_limit}} и {{label_limit}} в конфиге скрейпа, алерт на рост числа рядов; ревью новых метрик ([[victoriametrics]]).`});

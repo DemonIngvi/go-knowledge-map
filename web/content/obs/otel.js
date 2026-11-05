@@ -121,3 +121,23 @@ func (s *Service) Create(ctx context.Context, o Order) error {
 }`
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("otel",{ex:`## Инициализация в Go
+~~~
+exp, _ := otlptracegrpc.New(ctx)
+tp := sdktrace.NewTracerProvider(sdktrace.WithBatcher(exp),
+	sdktrace.WithResource(resource.NewWithAttributes(semconv.SchemaURL, semconv.ServiceName("orders"))))
+otel.SetTracerProvider(tp)
+otel.SetTextMapPropagator(propagation.TraceContext{})
+defer tp.Shutdown(ctx)
+~~~
+
+## HTTP без ручных спанов
+{{otelhttp.NewHandler(mux, "orders")}} на сервере и {{otelhttp.NewTransport(http.DefaultTransport)}} на клиенте.`,
+cs:`## Обобщённый случай из практики: трейсы терялись при каждом деплое
+**Ситуация.** Трейсы последних секунд перед остановкой пода никогда не доходили до бэкенда — как раз те, что интересны при разборе сбоев деплоя.
+
+**Причина.** BatchSpanProcessor копит спаны в памяти и отправляет пачками; процесс завершался без {{tp.Shutdown}}, и буфер терялся.
+
+**Как исправили.** {{Shutdown}} с таймаутом в обработке SIGTERM, Collector рядом с сервисом (agent), чтобы отправка была быстрой ([[net-http]]).`});

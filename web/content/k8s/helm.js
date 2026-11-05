@@ -78,3 +78,16 @@ KB.v("helm",[
   edges:[["t","h",""],["v","h",""],["h","m",""],["m","k","apply"],["h","r","","dc"]]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("helm",{ex:`## Проверить до установки
+{{helm template orders ./chart -f values-prod.yaml | kubeconform -strict}}; {{helm diff upgrade orders ./chart -f values-prod.yaml}} (плагин helm-diff).
+
+## Атомарное обновление
+{{helm upgrade --install orders ./chart -f values-prod.yaml --atomic --timeout 5m}} — при неудаче откат на прошлый релиз.`,
+cs:`## Обобщённый случай из практики: опечатка в values, которую никто не заметил
+**Ситуация.** В values-prod.yaml написали {{resource:}} вместо {{resources:}}.
+
+**Что пошло не так.** Helm молча проигнорировал неизвестный ключ, поды выкатились без requests и limits, а под нагрузкой их вытеснили первыми ([[qos]]).
+
+**Как исправили.** {{values.schema.json}} в чарте — Helm проверяет values по схеме и падает на неизвестных ключах; рендер и проверка манифестов в CI.`});
