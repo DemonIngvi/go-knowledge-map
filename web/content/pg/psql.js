@@ -70,3 +70,25 @@ orders->   FROM pg_stat_activity WHERE state <> 'idle' ORDER BY age DESC;
 orders=> \\watch 2                  -- повторять каждые 2 секунды`
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("psql",{ex:`## Удобный .psqlrc
+~~~
+\\set QUIET 1
+\\pset null '∅'
+\\timing on
+\\x auto
+\\set HISTSIZE 10000
+\\set QUIET 0
+~~~
+
+## Выгрузка в CSV
+{{\\copy (SELECT id, status FROM orders WHERE created_at > now() - interval '1 day') TO 'orders.csv' CSV HEADER}} — на машине клиента, без доступа к файлам сервера.`,
+cs:`## Обобщённый случай из практики: UPDATE без WHERE в консоли
+**Ситуация.** Инженер в psql на проде хотел обновить статус одного заказа и случайно отправил запрос до того, как дописал условие.
+
+**Что пошло не так.** {{UPDATE orders SET status = 'cancelled'}} изменил все строки — psql по умолчанию в режиме autocommit, отката не было. Восстанавливали из бэкапа с PITR ([[pg-wal]]).
+
+**Как исправили.**
+- {{\\set AUTOCOMMIT off}} в .psqlrc для продовых подключений: изменения требуют явного COMMIT.
+- Ручные правки — только через ревьюируемые скрипты, роль с минимальными правами ([[rbac]]).`});

@@ -102,3 +102,33 @@ KB.v("pg-isolation",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("pg-isolation",{ex:`## Списание без lost update
+~~~
+UPDATE accounts SET balance = balance - $1
+WHERE id = $2 AND balance >= $1
+RETURNING balance;
+~~~
+Одно атомарное выражение вместо «прочитать → посчитать в Go → записать».
+
+## Повтор при сериализации
+~~~
+for attempt := 0; attempt < 3; attempt++ {
+	err = runTx(ctx, pgx.TxOptions{IsoLevel: pgx.Serializable}, work)
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) && pgErr.Code == "40001" {
+		time.Sleep(backoffWithJitter(attempt))
+		continue
+	}
+	break
+}
+~~~`,
+cs:`## Обобщённый случай из практики: два дежурных снялись одновременно
+**Ситуация.** Правило: в смене должен оставаться хотя бы один дежурный. Код проверял {{SELECT count(*) FROM on_call WHERE shift = $1}} и, если больше одного, удалял запись текущего пользователя.
+
+**Что пошло не так.** Два дежурных одновременно нажали «сняться». Обе транзакции увидели count = 2, обе удалили свою запись — смена осталась без дежурных.
+
+**Причина.** Write skew: транзакции читают общий набор и пишут в разные строки. Ни Read Committed, ни Repeatable Read это не предотвращают.
+
+**Как исправили.** Уровень Serializable с повтором при ошибке 40001 для этой операции; альтернатива — явная блокировка строки смены {{SELECT … FOR UPDATE}} перед проверкой ([[pg-locks]]).`});

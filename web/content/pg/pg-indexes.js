@@ -109,3 +109,19 @@ KB.v("pg-indexes",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("pg-indexes",{ex:`## Индекс под запрос очереди
+{{CREATE INDEX CONCURRENTLY jobs_new_idx ON jobs (created_at) WHERE status = 'new';}} — крошечный индекс только по необработанным задачам.
+
+## Поиск по подстроке
+{{CREATE EXTENSION pg_trgm; CREATE INDEX ON products USING gin (name gin_trgm_ops);}} — ускоряет {{ILIKE '%чайник%'}}.
+
+## Неиспользуемые индексы
+{{SELECT indexrelname, idx_scan, pg_size_pretty(pg_relation_size(indexrelid)) FROM pg_stat_user_indexes WHERE idx_scan = 0;}} — кандидаты на удаление: они только замедляют запись.`,
+cs:`## Обобщённый случай из практики: индекс есть, а запрос медленный
+**Ситуация.** Запрос {{WHERE lower(email) = $1}} выполнялся секунды на таблице в 20 млн строк, хотя индекс по {{email}} существовал.
+
+**Причина.** Индекс построен по {{email}}, а условие — по выражению {{lower(email)}}; планировщик не может его использовать и читает таблицу целиком ([[pg-explain]]).
+
+**Как исправили.** Индекс по выражению {{CREATE INDEX CONCURRENTLY ON users (lower(email))}}. Время ответа — миллисекунды. Правило: проверять EXPLAIN каждого нового запроса на реалистичном объёме данных.`});

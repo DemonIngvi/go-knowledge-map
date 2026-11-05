@@ -75,3 +75,21 @@ KB.v("pg-toast",[
   edges:[["row","c0",""],["row","c1",""],["row","c2",""],["row","c3",""],["c1","tt","","d"]]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("pg-toast",{ex:`## Сколько места в TOAST
+~~~
+SELECT c.relname, pg_size_pretty(pg_relation_size(c.reltoastrelid)) AS toast_size
+FROM pg_class c WHERE c.reltoastrelid <> 0 ORDER BY pg_relation_size(c.reltoastrelid) DESC LIMIT 5;
+~~~
+
+## Сжатие lz4
+{{ALTER TABLE documents ALTER COLUMN body SET COMPRESSION lz4;}} — быстрее pglz при сопоставимом сжатии (для новых значений).`,
+cs:`## Обобщённый случай из практики: счётчик в jsonb раздул базу
+**Ситуация.** Профиль пользователя хранился одним большим jsonb (около 50 КБ) с полем {{last_seen_at}}, которое обновлялось на каждый запрос.
+
+**Что пошло не так.** WAL рос на гигабайты в час, TOAST-таблица раздувалась, реплики отставали.
+
+**Причина.** Изменение одного ключа в jsonb перезаписывает **всё значение** целиком, включая TOAST-куски, — 50 КБ на каждое обновление метки времени.
+
+**Как исправили.** {{last_seen_at}} вынесли в отдельную колонку (а частые обновления — в Redis со сбросом раз в минуту); jsonb меняется редко ([[redis]], [[pg-wal]]).`});

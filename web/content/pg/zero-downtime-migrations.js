@@ -48,3 +48,24 @@ CREATE INDEX CONCURRENTLY users_contact_email_idx ON users (contact_email);
 -- NOT NULL без долгой блокировки
 ALTER TABLE users ADD CONSTRAINT users_contact_email_nn CHECK (contact_email IS NOT NULL) NOT VALID;
 ALTER TABLE users VALIDATE CONSTRAINT users_contact_email_nn;`}]);
+
+// Примеры и сложный случай
+KB.ex("zero-downtime-migrations",{ex:`## Добавить внешний ключ без долгой блокировки
+~~~
+ALTER TABLE order_items ADD CONSTRAINT fk_order
+  FOREIGN KEY (order_id) REFERENCES orders(id) NOT VALID;
+ALTER TABLE order_items VALIDATE CONSTRAINT fk_order;
+~~~
+
+## Backfill пачками
+{{UPDATE users SET contact_email = email WHERE id BETWEEN $1 AND $2 AND contact_email IS NULL}} по 5 000 строк с паузой и контролем отставания реплик.`,
+cs:`## GoCardless: тонкости миграций PostgreSQL без простоя
+**Источник**: [Zero-downtime Postgres migrations — the hard parts (GoCardless)](https://gocardless.com/blog/zero-downtime-postgres-migrations-the-hard-parts/).
+
+**Ситуация.** Платёжная компания выкатывала изменения схемы на большие таблицы под постоянной нагрузкой.
+
+**Что пошло не так.** Миграции, безобидные на тестовой базе, на проде вызывали остановки: ожидающая блокировка ALTER выстраивала за собой очередь запросов, а некоторые операции требовали эксклюзивной блокировки дольше, чем казалось.
+
+**Что сделали.** Описали, какие операции какие блокировки берут, ввели lock_timeout с повторами и разбили опасные изменения на безопасные шаги.
+
+**Вывод.** Миграцию оценивают по блокировкам и длительности на реальном объёме, а не по синтаксису ([[pg-locks]]).`});

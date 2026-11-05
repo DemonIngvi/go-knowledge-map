@@ -94,3 +94,30 @@ KB.v("pg-vacuum",[
   edges:[["a5","b0","VACUUM","ah"]]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("pg-vacuum",{ex:`## Таблицы, которые давно не чистились
+~~~
+SELECT relname, n_dead_tup, last_autovacuum, age(relfrozenxid) AS xid_age
+FROM pg_stat_user_tables JOIN pg_class USING (relname)
+ORDER BY n_dead_tup DESC LIMIT 10;
+~~~
+
+## Настройка для горячей таблицы
+{{ALTER TABLE outbox SET (autovacuum_vacuum_scale_factor = 0.01, autovacuum_vacuum_cost_limit = 2000);}}
+
+## Обрубить забытые транзакции
+{{idle_in_transaction_session_timeout = '60s'}} — сессия, забывшая COMMIT, будет закрыта.`,
+cs:`## Sentry: база остановила запись из-за wraparound
+**Источник**: [Transaction ID Wraparound in Postgres (Sentry, 2015)](https://blog.sentry.io/transaction-id-wraparound-in-postgres/).
+
+**Ситуация.** Sentry обрабатывал огромный поток событий на PostgreSQL с очень высокой частотой транзакций.
+
+**Что пошло не так.** Autovacuum не успевал замораживать старые строки, возраст транзакций приблизился к пределу 32-битного счётчика. Чтобы защитить данные, PostgreSQL **перестал принимать записи**. Сервис был недоступен на запись много часов: замораживание огромных таблиц шло медленно.
+
+**Причина.** Настройки autovacuum по умолчанию не соответствовали нагрузке, а мониторинга возраста транзакций не было.
+
+**Вывод.**
+- Мониторить {{age(datfrozenxid)}} и {{age(relfrozenxid)}} с алертом задолго до предела.
+- Агрессивнее настраивать autovacuum для больших таблиц с частой записью.
+- Долгие транзакции и брошенные слоты репликации мешают заморозке ([[pg-mvcc]], [[pg-multixact]]).`});

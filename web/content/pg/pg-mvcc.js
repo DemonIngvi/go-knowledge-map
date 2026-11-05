@@ -77,3 +77,27 @@ KB.v("pg-mvcc",[
   edges:[["v1","v2","UPDATE (txn 105)","a"],["t3","v1","","dc"],["t6","v2","","d"]]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("pg-mvcc",{ex:`## Посмотреть версии строк
+~~~
+SELECT xmin, xmax, ctid, * FROM accounts WHERE id = 1;
+UPDATE accounts SET balance = balance - 10 WHERE id = 1;
+SELECT xmin, xmax, ctid, * FROM accounts WHERE id = 1;  -- другой ctid и xmin: новая версия
+~~~
+
+## HOT update в цифрах
+{{SELECT n_tup_upd, n_tup_hot_upd FROM pg_stat_user_tables WHERE relname = 'orders';}} — доля HOT-обновлений. Низкая доля при частых UPDATE — повод снизить {{fillfactor}} или убрать индекс с часто меняющейся колонки.
+
+## Кто держит горизонт
+{{SELECT pid, state, now() - xact_start AS age FROM pg_stat_activity WHERE xact_start IS NOT NULL ORDER BY age DESC LIMIT 5;}}`,
+cs:`## Uber: почему ушли с PostgreSQL на MySQL
+**Источник**: [Why Uber Engineering Switched from Postgres to MySQL (2016)](https://www.uber.com/blog/postgres-to-mysql-migration/).
+
+**Ситуация.** У Uber были большие таблицы с множеством индексов и интенсивными UPDATE, а также реплики в нескольких датацентрах.
+
+**Что пошло не так.** Каждое обновление строки в PostgreSQL создаёт новую версию с новым физическим адресом, и, если HOT не срабатывает, **обновляются все индексы таблицы** — даже по неизменившимся колонкам. Это давало большую нагрузку на запись, большой объём WAL и трафик репликации между ДЦ. Плюс были сложности с обновлением мажорных версий.
+
+**Обсуждение.** Статья вызвала много ответов от сообщества PostgreSQL: часть проблем решается настройками (fillfactor и HOT, меньше индексов), а со временем в PostgreSQL появились улучшения. Но сама механика MVCC описана верно.
+
+**Вывод.** Понимать, как MVCC превращает UPDATE в запись новой версии и индексов, — ключ к проектированию таблиц с частыми изменениями ([[pg-indexes]], [[pg-wal]]).`});
