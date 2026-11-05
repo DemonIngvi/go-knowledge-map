@@ -45,3 +45,4 @@ svg.onlypath .t-node:not(.on),svg.onlypath .t-edge:not(.on){display:none}
 .t-edge.tr{stroke-opacity:.09}
 svg.pathmode .t-edge.tr.on{stroke-opacity:.55;stroke-width:1.4}
 .t-num{font:600 9.5px var(--f-mono);fill:var(--muted);pointer-events:none}
+.t-edge.cut{display:none}

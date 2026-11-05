@@ -1,7 +1,7 @@
 // Дерево знаний по уровням глубины 1→5 слева направо (большой уровень делится на подстолбцы).
 // Ребро «предпосылка → тема»: связанная тема более раннего этапа (в одном этапе — ядро раньше кругозора).
 // Транзитивные рёбра убраны, чтобы оставался читаемый маршрут.
-const TR={vert:(()=>{try{return localStorage.getItem('gokb-tree-vert')==='1';}catch(e){return false;}})(),built:false,mode:'to',sel:null,selB:null,onlyPath:false,coreOnly:false,all:false,multi:new Set()};
+const TR={oneLink:(()=>{try{return localStorage.getItem('gokb-tree-one')!=='0';}catch(e){return true;}})(),vert:(()=>{try{return localStorage.getItem('gokb-tree-vert')==='1';}catch(e){return false;}})(),built:false,mode:'to',sel:null,selB:null,onlyPath:false,coreOnly:false,all:false,multi:new Set()};
 function ensurePrereq(){if(!TR.par){const r=buildPrereq();TR.par=r.par;TR.kid=r.kid;TR.main=r.main;TR.mkid=r.mkid;TR.trans=r.trans;}}
 // порядок изучения внутри набора тем: каждая тема после всех своих предпосылок, затем по уровню и важности
 function topoOrder(ids){ensurePrereq();const S=new Set(ids),indeg={},ZO=ZONES.map(z=>z.id);
@@ -111,10 +111,10 @@ function initTree(){
   document.querySelectorAll('#tmode button').forEach(b=>b.onclick=()=>{TR.mode=b.dataset.m;TR.sel=null;TR.selB=null;TR.multi=new Set();
     document.querySelectorAll('#tmode button').forEach(x=>x.setAttribute('aria-pressed',x===b));paintTree();});
   document.getElementById('tOnly').onchange=e=>{TR.onlyPath=e.target.checked;paintTree();};
-  document.getElementById('tOne').onchange=e=>{TR.oneLink=e.target.checked;paintTree();};
+  const one_=document.getElementById('tOne');one_.checked=TR.oneLink;one_.onchange=e=>{TR.oneLink=e.target.checked;try{localStorage.setItem('gokb-tree-one',TR.oneLink?'1':'0');}catch(x){}paintTree();};
   document.getElementById('tCore').onchange=e=>{TR.coreOnly=e.target.checked;paintTree();};
   const vb_=document.getElementById('tVert');vb_.setAttribute('aria-pressed',TR.vert);vb_.onclick=()=>{TR.vert=!TR.vert;try{localStorage.setItem('gokb-tree-vert',TR.vert?'1':'0');}catch(e){}
-    const old=document.getElementById('tsvg');old.replaceWith(old.cloneNode(false));TR.built=false;TR.touched=false;renderTree();};
+    const old=document.getElementById('tsvg');old.replaceWith(old.cloneNode(false));TR.built=false;TR.touched=false;TR.bgKeep=null;renderTree();};
   document.getElementById('tClear').onclick=()=>{TR.sel=null;TR.selB=null;TR.multi=new Set();paintTree();};}
 
 const ancestors=(i,full)=>{if(!full){const s=new Set([i]);let x=i;while(TR.main[x]>=0){x=TR.main[x];s.add(x);}return s;}const s=new Set([i]),st=[i];while(st.length){const x=st.pop();TR.par[x].forEach(p=>{if(!s.has(p)){s.add(p);st.push(p);}});}return s;};
@@ -133,11 +133,22 @@ function paintTree(){
   svgT.classList.toggle('pathmode',!!set);svgT.classList.toggle('onlypath',!!set&&TR.onlyPath);
   TR.nodeEls.forEach((g,i)=>{const t=T[i];const x=st(t.id);g.classList.remove('st-ok','st-soon','st-due','st-fail');if(x!=='new')g.classList.add('st-'+x);
     g.classList.toggle('on',!!set&&set.has(i));g.classList.toggle('sel',TR.multi.has(i));g.classList.toggle('dim-core',TR.coreOnly&&t.l!==1);});
-  // п.3 плана: в режимах «все предпосылки» и «несколько тем» можно оставить одну связь на пару блоков (ближайшие уровни, затем главная)
-  const one=TR.oneLink&&TR.mode!=='to'&&set,keep=new Map();
-  if(one)TR.edgeEls.forEach(e=>{if(!(set.has(e.i)&&set.has(e.j)))return;const bi=T[e.i].b,bj=T[e.j].b;if(bi===bj)return;const k=bi+'>'+bj,sc=(T[e.j].s-T[e.i].s)*10-(e.isMain?5:0)-(TR.trans.has(e.i+'|'+e.j)?0:3);const c=keep.get(k);if(!c||sc<c.sc)keep.set(k,{e,sc});});
-  const kept=new Set([...keep.values()].map(x=>x.e));
-  TR.edgeEls.forEach(e=>e.p.classList.toggle('on',!!set&&set.has(e.i)&&set.has(e.j)&&(TR.mode!=='to'||e.isMain)&&(!one||T[e.i].b===T[e.j].b||kept.has(e))));
+  // прореживание (просьба владельца): между парой рамок дерева «уровень × зона» рисуем одну связь, внутри рамки — все.
+  // Лучшая связь: главная предпосылка, затем не транзитивная, затем ближайшие уровни. Работает и для фона, и для подсвеченного маршрута.
+  const gk=i=>T[i].s+'|'+ZB[T[i].b];
+  const thin=list=>{const best=new Map();list.forEach(e=>{const k=gk(e.i)+'>'+gk(e.j);if(k.split('>')[0]===k.split('>')[1])return;
+    const sc=(e.isMain?0:100)+(TR.trans.has(e.i+'|'+e.j)?50:0)+(T[e.j].s-T[e.i].s);const c=best.get(k);if(!c||sc<c.sc)best.set(k,{e,sc});});
+    // рамка уже достижима через другие рамки — прямую связь не рисуем (жадно, от худших связей; достижимость сохраняется)
+    const adj=new Map();for(const k of best.keys()){const [x,y]=k.split('>');if(!adj.has(x))adj.set(x,new Set());adj.get(x).add(y);}
+    const reach=(x,y,skip)=>{const seen=new Set([x]),st=[x];while(st.length){const u=st.pop();for(const v of adj.get(u)||[]){if(u===x&&v===skip)continue;if(v===y)return true;if(!seen.has(v)){seen.add(v);st.push(v);}}}return false;};
+    [...best.entries()].sort((p,q)=>q[1].sc-p[1].sc).forEach(([k])=>{const [x,y]=k.split('>');if(reach(x,y,y)){adj.get(x).delete(y);best.delete(k);}});
+    return new Set([...best.values()].map(x=>x.e));};
+  const same=e=>gk(e.i)===gk(e.j);
+  const isOn=e=>!!set&&set.has(e.i)&&set.has(e.j)&&(TR.mode!=='to'||e.isMain);
+  if(!TR.bgKeep)TR.bgKeep=thin(TR.edgeEls);
+  const onKeep=thin(TR.edgeEls.filter(isOn));
+  TR.edgeEls.forEach(e=>{const on=isOn(e);e.p.classList.toggle('on',on);
+    e.p.classList.toggle('cut',TR.oneLink&&!same(e)&&!(on?onKeep.has(e):TR.bgKeep.has(e)));});
   const panel=document.getElementById('tpanel');
   if(!set){panel.innerHTML='<p class="stat">'+(TR.mode==='multi'?'Щёлкайте темы — каждая добавляется к выбору, подсвечиваются все их предпосылки. Повторный щелчок убирает тему.':TR.mode==='all'?'Щёлкните тему — подсветятся все темы нижних уровней (и более базовые на том же), которые нужно закрыть перед ней. Ctrl+щелчок добавляет цели.':'Щёлкните тему — подсветится маршрут от начальных тем до неё. Ctrl+щелчок добавляет ещё цели: маршрут построится ко всем сразу.')+'</p><p class="stat">Двойной щелчок открывает статью.</p>';return;}
   const list=topoOrder([...set]).map(i=>T[i]).filter(t=>!TR.coreOnly||t.l===1);
