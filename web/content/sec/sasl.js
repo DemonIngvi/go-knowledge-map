@@ -73,3 +73,20 @@ KB.v("sasl",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("sasl",{ex:`## Kafka в Go с SCRAM
+~~~
+mech, _ := scram.Mechanism{User: "billing", Pass: pass}.AsSha512Mechanism()
+cl, _ := kgo.NewClient(kgo.SeedBrokers(brokers...),
+	kgo.SASL(mech), kgo.DialTLSConfig(&tls.Config{}))
+~~~
+
+## Почему не PLAIN без TLS
+PLAIN отправляет пароль как есть; допустим только внутри TLS ([[tls]], [[kafka-security]]).`,
+cs:`## Обобщённый случай из практики: пароль в трафике
+**Ситуация.** Для подключения к брокеру включили SASL/PLAIN, а TLS отложили «на потом».
+
+**Что пошло не так.** При разборе сетевой проблемы tcpdump показал логины и пароли сервисов в открытом виде — их увидели все, у кого был доступ к дампу ([[tcpdump]]).
+
+**Как исправили.** Ротация всех паролей, SASL_SSL обязателен, SCRAM вместо PLAIN; дампы трафика — с доступом как к секретам.`});

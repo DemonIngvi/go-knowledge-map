@@ -101,3 +101,24 @@ KB.v("tcp",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("tcp",{ex:`## Состояния соединений
+{{ss -tan state time-wait | wc -l}}, {{ss -tin dst 10.0.0.5}} — rtt, cwnd и ретрансмиты соединения.
+
+## Таймауты в Go
+~~~
+d := net.Dialer{Timeout: 2 * time.Second, KeepAlive: 30 * time.Second}
+srv := &http.Server{ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 90 * time.Second}
+~~~
+
+## Очередь приёма
+{{ss -ltn}}: Recv-Q у слушающего сокета близок к Send-Q — backlog переполнен.`,
+cs:`## Обобщённый случай из практики: исчерпание эфемерных портов
+**Ситуация.** Сервис на каждый запрос к соседу создавал новый http.Client и не читал тело ответа до конца.
+
+**Что пошло не так.** Под нагрузкой появились ошибки {{connect: cannot assign requested address}}, в {{ss}} — десятки тысяч соединений в TIME_WAIT.
+
+**Причина.** Соединения не переиспользовались: без чтения тела и Close keep-alive не работает, а каждый новый клиент — новый пул.
+
+**Как исправили.** Один общий http.Client, {{io.Copy(io.Discard, resp.Body)}} и Close, настройка {{MaxIdleConnsPerHost}} ([[tcp-keepalive]]).`});

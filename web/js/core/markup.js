@@ -2,7 +2,7 @@
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function inline(s){
   s=esc(s);
-  s=s.replace(/\{\{(.+?)\}\}/g,(m,c)=>'<code>'+c+'</code>');
+  s=s.replace(/\{\{(.+?\}*)\}\}/g,(m,c)=>'<code>'+c+'</code>');
   s=s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
   // внешняя ссылка [текст](https://…)
   s=s.replace(/(^|[^\[])\[([^\[\]]+)\]\((https?:\/\/[^\s)]+)\)/g,(x,p,txt,u)=>p+'<a href="'+u+'" target="_blank" rel="noopener">'+txt+'</a>');

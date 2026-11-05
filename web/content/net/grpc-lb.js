@@ -126,3 +126,23 @@ srv := grpc.NewServer(grpc.KeepaliveParams(keepalive.ServerParameters{
 }))`
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("grpc-lb",{ex:`## Клиентская балансировка в Kubernetes
+~~~
+conn, err := grpc.NewClient("dns:///orders-headless.app.svc.cluster.local:9090",
+	grpc.WithDefaultServiceConfig(\`{"loadBalancingConfig":[{"round_robin":{}}]}\`),
+	grpc.WithTransportCredentials(insecure.NewCredentials()))
+~~~
+headless service отдаёт адреса всех подов.
+
+## Обновление адресов
+DNS-резолвер gRPC перечитывает записи при ошибках соединения; для быстрого обновления — xDS или свой resolver поверх Kubernetes API.`,
+cs:`## Обобщённый случай из практики: трафик не уходил с удалённых подов
+**Ситуация.** Клиентская балансировка через DNS headless service.
+
+**Что пошло не так.** После деплоя часть клиентов ещё минуту отправляла запросы на адреса старых подов и получала ошибки.
+
+**Причина.** Клиент обновлял список адресов только при ошибке, а старые поды закрывались без graceful shutdown.
+
+**Как исправили.** Graceful shutdown с GOAWAY и задержкой перед остановкой (preStop), чтобы клиенты успели переподключиться; health checking в gRPC.`});

@@ -98,7 +98,10 @@ _, _ = io.Copy(io.Discard, resp.Body) // дочитать, чтобы соеди
 
 // Примеры и сложный случай
 KB.ex("net-http",{ex:`## Клиент для внешнего API
-{{&http.Client{Timeout: 5 * time.Second, Transport: &http.Transport{MaxIdleConnsPerHost: 100}}}} — один клиент на весь сервис, а не новый на каждый запрос: иначе соединения не переиспользуются.
+~~~
+client := &http.Client{Timeout: 5 * time.Second, Transport: &http.Transport{MaxIdleConnsPerHost: 100}}
+~~~
+Один клиент на весь сервис, а не новый на каждый запрос: иначе соединения не переиспользуются.
 
 ## Маршрутизация Go 1.22
 ~~~

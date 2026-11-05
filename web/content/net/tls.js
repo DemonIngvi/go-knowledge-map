@@ -90,3 +90,26 @@ KB.v("tls",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("tls",{ex:`## Посмотреть сертификат и срок
+{{openssl s_client -connect api.example.com:443 -servername api.example.com </dev/null | openssl x509 -noout -subject -issuer -enddate}}
+
+## Сервер в Go
+~~~
+srv := &http.Server{TLSConfig: &tls.Config{MinVersion: tls.VersionTLS12}}
+srv.ListenAndServeTLS("cert.pem", "key.pem")
+~~~
+
+## Алерт на истечение
+Метрика blackbox exporter {{probe_ssl_earliest_cert_expiry - time() < 14 * 86400}} ([[prometheus]]).`,
+cs:`## Heartbleed: утечка памяти сервера через TLS heartbeat
+**Источник**: [heartbleed.com](https://heartbleed.com/), [OpenSSL Security Advisory 2014-04-07](https://www.openssl.org/news/secadv/20140407.txt).
+
+**Ситуация.** OpenSSL 1.0.1–1.0.1f использовался значительной частью веб-серверов.
+
+**Что пошло не так.** В расширении heartbeat сервер возвращал столько байт, сколько заявил клиент, не сверив с фактическим размером сообщения. Атакующий получал до 64 КБ памяти процесса за запрос — включая приватные ключи, пароли и cookies — без следов в логах.
+
+**Последствия.** Обновление OpenSSL, **перевыпуск сертификатов и отзыв старых**, смена паролей пользователей.
+
+**Вывод.** Отсутствие проверки границ в C-коде; ключи должны ротироваться без боли; полезны реализации на безопасных по памяти языках (crypto/tls в Go не был затронут).`});

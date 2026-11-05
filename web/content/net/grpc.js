@@ -90,3 +90,26 @@ KB.v("grpc",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("grpc",{ex:`## Дедлайн на каждый вызов
+~~~
+ctx, cancel := context.WithTimeout(ctx, 300*time.Millisecond)
+defer cancel()
+resp, err := client.GetOrder(ctx, &pb.GetOrderRequest{Id: id})
+if status.Code(err) == codes.DeadlineExceeded { … }
+~~~
+
+## Проверка без кода
+{{grpcurl -plaintext localhost:9090 list}}, {{grpcurl -d '{"id":42}' localhost:9090 orders.v1.Orders/GetOrder}} — при включённом reflection.
+
+## Совместимость
+{{buf breaking --against '.git#branch=main'}} в CI.`,
+cs:`## Обобщённый случай из практики: переиспользованный номер поля
+**Ситуация.** Из сообщения удалили поле {{string coupon = 7;}}, а позже добавили новое {{int64 discount_cents = 7;}}.
+
+**Что пошло не так.** Старые клиенты продолжали слать coupon с номером 7; новый сервер интерпретировал байты как discount_cents — заказы получали странные скидки.
+
+**Причина.** В protobuf поле определяется номером, а не именем.
+
+**Как исправили.** {{reserved 7; reserved "coupon";}} для удалённых полей, buf breaking в CI ([[contracts]]).`});

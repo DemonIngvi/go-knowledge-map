@@ -113,3 +113,27 @@ func (s *server) Watch(req *pb.WatchRequest, stream pb.Prices_WatchServer) error
 }`
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("grpc-streaming",{ex:`## Серверный стрим с отменой
+~~~
+func (s *srv) Watch(req *pb.WatchReq, stream pb.Orders_WatchServer) error {
+	for {
+		select {
+		case <-stream.Context().Done(): return stream.Context().Err()
+		case ev := <-s.events(req.Id): if err := stream.Send(ev); err != nil { return err }
+		}
+	}
+}
+~~~
+
+## Keepalive
+{{keepalive.ServerParameters}} с {{Time: 30*time.Second}} и {{MaxConnectionAge}} — соединения переподключаются и распределяются по новым подам.`,
+cs:`## Обобщённый случай из практики: после масштабирования новые поды простаивали
+**Ситуация.** Клиенты держали долгие стримы к сервису. Под нагрузкой добавили поды через HPA.
+
+**Что пошло не так.** Новые поды почти не получали трафика: стримы, открытые до масштабирования, жили часами на старых подах.
+
+**Причина.** Балансировка происходит при установке соединения; долгий стрим к новому поду сам не переедет.
+
+**Как исправили.** {{MaxConnectionAge}} с {{MaxConnectionAgeGrace}} на сервере — клиенты периодически переподключаются; клиент умеет восстанавливать стрим с позиции ([[grpc-lb]], [[hpa]]).`});

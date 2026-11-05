@@ -20,6 +20,11 @@ const BY={};T.forEach(t=>BY[t.id]=t);let preN=0;
 for(const [id,ps] of Object.entries(PREREQ)){if(!BY[id]){err('prereq: нет темы',id);continue;}ps.forEach(p=>{preN++;if(!BY[p])err('prereq: нет предпосылки',id,'←',p);else if(BY[p].s>BY[id].s)err('prereq: предпосылка на уровне выше',id,'←',p);if(p===id)err('prereq: тема сама себе',id);});}
 T.forEach(t=>{if(!PREREQ[t.id])console.log('нет записи в prereq.js:',t.id);});
 {const state={};const dfs=(u,stack)=>{state[u]=1;for(const p of PREREQ[u]||[]){if(state[p]===1){err('prereq: цикл',[...stack,u,p].join(' → '));continue;}if(!state[p])dfs(p,[...stack,u]);}state[u]=2;};Object.keys(PREREQ).forEach(u=>{if(!state[u])dfs(u,[]);});}
+// примеры и сложные случаи: ссылки и разметка
+for(const [id,o] of Object.entries(KB.exs)){if(!ids.has(id))err('примеры без темы',id);
+  for(const k of ['ex','cs']){const x=o[k];if(typeof x!=='string'||!x.trim()){err('пустой раздел',id,k);continue;}
+    (x.match(/\[\[([a-z0-9-]+)/g)||[]).forEach(m=>{if(!ids.has(m.slice(2)))err('битая ссылка в примерах',id,k,'→',m.slice(2));});
+    const s=x.replace(/^~~~[\s\S]*?^~~~/mg,'');if((s.match(/\{\{/g)||[]).length!==(s.match(/\}\}/g)||[]).length)err('непарные {{ }} в примерах',id,k);}}
 const noEx=T.filter(t=>!KB.exs[t.id]).map(t=>t.id);
 const noQuiz=T.filter(t=>!KB.qz[t.id]).map(t=>t.id),orph=T.filter(t=>!inc[t.id]).map(t=>t.id);
 console.log('тем',T.length,'· ссылок',links,'· вопросов',Object.values(KB.qz).reduce((s,q)=>s+q.length,0),'· тем со схемами',Object.keys(KB.vz).length);

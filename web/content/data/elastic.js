@@ -104,7 +104,7 @@ PUT products
 Новый индекс {{products_v2}}, {{_reindex}} из старого, затем атомарное переключение алиаса {{products}} через {{_aliases}}.
 
 ## Глубокая пагинация
-{{search_after}} с сортировкой по {{(created_at, id)}} вместо {{from: 100000}} ([[pagination]]).`,
+{{search_after}} с сортировкой по {{(created_at, id)}} вместо {{from: 100000}}.`,
 cs:`## Обобщённый случай из практики: mapping explosion
 **Ситуация.** В Elasticsearch писали логи с полем {{context}} — произвольным JSON от разных сервисов, с динамическим mapping.
 
@@ -112,4 +112,4 @@ cs:`## Обобщённый случай из практики: mapping explosio
 
 **Причина.** Динамический mapping создаёт поле на каждый новый ключ.
 
-**Как исправили.** {{dynamic: false}} для context (или тип {{flattened}}), лимит {{index.mapping.total_fields.limit}}, правило логирования: идентификаторы — в значения, а не в ключи ([[logging]]).`});
+**Как исправили.** {{dynamic: false}} для context (или тип {{flattened}}), лимит {{index.mapping.total_fields.limit}}, правило логирования: идентификаторы — в значения, а не в ключи ([[elk]]).`});

@@ -45,3 +45,25 @@ func securityHeaders(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }`}]);
+
+// Примеры и сложный случай
+KB.ex("owasp",{ex:`## Параметризованный запрос
+{{db.QueryRow(ctx, "SELECT * FROM users WHERE email = $1", email)}} — никогда {{fmt.Sprintf}} в SQL.
+
+## Заголовки безопасности
+~~~
+w.Header().Set("Content-Security-Policy", "default-src 'self'; frame-ancestors 'none'")
+w.Header().Set("X-Content-Type-Options", "nosniff")
+w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+~~~
+
+## SSRF
+Запросы по URL от пользователя — только через клиент, запрещающий приватные адреса и {{169.254.169.254}}.`,
+cs:`## Обобщённый случай из практики: CORS с отражением Origin
+**Ситуация.** Чтобы «починить CORS» для нового фронтенда, бэкенд стал возвращать {{Access-Control-Allow-Origin}} равным присланному Origin вместе с {{Access-Control-Allow-Credentials: true}}.
+
+**Что пошло не так.** Любой сайт мог от имени залогиненного пользователя читать его данные через fetch с cookies.
+
+**Причина.** Отражение Origin фактически разрешает все домены.
+
+**Как исправили.** Белый список доменов в конфиге, SameSite cookies, тест на запрос с чужим Origin.`});

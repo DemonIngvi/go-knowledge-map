@@ -82,3 +82,24 @@ KB.v("canary-picker",[
   edges:[["rq","h",""],["h","v2","да"],["h","v1","нет"],["cfg","h","","dv"]]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("canary-picker",{ex:`## Свой picker в Go
+~~~
+func (p *canaryPicker) Pick(info balancer.PickInfo) (balancer.PickResult, error) {
+	if md, ok := metadata.FromOutgoingContext(info.Ctx); ok && len(md.Get("x-canary")) > 0 {
+		return balancer.PickResult{SubConn: p.canary.Next()}, nil
+	}
+	if rand.Float64() < p.share { return balancer.PickResult{SubConn: p.canary.Next()}, nil }
+	return balancer.PickResult{SubConn: p.stable.Next()}, nil
+}
+~~~
+
+## Липкость
+Хэш от user_id вместо случайного числа — пользователь всегда попадает в одну версию.`,
+cs:`## Обобщённый случай из практики: канарейка, которая ничего не показала
+**Ситуация.** Новую версию выкатили на 5% запросов, метрики ошибок не изменились, версию раскатили на всех — и получили инцидент.
+
+**Причина.** Канарейка получала случайные запросы, а ошибка проявлялась только у пользователей с определённой настройкой, которых в 5% почти не было; кроме того, метрики канарейки смотрели вместе с основными, и её 5% ошибок растворялись.
+
+**Как исправили.** Отдельные метрики и SLO для канареечной версии, автоматическое сравнение с базовой (Argo Rollouts / Flagger), липкое распределение по пользователям ([[slo]], [[argocd]]).`});
