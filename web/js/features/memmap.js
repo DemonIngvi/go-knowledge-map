@@ -2,7 +2,7 @@
 const RANK={new:0,ok1:1,ok2:2,ok3:3,soon:4,due:5};
 function memLevel(id){const x=st(id);if(x==='new')return 'new';if(x==='due'||x==='fail')return 'due';
   const s=SR[id],r=(s.due-Date.now())/(IV[s.b]*DAY);if(r<.2)return 'soon';if(r<.35)return 'ok3';if(r<.6)return 'ok2';return 'ok1';}
-let memOn=false;try{memOn=localStorage.getItem('gokb-mem')==='1';}catch(e){}
+let memOn=true;try{memOn=localStorage.getItem('gokb-mem')!=='0';}catch(e){}
 const memBtn=document.getElementById('memBtn');
 function paintMem(){svg.classList.toggle('memmap',memOn);memBtn.setAttribute('aria-pressed',memOn);document.getElementById('memLegend').hidden=!memOn;
   if(!memOn)return;

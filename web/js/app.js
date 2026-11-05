@@ -12,8 +12,9 @@ function route(){const h=location.hash.slice(1);
   else if(h==='plan'){show('plan');renderPlan();document.title='Карта знаний Go-бэкенда';}
   else if(h==='terms'){show('terms');document.title='Карта знаний Go-бэкенда';}
   else if(h==='review'){show('review');renderReview();document.title='Повторение — Карта знаний Go-бэкенда';}
-  else if(h==='tree'){show('tree');renderTree();document.title='Дерево знаний — Карта знаний Go-бэкенда';}
-  else{show('graph');setVB();document.title='Карта знаний Go-бэкенда';}
+  else if(h==='graph'){show('graph');fitGraph();document.title='Граф знаний — Карта знаний Go-бэкенда';}
+  else if(h==='tree'||!h){show('tree');renderTree();document.title='Дерево знаний — Карта знаний Go-бэкенда';}
+  else{show('tree');renderTree();document.title='Дерево знаний — Карта знаний Go-бэкенда';}
   renderBanner();markNav();}
 window.addEventListener('hashchange',route);
 renderNav();renderTerms();stat();paintMem();route();loadServer();

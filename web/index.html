@@ -23,8 +23,8 @@
   <button class="menu-btn" id="menuBtn" aria-label="Открыть оглавление">☰ Темы</button>
   <div class="brand">Карта знаний Go-бэкенда <small>GO · STACK</small></div>
   <nav class="tabs" aria-label="Разделы">
-    <a href="#graph" data-v="graph">Граф</a>
     <a href="#tree" data-v="tree">Дерево</a>
+    <a href="#graph" data-v="graph">Граф</a>
     <a href="#plan" data-v="plan">План обучения</a>
     <a href="#terms" data-v="terms">Термины</a>
     <a href="#review" data-v="review">Повторение</a>
@@ -44,7 +44,15 @@
     <div class="banner" id="banner" hidden></div>
     <section class="view" id="v-graph">
       <h1 class="view-h">Граф знаний</h1>
-      <p class="lead">Темы сгруппированы в блоки, блоки — в зоны. Зоны посчитаны по плотности перекрёстных ссылок между статьями. Ленты показывают, сколько связей между блоками. Издалека видны зоны и блоки, при приближении — темы. Кнопки ниже подсвечивают выбранные зоны и блоки; щелчок по теме открывает статью, двойной щелчок по блоку приближает его.</p>
+      <details class="lead g-help"><summary>Как читать граф</summary>Темы сгруппированы в блоки, блоки — в зоны. Зоны посчитаны по плотности перекрёстных ссылок между статьями. Ленты показывают, сколько связей между блоками. Издалека видны зоны и блоки, при приближении — темы. Кнопки ниже подсвечивают выбранные зоны и блоки; щелчок по теме открывает статью, двойной щелчок по блоку приближает его.</details>
+      <div class="g-layout">
+      <div class="graph-shell">
+        <svg id="kgraph" role="img" aria-label="Граф связанных тем"></svg>
+        <div class="g-tools"><button id="zin" aria-label="Приблизить">+</button><button id="zout" aria-label="Отдалить">−</button><button id="zfit" aria-label="Показать всё">⤢</button></div>
+        <div class="g-tip" id="gtip"></div>
+        <div class="gcard" id="gcard" hidden></div>
+      </div>
+      <aside class="g-side" aria-label="Управление графом">
       <div class="g-row">
         <label for="stageSel" class="stat" style="display:inline">Уровень:</label>
         <select id="stageSel"><option value="">все уровни</option></select>
@@ -66,11 +74,7 @@
         <label class="stat" style="display:inline"><input type="checkbox" id="ribOn"> ленты связей между блоками</label>
         <label class="stat" style="display:inline" for="ribThr">от</label> <input type="range" id="ribThr" min="1" max="12" value="3" aria-label="Минимум связей для ленты"> <b class="stat" id="ribThrV">3</b>
       </div>
-      <div class="graph-shell">
-        <svg id="kgraph" role="img" aria-label="Граф связанных тем"></svg>
-        <div class="g-tools"><button id="zin" aria-label="Приблизить">+</button><button id="zout" aria-label="Отдалить">−</button><button id="zfit" aria-label="Показать всё">⤢</button></div>
-        <div class="g-tip" id="gtip"></div>
-        <div class="gcard" id="gcard" hidden></div>
+      </aside>
       </div>
       <details class="mx-box"><summary>Матрица связности блоков</summary>
         <p class="lead">Число перекрёстных ссылок между блоками; чем темнее клетка, тем сильнее связь относительно размеров блоков. Жирные линии — границы зон. Наведите на клетку, чтобы подсветить пару на графе.</p>

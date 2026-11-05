@@ -14,4 +14,8 @@ window.addEventListener('pointermove',e=>{if(!drag)return;const r=svg.getBoundin
   if(Math.abs(dx)+Math.abs(dy)>4){moved=true;svg.classList.add('dragging');}vb.x=drag.vx-dx*s;vb.y=drag.vy-dy*s;setVB();});
 window.addEventListener('pointerup',()=>{drag=null;svg.classList.remove('dragging');setTimeout(()=>moved=false,0);});
 
-window.addEventListener('resize',setVB);
+// высота области графа — до низа окна, с учётом фильтров над ним
+function fitGraph(){const sh=document.querySelector('.graph-shell');if(!sh||sh.offsetParent===null)return;
+  const top=sh.getBoundingClientRect().top+window.scrollY;const h=Math.max(420,window.innerHeight-top-12);sh.style.height=h+'px';sh.parentNode.style.setProperty('--gh',h+'px');setVB();}
+window.addEventListener('resize',fitGraph);
+document.querySelector('.g-help')?.addEventListener('toggle',fitGraph);

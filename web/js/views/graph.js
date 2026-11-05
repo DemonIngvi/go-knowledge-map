@@ -74,7 +74,6 @@ BLOCKS.forEach(b=>{const c=BP[b.id];
   const tx=el('text',{x:c.x,y:c.y-c.r+22,class:'g-hlabel','data-b':b.id},gL);tx.textContent=b.name;tx.style.setProperty('--h',b.h);
   el('text',{x:c.x,y:c.y-c.r+38,class:'g-hcount','data-b':b.id},gL).textContent=bsize[b.id]+' '+plural(bsize[b.id],'тема','темы','тем');
   el('text',{x:c.x,y:c.y+c.r+18,class:'g-hstat','data-b':b.id},gL);
-  ci.addEventListener('pointerenter',()=>{if(!filterSet)focusBlock(b.id);});ci.addEventListener('pointerleave',()=>{if(!filterSet)clearFocus();tip.textContent=defTip;});
   ci.addEventListener('dblclick',e=>{e.preventDefault();zoomTo(c.x,c.y,c.r*2.8);});});
 
 // связи тем и сами темы
@@ -86,7 +85,8 @@ const nodeEls=nodes.map(n=>{const g=el('g',{class:'g-node l'+n.t.l+(st(n.t.id)!=
 const adj=nodes.map(()=>new Set());edges.forEach(([i,j])=>{adj[i].add(j);adj[j].add(i);});
 
 // ---------- подсветка ----------
-const tip=document.getElementById('gtip');const defTip='Наведите на тему или блок. Щелчок по теме открывает статью, двойной щелчок по блоку приближает его.';tip.textContent=defTip;
+const tip=document.getElementById('gtip');// реакции на наведение нет (по просьбе владельца): только кнопки, фильтры, масштаб и щелчки
+const defTip='Выберите зоны или блоки кнопками выше. Щелчок по теме открывает статью, двойной щелчок по блоку приближает его.';tip.textContent=defTip;
 function focusNodes(set,blocks){svg.classList.add('focus');
   nodeEls.forEach((g,i)=>g.classList.toggle('hl',set.has(i)));
   edgeEls.forEach((p,k)=>{if(!p)return;const[i,j]=edges[k];p.classList.toggle('hl',set.has(i)&&set.has(j));});
@@ -101,13 +101,6 @@ function focusBlock(b){const nb=new Set([b]);ribEls.forEach(r=>{if(r.a===b)nb.ad
 let filterSet=null;
 function clearFocus(){if(filterSet){applyFilter();return;}svg.classList.remove('focus');}
 nodeEls.forEach((g,i)=>{
-  g.addEventListener('pointerenter',()=>{const s=new Set([i,...adj[i]]);focusNodes(s,new Set([...s].map(k=>nodes[k].t.b)));
-    edgeEls.forEach((p,k)=>{if(!p)return;const[a,b]=edges[k];p.classList.toggle('hl',a===i||b===i);});
-    const t=nodes[i].t;const SL={new:'не изучено',ok:'свежо, повторить через '+(SR[t.id]?rel(SR[t.id].due-Date.now()):''),soon:'повторить в течение суток',due:'пора повторить',fail:'тест не сдан'};
-    tip.innerHTML='<b>'+t.t+'</b> · '+BI[t.b].name+' · уровень '+t.s+' · связей: '+adj[i].size+' · '+SL[st(t.id)];
-    g.classList.add('hot');labelNeighbours(i);showCard(i,SL[st(t.id)]);});
-  g.addEventListener('pointerleave',()=>{clearFocus();tip.textContent=defTip;hideCard();g.classList.remove('hot');nodeEls.forEach(x=>x.classList.remove('nolab'));});
-  g.addEventListener('pointermove',e=>moveCard(e));
   g.addEventListener('click',()=>{if(moved)return;location.hash='t-'+nodes[i].t.id;});
   g.addEventListener('keydown',e=>{if(e.key==='Enter')location.hash='t-'+nodes[i].t.id;});});
 
@@ -142,10 +135,7 @@ ribOn.onchange=applyRibbons;ribThr.oninput=applyRibbons;applyRibbons();
     return '<td class="'+cls+'" style="--v:'+v.toFixed(3)+'" data-a="'+a+'" data-b="'+b+'" title="'+BI[a].name+' ↔ '+BI[b].name+': '+c+'">'+(c||'')+'</td>';}).join('')+'</tr>';});
   const box=document.getElementById('mx');box.innerHTML=h+'</table>';
   box.querySelectorAll('td.v').forEach(td=>{const a=td.dataset.a,b=td.dataset.b;if(a===b)return;
-    td.onmouseenter=()=>{if(filterSet)return;const s=new Set();nodes.forEach((n,i)=>{if(n.t.b===a||n.t.b===b)s.add(i);});focusNodes(s,new Set([a,b]));
-      edgeEls.forEach((p,k)=>{if(!p)return;const[i,j]=edges[k];const x=T[i].b,y=T[j].b;p.classList.toggle('hl',(x===a&&y===b)||(x===b&&y===a));});
-      tip.innerHTML='<b>'+BI[a].name+' ↔ '+BI[b].name+'</b>: '+(pair[[a,b].sort().join('~')]||0)+' связей между темами';};
-    td.onmouseleave=()=>{clearFocus();tip.textContent=defTip;};});})();
+});})();
 
 // ---------- карточка-подсказка у курсора ----------
 const gcard=document.getElementById('gcard'),gshell=svg.parentNode;
