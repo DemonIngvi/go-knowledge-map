@@ -80,3 +80,27 @@ KB.v("proxies",[
   edges:[["u","l4",""],["l4","gw",""],["gw","s1",""],["gw","s2",""],["gw","s3",""]]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("proxies",{ex:`## Envoy: повторы и outlier detection
+~~~
+retry_policy: { retry_on: "5xx,reset", num_retries: 2, per_try_timeout: 0.3s }
+outlier_detection: { consecutive_5xx: 5, base_ejection_time: 30s, max_ejection_percent: 50 }
+~~~
+
+## Nginx: таймауты к бэкенду
+{{proxy_connect_timeout 1s; proxy_read_timeout 10s; proxy_next_upstream error timeout;}}
+
+## HAProxy
+{{option redispatch}} и {{retries 2}} — перекинуть запрос на другой сервер при отказе соединения.`,
+cs:`## Cloudflare: регулярное выражение загрузило CPU по всему миру
+**Источник**: [Details of the Cloudflare outage on July 2, 2019](https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/).
+
+**Ситуация.** В WAF — часть прокси на каждом сервере edge — выкатили новое правило.
+
+**Что пошло не так.** Регулярное выражение в правиле вызывало катастрофический бэктрекинг. Правило раскатилось на все серверы сразу, CPU везде ушёл в 100%, и прокси перестали обслуживать трафик — около 27 минут глобальных ошибок 502.
+
+**Вывод.**
+- Конфигурация прокси — это код: поэтапная раскатка и для неё, а не только для бинарников ([[canary-picker]]).
+- Движок регулярных выражений с гарантией линейного времени (так работает пакет regexp в Go — RE2).
+- Лимиты CPU на обработку одного запроса.`});
