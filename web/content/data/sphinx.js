@@ -23,7 +23,7 @@ KB.add({
 Сравнение: Sphinx и Manticore быстрее и легче по ресурсам, [[elastic]] богаче по агрегациям и экосистеме.`,
  m:[
   ["Manticore Search manual","https://manual.manticoresearch.com/"],
-  ["Sphinx documentation","https://sphinxsearch.com/docs/"]
+  ["Manticore Search: документация","https://manual.manticoresearch.com/"]
  ]
 });
 

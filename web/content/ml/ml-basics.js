@@ -52,7 +52,7 @@ KB.ex("ml-basics",{ex:`## Где ML встречается бэкенд-разр
 Модель нашла 80 транзакций как фрод, из них 60 действительно фрод (precision = 0,75), а всего фрода было 100 (recall = 0,6). Поднимаем порог — precision растёт, recall падает. Выбирают по стоимости ошибок: сколько стоит пропущенный фрод и сколько — потерянный клиент.
 
 ## Минимальная интеграция в Go
-- Модель экспортируют в ONNX и вызывают из отдельного сервиса на Python (Triton, FastAPI) или прямо из Go через ONNX Runtime (с [[cgo]]).
+- Модель экспортируют в ONNX и вызывают из отдельного сервиса на [[python-basics|Python]] (Triton, FastAPI) или прямо из Go через ONNX Runtime (с [[cgo]]).
 - У вызова модели — таймаут и **запасное поведение** при отказе: правила вместо модели, а не 500 на весь платёж ([[resilience]]).`,
 cs:`## Zillow Offers: модель, которая не заметила смены рынка
 **Источник**: [сообщение Zillow о закрытии Zillow Offers (ноябрь 2021)](https://www.zillow.com/news/zillow-group-reports-third-quarter-2021-financial-results-shares-plan-to-wind-down-zillow-offers-operations/).

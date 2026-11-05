@@ -27,8 +27,8 @@ KB.add({
 Что делать с тестами, которые врут, — в [[test-outcomes]].`,
  m:[
   [
-   "Unit Testing Principles (V. Khorikov) — обзор AAA",
-   "https://enterprisecraftsmanship.com/posts/structure-unit-test/"
+   "V. Khorikov: Unit Testing Principles, Practices, and Patterns (книга, глава про AAA)",
+   "https://www.manning.com/books/unit-testing"
   ],
   ["Martin Fowler: GivenWhenThen","https://martinfowler.com/bliki/GivenWhenThen.html"]
  ]

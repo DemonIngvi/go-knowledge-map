@@ -49,7 +49,7 @@ KB.add({
 
 ## Сеть и конфигурация
 - **Service** (ClusterIP, NodePort, LoadBalancer, headless) — стабильный адрес для набора подов ([[service-discovery]], [[dns-k8s]]). Внешний вход — Ingress или Gateway API ([[proxies]]).
-- **ConfigMap и Secret** — конфигурация и секреты ([[vault]]). **NetworkPolicy** — файрвол между подами ([[acl]]).
+- **ConfigMap и Secret** — конфигурация и секреты вне образа, как требует [[twelve-factor]] ([[vault]]). **NetworkPolicy** — файрвол между подами ([[acl]]).
 
 ## Пробы — частый источник аварий
 - **readiness**: готов ли под принимать трафик. Не прошёл — убирается из Service.
@@ -63,7 +63,7 @@ KB.add({
   ["Kubernetes: Concepts","https://kubernetes.io/docs/concepts/"],
   ["Kubernetes the Hard Way","https://github.com/kelseyhightower/kubernetes-the-hard-way"],
   ["Kubernetes: Probes","https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/"],
-  ["Слёрм: бесплатные материалы по Kubernetes (YouTube)","https://www.youtube.com/@SlurmIT"]
+  ["Слёрм: курсы и бесплатные материалы по Kubernetes","https://slurm.io/"]
  ]
 });
 

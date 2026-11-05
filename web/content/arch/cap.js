@@ -46,7 +46,7 @@ KB.ex("cap",{ex:`## Выбор на уровне операции
 ## Read-your-writes с репликами
 После изменения профиля пользователя его следующие запросы 5 секунд идут на мастер (метка в cookie или сессии), остальные — на реплики.`,
 cs:`## GitHub: 43 секунды разрыва сети и сутки деградации
-**Источник**: [October 21 post-incident analysis (GitHub, 2018)](https://github.blog/2018-10-30-oct21-post-incident-analysis/).
+**Источник**: [October 21 post-incident analysis (GitHub, 2018)](https://github.blog/news-insights/company-news/oct21-post-incident-analysis/).
 
 **Ситуация.** Кластеры MySQL GitHub работали в двух датацентрах, переключение мастера выполнял orchestrator с консенсусом.
 

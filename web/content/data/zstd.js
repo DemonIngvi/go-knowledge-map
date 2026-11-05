@@ -26,7 +26,7 @@ KB.add({
 ## В Go
 {{github.com/klauspost/compress/zstd}} — быстрая реализация на чистом Go без cgo ([[cgo]]); из той же библиотеки быстрые gzip и s2. Переиспользуйте encoder и decoder: их создание дорогое ([[memory]]).`,
  m:[
-  ["Zstandard","https://facebook.github.io/zstd/"],
+  ["Zstandard","https://github.com/facebook/zstd"],
   ["klauspost/compress","https://github.com/klauspost/compress"],
   ["RFC 8878 (zstd)","https://www.rfc-editor.org/rfc/rfc8878"]
  ]

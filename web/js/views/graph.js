@@ -78,8 +78,9 @@ BLOCKS.forEach(b=>{const c=BP[b.id];
   ci.addEventListener('dblclick',e=>{e.preventDefault();zoomTo(c.x,c.y,c.r*2.8);});});
 
 // связи тем и сами темы
-const edgeEls=edges.map(([i,j])=>{const a=nodes[i],c=nodes[j];const same=a.t.b===c.t.b;
-  const p=el('line',{x1:a.x,y1:a.y,x2:c.x,y2:c.y,class:'g-edge'+(same?' in':'')+(ZB[a.t.b]===ZB[c.t.b]?' inz':'')},gE);if(same)p.style.setProperty('--h',BI[a.t.b].h);return p;});
+// связи внутри блока не рисуем: блок и так показан кругом (по просьбе владельца); edgeEls выровнен по edges, для них null
+const edgeEls=edges.map(([i,j])=>{const a=nodes[i],c=nodes[j];if(a.t.b===c.t.b)return null;
+  return el('line',{x1:a.x,y1:a.y,x2:c.x,y2:c.y,class:'g-edge'+(ZB[a.t.b]===ZB[c.t.b]?' inz':'')},gE);});
 const nodeEls=nodes.map(n=>{const g=el('g',{class:'g-node l'+n.t.l+(st(n.t.id)!=='new'?' st-'+st(n.t.id):''),transform:'translate('+n.x+','+n.y+')',tabindex:0,role:'link','aria-label':n.t.t},gN);g.style.setProperty('--h',BI[n.t.b].h);
   el('circle',{r:n.t.l===1?6.5:n.t.l===2?5:3.6},g);const tx=el('text',{y:n.t.l===1?17:14},g);tx.textContent=n.t.short||n.t.t;return g;});
 const adj=nodes.map(()=>new Set());edges.forEach(([i,j])=>{adj[i].add(j);adj[j].add(i);});
@@ -88,7 +89,7 @@ const adj=nodes.map(()=>new Set());edges.forEach(([i,j])=>{adj[i].add(j);adj[j].
 const tip=document.getElementById('gtip');const defTip='Наведите на тему или блок. Щелчок по теме открывает статью, двойной щелчок по блоку приближает его.';tip.textContent=defTip;
 function focusNodes(set,blocks){svg.classList.add('focus');
   nodeEls.forEach((g,i)=>g.classList.toggle('hl',set.has(i)));
-  edgeEls.forEach((p,k)=>{const[i,j]=edges[k];p.classList.toggle('hl',set.has(i)&&set.has(j));});
+  edgeEls.forEach((p,k)=>{if(!p)return;const[i,j]=edges[k];p.classList.toggle('hl',set.has(i)&&set.has(j));});
   gH.querySelectorAll('.g-hull').forEach(c=>c.classList.toggle('hl',blocks.has(c.dataset.b)));
   gL.querySelectorAll('.g-hlabel,.g-hcount,.g-hstat').forEach(c=>c.classList.toggle('hl',blocks.has(c.dataset.b)));
   ribEls.forEach(r=>{const on=blocks.has(r.a)&&blocks.has(r.b);r.p.classList.toggle('hl',on);r.t.classList.toggle('hl',on);});}
@@ -101,7 +102,7 @@ let filterSet=null;
 function clearFocus(){if(filterSet){applyFilter();return;}svg.classList.remove('focus');}
 nodeEls.forEach((g,i)=>{
   g.addEventListener('pointerenter',()=>{const s=new Set([i,...adj[i]]);focusNodes(s,new Set([...s].map(k=>nodes[k].t.b)));
-    edgeEls.forEach((p,k)=>{const[a,b]=edges[k];p.classList.toggle('hl',a===i||b===i);});
+    edgeEls.forEach((p,k)=>{if(!p)return;const[a,b]=edges[k];p.classList.toggle('hl',a===i||b===i);});
     const t=nodes[i].t;const SL={new:'не изучено',ok:'свежо, повторить через '+(SR[t.id]?rel(SR[t.id].due-Date.now()):''),soon:'повторить в течение суток',due:'пора повторить',fail:'тест не сдан'};
     tip.innerHTML='<b>'+t.t+'</b> · '+BI[t.b].name+' · уровень '+t.s+' · связей: '+adj[i].size+' · '+SL[st(t.id)];
     g.classList.add('hot');labelNeighbours(i);showCard(i,SL[st(t.id)]);});
@@ -142,7 +143,7 @@ ribOn.onchange=applyRibbons;ribThr.oninput=applyRibbons;applyRibbons();
   const box=document.getElementById('mx');box.innerHTML=h+'</table>';
   box.querySelectorAll('td.v').forEach(td=>{const a=td.dataset.a,b=td.dataset.b;if(a===b)return;
     td.onmouseenter=()=>{if(filterSet)return;const s=new Set();nodes.forEach((n,i)=>{if(n.t.b===a||n.t.b===b)s.add(i);});focusNodes(s,new Set([a,b]));
-      edgeEls.forEach((p,k)=>{const[i,j]=edges[k];const x=T[i].b,y=T[j].b;p.classList.toggle('hl',(x===a&&y===b)||(x===b&&y===a));});
+      edgeEls.forEach((p,k)=>{if(!p)return;const[i,j]=edges[k];const x=T[i].b,y=T[j].b;p.classList.toggle('hl',(x===a&&y===b)||(x===b&&y===a));});
       tip.innerHTML='<b>'+BI[a].name+' ↔ '+BI[b].name+'</b>: '+(pair[[a,b].sort().join('~')]||0)+' связей между темами';};
     td.onmouseleave=()=>{clearFocus();tip.textContent=defTip;};});})();
 

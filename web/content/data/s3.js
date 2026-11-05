@@ -27,7 +27,7 @@ KB.add({
 AWS SDK for Go v2 или minio-go; с любой S3-совместимой реализацией работают через указание endpoint. Локально — MinIO в docker compose ([[docker]]). Бэкапы баз (WAL-G, pgBackRest, [[pg-wal]]) и логи ([[grafana-stack|Loki]], Tempo, Mimir) тоже хранятся в S3.`,
  m:[
   ["Amazon S3 User Guide","https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"],
-  ["AWS SDK for Go v2","https://aws.github.io/aws-sdk-go-v2/docs/"],
+  ["AWS SDK for Go v2","https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/"],
   ["MinIO Go client","https://min.io/docs/minio/linux/developers/go/minio-go.html"]
  ]
 });
