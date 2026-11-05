@@ -84,27 +84,26 @@
 
     <section class="view" id="v-tree" hidden>
       <h1 class="view-h">Дерево знаний</h1>
-      <p class="lead">Темы разложены по уровням глубины, слева направо: от фундамента к экспертизе. Стрелка ведёт от темы, которую нужно знать раньше, к теме, которая на неё опирается. Щёлкните тему, чтобы подсветить маршрут; двойной щелчок открывает статью.</p>
+      <p class="lead">Этапы пути бэкендера по порядку изучения — со схемы из видео А. Шумейко «Как стать Backend разработчиком»; ветка AI / LLM добавлена в конец. Внутри этапа — подгруппы и темы в порядке изучения. Щёлкните тему, чтобы подсветить все её предпосылки; двойной щелчок открывает статью.</p>
       <div class="t-tools">
-        <button type="button" class="btn" id="tVert" aria-pressed="false" title="Уровни сверху вниз, зоны — столбцами">Вертикально</button>
-        <div id="tmode" role="group" aria-label="Режим"><button type="button" data-m="to" aria-pressed="true">Маршрут к теме</button><button type="button" data-m="all" aria-pressed="false">Все предпосылки темы</button><button type="button" data-m="multi" aria-pressed="false">Несколько тем</button></div>
-        <label class="stat" style="display:inline"><input type="checkbox" id="tOnly"> только маршрут</label>
+        <div id="tmode" role="group" aria-label="Выбор тем"><button type="button" data-m="all" aria-pressed="true">Все предпосылки темы</button><button type="button" data-m="multi" aria-pressed="false">Несколько тем</button></div>
+        <div id="tlinkm" class="seg" role="group" aria-label="Связи между этапами"><button type="button" data-l="none" aria-pressed="true">Только путь</button><button type="button" data-l="fw" aria-pressed="false">Связи из ранних этапов</button><button type="button" data-l="bw" aria-pressed="false">Связи «назад»</button></div>
         <label class="stat" style="display:inline"><input type="checkbox" id="tCore"> только ядро</label>
-        <label class="stat" style="display:inline" title="В режимах «Все предпосылки темы» и «Несколько тем»: между парой рамок (уровень × зона) рисовать одну связь; связи внутри рамки — все"><input type="checkbox" id="tOne" checked> одна связь между рамками</label>
-        <button type="button" class="btn" id="tClear">Сбросить выбор</button><button type="button" class="btn" id="tfit">Показать всё</button>
+        <button type="button" class="btn" id="tClear">Сбросить выбор</button>
+        <span class="stat" id="tsum"></span>
       </div>
       <div class="tree-wrap">
-        <div class="tree-shell"><svg id="tsvg" role="img" aria-label="Дерево тем по этапам"></svg><div class="gcard" id="tcard" hidden></div></div>
+        <div class="rm-map" id="tmap"><svg id="tlinks" aria-hidden="true"></svg><div id="trows"></div></div>
         <div class="tpanel" id="tpanel"></div>
       </div>
     </section>
 
     <section class="view" id="v-plan" hidden>
       <h1 class="view-h">План обучения</h1>
-      <p class="lead">Пять уровней глубины по спиральной программе: каждый уровень проходит все области — от общих понятий к внутреннему устройству и тонкой настройке. Уровни 1–3 — то, что ждут от middle/senior Go-разработчика; 4 — внутреннее устройство для сильного senior; 5 — экспертиза, которую берут по мере надобности. Внутри уровня темы сгруппированы по зонам и пронумерованы в порядке изучения: каждая тема идёт после своих предпосылок. Отметки ставятся по результатам тестов.</p>
+      <p class="lead">План идёт по этапам пути бэкендера — со схемы из видео А. Шумейко «Как стать Backend разработчиком»: язык → CPU/IO → базы данных → Git → HTTP + API → Docker → брокеры → тестирование → кэширование → CI/CD → S3 → авторизация → мониторинг → прокси → Kubernetes. Ветка AI / LLM добавлена в конец. Внутри этапа темы сгруппированы и пронумерованы в порядке изучения; «ур.» — глубина темы от 1 (основы) до 5 (экспертиза). Отметки ставятся по результатам тестов.</p>
       <div class="keys"><span><b>●</b> ядро — спрашивают на собеседованиях</span><span>○ важно в работе</span><span>· кругозор</span></div>
       <div class="my-plans" id="myPlans"></div>
-      <h2 class="mp-h">Общий план по уровням</h2>
+      <h2 class="mp-h">Общий план по этапам</h2>
       <div class="stages" id="stages"></div>
     </section>
 
@@ -130,6 +129,7 @@
 <script src="js/core/kb.js"></script>
 <script src="content/manifest.js"></script>
 <script src="content/prereq.js"></script>
+<script src="content/roadmap.js"></script>
 <script src="js/loader.js"></script>
 </body>
 </html>

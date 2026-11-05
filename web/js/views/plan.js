@@ -1,13 +1,13 @@
 // План обучения
 function renderPlan(){
   renderMyPlans();
-  const box=document.getElementById('stages');box.innerHTML='';
-  STAGES.forEach(s=>{const ts=T.filter(t=>t.s===s.n).sort((a,b)=>a.l-b.l||a.b.localeCompare(b.b));const dn=ts.filter(t=>isFresh(t.id)).length,sl=ts.filter(t=>isStale(t.id)).length;
-    const MK={ok:'✓',soon:'◔',due:'↻',fail:'✗'};
-    const d=document.createElement('div');d.className='stage';
-    d.innerHTML='<div class="stage-n">'+String(s.n).padStart(2,'0')+'</div><h3>'+s.name+'</h3><div class="meta"><span>'+s.w+'</span><span>'+ts.length+' тем</span><span>ядро: '+ts.filter(t=>t.l===1).length+'</span><span>свежих '+dn+'/'+ts.length+'</span>'+(sl?'<span style="color:var(--warn)">устарело '+sl+'</span>':'')+'</div><div><p>'+s.goal+'</p><div class="bar"><i style="width:'+(ts.length?dn/ts.length*100:0)+'%"></i></div></div>'+
-    '<div class="st-zones">'+ZONES.map(z=>{const zt=topoOrder(ts.filter(t=>ZB[t.b]===z.id).map(t=>T.indexOf(t))).map(i=>T[i]);if(!zt.length)return '';const zf=zt.filter(t=>isFresh(t.id)).length;
-      return '<div class="st-zone" style="--zh:'+z.h+'"><div class="st-zh"><span class="zdot"></span>'+z.name+'<span class="st-zc">'+zt.length+' · изучено '+zf+'</span></div><div class="st-topics">'+zt.map((t,k)=>{const x=st(t.id);return '<a href="#t-'+t.id+'" class="l'+t.l+(x!=='new'?' st-'+x:'')+'" style="--h:'+BI[t.b].h+'"><span class="mp-n">'+(k+1)+'</span><span class="dot"></span>'+LVS[t.l]+' '+t.t+(MK[x]?' <span class="mk">'+MK[x]+'</span>':'')+'</a>';}).join('')+'</div></div>';}).join('')+'</div>';
+  const box=document.getElementById('stages');box.innerHTML='';const MK={ok:'✓',soon:'◔',due:'↻',fail:'✗'};
+  // этапы пути по порядку; внутри — подгруппы, темы в порядке изучения
+  RM.forEach((s,k)=>{const ts=T.filter(t=>t.p===k);const dn=ts.filter(t=>isFresh(t.id)).length,sl=ts.filter(t=>isStale(t.id)).length;
+    const d=document.createElement('div');d.className='stage'+(s.extra?' extra':'');d.style.setProperty('--sc',s.color);
+    d.innerHTML='<div class="stage-n">'+String(k+1).padStart(2,'0')+'</div><h3>'+s.name+'</h3><div class="meta"><span>'+ts.length+' '+plural(ts.length,'тема','темы','тем')+'</span><span>ядро: '+ts.filter(t=>t.l===1).length+'</span><span>свежих '+dn+'/'+ts.length+'</span>'+(sl?'<span style="color:var(--warn)">устарело '+sl+'</span>':'')+'</div><div><p>'+s.hint+'</p><div class="bar"><i style="width:'+(ts.length?dn/ts.length*100:0)+'%"></i></div></div>'+
+    '<div class="st-zones">'+(s.subs.length?s.subs.map(([g,ids])=>{const zt=ids.map(id=>BYID[id]).filter(Boolean);const zf=zt.filter(t=>isFresh(t.id)).length;
+      return '<div class="st-zone st-sub"><div class="st-zh"><span class="sdot"></span>'+g+'<span class="st-zc">'+zt.length+' · изучено '+zf+'</span></div><div class="st-topics">'+zt.map((t,j)=>{const x=st(t.id);return '<a href="#t-'+t.id+'" class="l'+t.l+(x!=='new'?' st-'+x:'')+'" style="--h:'+BI[t.b].h+'"><span class="mp-n">'+(j+1)+'</span><span class="dot"></span>'+LVS[t.l]+' '+t.t+' <span class="lvn">ур. '+t.s+'</span>'+(MK[x]?' <span class="mk">'+MK[x]+'</span>':'')+'</a>';}).join('')+'</div></div>';}).join(''):'<p class="stat">Тем нет: это граница бэкенда.</p>')+'</div>';
     box.appendChild(d);});
 }
 

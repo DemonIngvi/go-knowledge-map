@@ -62,3 +62,6 @@ h1,h2,h3{text-wrap:balance}
   .graph-shell{height:70vh}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* меню по этапам пути */
+.nav-block>button .sdot{width:10px;height:10px;border-radius:3px;background:var(--sc);border:1px solid var(--line);flex:none}
+.nav-sub{list-style:none;font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:8px 0 2px 4px;opacity:.85}

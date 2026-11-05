@@ -1,7 +1,7 @@
 // Проверка контента: id, блоки, этапы, перекрёстные ссылки, разметка, тесты, схемы.
 // Запуск: node scripts/check.js
 const {loadContent}=require('./load');
-const {KB,CONTENT,PREREQ}=loadContent();const T=KB.topics,ids=new Set();let errors=0;
+const {KB,CONTENT,PREREQ,ROADMAP}=loadContent();const T=KB.topics,ids=new Set();let errors=0;
 const err=(...a)=>{errors++;console.log('ОШИБКА',...a);};
 const BLOCKS=Object.keys(CONTENT);
 T.forEach(t=>{if(ids.has(t.id))err('дубль id',t.id);ids.add(t.id);
@@ -20,6 +20,9 @@ const BY={};T.forEach(t=>BY[t.id]=t);let preN=0;
 for(const [id,ps] of Object.entries(PREREQ)){if(!BY[id]){err('prereq: нет темы',id);continue;}ps.forEach(p=>{preN++;if(!BY[p])err('prereq: нет предпосылки',id,'←',p);else if(BY[p].s>BY[id].s)err('prereq: предпосылка на уровне выше',id,'←',p);if(p===id)err('prereq: тема сама себе',id);});}
 T.forEach(t=>{if(!PREREQ[t.id])console.log('нет записи в prereq.js:',t.id);});
 {const state={};const dfs=(u,stack)=>{state[u]=1;for(const p of PREREQ[u]||[]){if(state[p]===1){err('prereq: цикл',[...stack,u,p].join(' → '));continue;}if(!state[p])dfs(p,[...stack,u]);}state[u]=2;};Object.keys(PREREQ).forEach(u=>{if(!state[u])dfs(u,[]);});}
+// этапы пути: каждая тема ровно в одной подгруппе
+{const seen={};(ROADMAP||[]).forEach(s=>s.subs.forEach(([g,ids])=>ids.forEach(id=>{if(!ids||!BY[id])err('roadmap: нет темы',id);if(seen[id])err('roadmap: тема дважды',id,seen[id],'и',s.name);seen[id]=s.name;})));
+  T.forEach(t=>{if(!seen[t.id])err('roadmap: тема не в этапе',t.id);});}
 // примеры и сложные случаи: ссылки и разметка
 for(const [id,o] of Object.entries(KB.exs)){if(!ids.has(id))err('примеры без темы',id);
   for(const k of ['ex','cs']){const x=o[k];if(typeof x!=='string'||!x.trim()){err('пустой раздел',id,k);continue;}
