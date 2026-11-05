@@ -1,0 +1,97 @@
+generics: dry
+go-template: go-build
+go-reflect: go-json strings generics
+go-json: slices python-basics
+go-iterators: python-basics strings
+go-libs: dry
+go-lint: python-basics structs
+dry: errors
+hll: strings
+dsu: trie
+python-basics: go-modules errors
+scheduler: python-concurrency profiling
+memory: sync pprof profiling gc
+gc: sync pprof profiling
+pprof: goroutines sync
+profiling: atomic
+cpu-affinity: atomic ebpf-tools profiling
+cap: n-plus-one
+raft: pg-locks
+pg-mvcc: pg-go n-plus-one pg-indexes pg-locks clickhouse elastic pg-vacuum
+pg-isolation: pg-go pg-locks
+pg-explain: pg-go n-plus-one
+pg-locks: pg-go psql
+pg-wal: pg-replication cap zero-downtime-migrations elastic pgbench pg-btree
+pg-vacuum: pg-go pg-indexes pg-locks pg-replication pg-explain pg-skip-locked zero-downtime-migrations
+pg-toast: n-plus-one pg-vacuum pg-wal
+pg-repack: pg-replication pg-wal pg-btree
+psql: pg-go
+pgbench: pg-go pg-explain
+pg-replication: pg-go pg-locks
+plpgsql: n-plus-one pg-explain
+citus: pg-replication clickhouse
+pg-partitioning: zero-downtime-migrations pg-vacuum sharding
+elastic: cap
+clickhouse: pandas pg-replication
+scylladb: clickhouse pg-mvcc
+hadoop: clickhouse df-alternatives
+spark: clickhouse
+sharding: pg-explain clickhouse
+pandas: pg-go n-plus-one
+df-alternatives: pg-explain clickhouse
+layered: grpc
+protobuf: grpc
+openapi: grpc protobuf
+twelve-factor: layered
+ipv6: dns-linux icmp-ttl
+mac-arp: ipv6
+tcp: http
+udp: http dns-linux
+tcpdump: dns-linux icmp-ttl
+packet-path: dns-linux icmp-ttl udp tcpdump
+dns-linux: tcp
+go-resolver: net-http
+grpc: osi rest
+grpc-streaming: realtime
+graphql: grpc contracts realtime
+bgp: packet-path
+ospf: ipv6 packet-path bgp
+isis: ipv6 packet-path bgp
+ldp-mpls: bfd
+stp: icmp-ttl bgp ospf
+bfd: tcp isis
+data-bus: kafka-dlq stream-vs-kafka
+cqrs-es: data-bus
+kafka-delivery: rabbitmq outbox
+kafka-dlq: rabbitmq
+kafka-mirror: data-bus
+rabbitmq: kafka-core
+bloom: redis lru
+redis-pubsub: lru
+kafka-security: auth-go vault
+oauth-jwt: auth-go crypto
+rbac: owasp
+kerberos: vault kafka-security
+vault: auth-go owasp crypto rbac
+owasp: auth-go tls
+tls: auth-go
+tls-layers: auth-go
+crypto: tls owasp
+victoriametrics: grafana-stack otel
+elk: grafana-stack
+jaeger: grafana-stack
+otel: grafana-stack
+rate-limiting: proxies jitter
+canary-picker: service-discovery
+p2c: proxies
+search-balancer: jitter
+jitter: load-balancing
+k3s: helm
+requests-limits: k3s
+hpa: k3s
+kustomize: k3s requests-limits hpa argocd
+argocd: k3s
+ml-basics: llm-basics
+guardrails: llm-go
+ai-memory: guardrails
+rbac: auth-go

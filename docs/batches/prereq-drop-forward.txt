@@ -1,0 +1,79 @@
+memory: strings go-iterators go-reflect
+gc: go-reflect
+pprof: slices go-json strings go-build delve
+profiling: dry
+ebpf-tools: delve
+raft: gc
+zero-downtime-migrations: go-build
+n-plus-one: maps dry
+spark: hll
+git: go-modules
+layered: errors dry pg-go
+contracts: errors dry
+protobuf: dry
+openapi: python-basics dry go-libs
+twelve-factor: go-modules conc-patterns
+microservices: go-modules dry
+mac-arp: pg-replication
+grpc: python-basics
+planes: trie
+bgp: trie
+cgroups: conc-patterns
+data-bus: osi cap
+saga: dry
+workflow-engines: dry
+cqrs-es: n-plus-one protobuf pg-skip-locked clickhouse elastic
+kafka-core: channels
+kafka-dlq: contracts
+kafka-clients: docker
+rabbitmq: goroutines
+go-test: maps
+allure-bdd: go-libs
+cute: contracts go-libs
+load-types: goroutines
+pandora: profiling
+bloom: pg-indexes go-test generics clickhouse
+redis-pubsub: realtime
+cache-strategies: sync outbox
+starlark: dry go-template
+gitlab-ci: dry twelve-factor
+s3: docker
+ceph: hadoop
+zstd: http kafka-core grpc kafka-clients protobuf pandas clickhouse memory
+kafka-security: data-bus
+rbac: ip s3
+kerberos: hadoop
+vault: docker git
+owasp: ip go-modules pg-go
+tls: grpc net-http
+tls-layers: osi ip channels pprof
+crypto: docker go-modules
+prometheus: goroutines
+victoriametrics: s3 net-http
+grafana-stack: s3 twelve-factor
+elk: s3 clickhouse
+jaeger: docker s3 clickhouse
+otel: grpc conc-patterns kafka-clients go-libs
+slo: go-test pg-replication
+rate-limiting: kafka-core grpc conc-patterns
+resilience: grpc conc-patterns cache-strategies load-types
+grpc-lb: http grpc-streaming
+canary-picker: observability microservices
+service-discovery: conc-patterns
+search-balancer: sync context lru
+proxies: grpc tracing auth-go microservices
+api-gateway: observability grpc tls owasp sync
+jitter: http redis tcp grpc pg-go conc-patterns prometheus go-libs realtime
+service-mesh: osi tracing auth-go rate-limiting cgroups tls-layers api-gateway packet-path grpc-lb
+k3s: dry
+requests-limits: prometheus jitter
+hpa: kafka-core conc-patterns twelve-factor load-types kafka-rebalance
+helm: dry
+argocd: rbac zero-downtime-migrations
+gitops: twelve-factor vault
+ml-basics: observability docker go-test
+llm-basics: go-json
+llm-go: kafka-core tracing prometheus
+llm-harness: go-test tracing context gitlab-ci cgroups
+guardrails: observability go-json rbac
+ai-memory: cache-strategies rbac

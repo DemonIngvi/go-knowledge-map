@@ -1,0 +1,23 @@
+gc: memory
+pg-vacuum: pg-mvcc
+pg-wal: pg-mvcc
+tls: crypto
+auth-go: oauth-jwt rbac
+oauth-jwt: crypto
+kafka-delivery: kafka-clients
+outbox: kafka-delivery
+go-template: structs
+pprof: goroutines
+starlark: gitlab-ci
+ulid: pg-indexes
+bloom: maps
+hll: maps
+dsu: slices
+pg-isolation: pg-go
+pg-locks: pg-go
+pg-replication: psql
+plpgsql: psql
+clickhouse: pg-indexes
+hadoop: sharding
+zstd: s3
+jitter: load-balancing

@@ -13,7 +13,7 @@ window.ROADMAP=[
    ["Конкурентность",["goroutines","channels","sync","context","conc-patterns","atomic","python-concurrency"]],
    ["Рантайм и память",["scheduler","memory","gc"]],
    ["Профилирование",["pprof","profiling"]],
-   ["Linux и CPU",["jitter","cpu-affinity","ebpf-tools"]]
+   ["Linux и CPU",["cpu-affinity","ebpf-tools"]]
  ]},
  {id:"db",name:"Базы данных",hint:"PostgreSQL, аналитические и NoSQL хранилища, распределённые данные",color:"#bcd4f5",subs:[
    ["PostgreSQL: работа",["pg-indexes","pg-go","n-plus-one","psql","pg-explain","pg-isolation","pg-locks","pg-skip-locked","zero-downtime-migrations","plpgsql","pgbench"]],
@@ -34,16 +34,16 @@ window.ROADMAP=[
    ["Контейнеры",["docker","cgroups"]]
  ]},
  {id:"brokers",name:"Брокеры",hint:"Kafka, RabbitMQ и асинхронные паттерны",color:"#ffffff",subs:[
-   ["Kafka",["kafka-core","kafka-clients","kafka-delivery","kafka-rebalance","kafka-dlq","kafka-security","kafka-isr","kafka-balancer","kafka-virtual","kafka-mirror"]],
-   ["Другие брокеры",["rabbitmq","redis-pubsub","stream-vs-kafka"]],
+   ["Kafka",["kafka-core","kafka-clients","kafka-delivery","kafka-rebalance","kafka-dlq","kafka-isr","kafka-balancer","kafka-virtual","kafka-mirror"]],
+   ["Другие брокеры",["rabbitmq","stream-vs-kafka"]],
    ["Асинхронные паттерны",["outbox","saga","data-bus","cqrs-es","workflow-engines"]]
  ]},
  {id:"test",name:"Тестирование",hint:"unit, BDD, нагрузка",color:"#d9d2f7",subs:[
    ["Тесты",["go-test","test-aaa","allure-bdd","cute"]],
    ["Нагрузка",["load-types","pandora","sitespeed"]]
  ]},
- {id:"cache",name:"Кэширование",hint:"Redis и стратегии кэша",color:"#f8c6c6",subs:[
-   ["Кэш",["redis","lru","cache-strategies","bloom"]]
+ {id:"cache",name:"Кэширование",hint:"Redis, Pub/Sub и Streams, стратегии кэша",color:"#f8c6c6",subs:[
+   ["Redis и кэш",["redis","redis-pubsub","lru","cache-strategies","bloom"]]
  ]},
  {id:"cicd",name:"CI/CD",hint:"пайплайны и конфигурация сборки",color:"#bcd4f5",subs:[
    ["CI/CD",["gitlab-ci","starlark"]]
@@ -53,14 +53,14 @@ window.ROADMAP=[
  ]},
  {id:"auth",name:"Авторизация",hint:"OAuth, JWT, права, секреты, TLS",color:"#f9d3b4",subs:[
    ["Аутентификация и права",["oauth-jwt","auth-go","rbac","kerberos"]],
-   ["Безопасность",["owasp","crypto","tls","tls-layers","vault"]]
+   ["Безопасность",["owasp","crypto","tls","tls-layers","vault","kafka-security"]]
  ]},
  {id:"obs",name:"Мониторинг / Логи",hint:"метрики, логи, трейсы, SLO",color:"#fbefa6",subs:[
    ["Наблюдаемость",["observability","prometheus","tracing","grafana-stack","otel","slo","elk","jaeger","victoriametrics"]]
  ]},
  {id:"proxy",name:"Прокси",hint:"Nginx, балансировка, устойчивость",color:"#bdeccb",subs:[
    ["Прокси и шлюзы",["load-balancing","proxies","service-discovery","api-gateway"]],
-   ["Устойчивость",["rate-limiting","resilience"]],
+   ["Устойчивость",["rate-limiting","jitter","resilience"]],
    ["Алгоритмы балансировки",["grpc-lb","p2c","canary-picker","subsetting","search-balancer"]]
  ]},
  {id:"k8s",name:"Kubernetes",hint:"Kubernetes, Helm, Argo",color:"#bcd4f5",subs:[
