@@ -44,3 +44,25 @@ KB.v("rabbitmq",[{type:"flow",h:230,after:"Модель",cap:"Topic exchange р�
   ["q1",370,20,150,44,"q.billing|order.*.created","cell"],["q2",370,96,150,44,"q.analytics|order.#","cell"],["q3",370,172,150,44,"q.us|order.us.*","cellg"],
   ["c1",560,10,104,30,"billing #1","good"],["c2",560,48,104,30,"billing #2","good"],["c3",560,100,104,36,"analytics","good"]],
  edges:[["p","x",""],["x","q1","","a"],["x","q2","","a"],["x","q3","нет совпадения","d"],["q1","c1",""],["q1","c2",""],["q2","c3",""]]}]);
+
+// Примеры и сложный случай
+KB.ex("rabbitmq",{ex:`## Подтверждения и prefetch
+~~~
+ch.Qos(20, 0, false)       // не больше 20 неподтверждённых
+msgs, _ := ch.Consume("orders", "", false, false, false, false, nil)
+for d := range msgs {
+	if err := handle(d.Body); err != nil { d.Nack(false, false); continue } // в DLX
+	d.Ack(false)
+}
+~~~
+
+## Надёжная очередь
+Quorum queue с {{x-dead-letter-exchange}} и publisher confirms у продюсера.`,
+cs:`## Обобщённый случай из практики: очередь съела всю память брокера
+**Ситуация.** Потребитель упал на выходных, продюсеры продолжали публиковать.
+
+**Что пошло не так.** Очередь выросла до миллионов сообщений, RabbitMQ упёрся в memory watermark и заблокировал публикацию **всем** продюсерам на всех очередях.
+
+**Причина.** Нет ограничения длины очереди и алерта на рост.
+
+**Как исправили.** {{x-max-length}} с overflow в DLX, lazy/quorum очереди, алерт на глубину очереди и отсутствие потребителей ([[alerting]]).`});

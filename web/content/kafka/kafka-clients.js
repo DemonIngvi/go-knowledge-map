@@ -101,3 +101,29 @@ KB.v("kafka-clients",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("kafka-clients",{ex:`## franz-go
+~~~
+cl, _ := kgo.NewClient(
+	kgo.SeedBrokers("kafka:9092"),
+	kgo.ConsumerGroup("billing"),
+	kgo.ConsumeTopics("orders"),
+	kgo.DisableAutoCommit(),
+)
+fetches := cl.PollFetches(ctx)
+fetches.EachRecord(func(r *kgo.Record) { handle(r) })
+cl.CommitUncommittedOffsets(ctx)
+~~~
+Чистый Go, без cgo.
+
+## confluent-kafka-go
+Обёртка над librdkafka — требует cgo и сборки под нужную libc (alpine — musl).`,
+cs:`## Обобщённый случай из практики: утечка памяти в продюсере
+**Ситуация.** Сервис отправлял события асинхронно через confluent-kafka-go и не читал канал {{Events()}}.
+
+**Что пошло не так.** Память сервиса росла часами до OOM kill, особенно когда брокеры отвечали медленно.
+
+**Причина.** Отчёты о доставке копились в непрочитанном канале, а буфер librdkafka был большим.
+
+**Как исправили.** Отдельная горутина читает отчёты о доставке и считает ошибки, ограничение {{queue.buffering.max.messages}}, Flush при остановке ([[graceful-shutdown]]).`});

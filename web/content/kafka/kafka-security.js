@@ -81,3 +81,23 @@ KB.v("kafka-security",[
   edges:[["c","tls",""],["tls","au",""],["au","acl","User:orders-svc"],["acl","ok","","v"]]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("kafka-security",{ex:`## Клиент с SASL/SCRAM и TLS
+~~~
+security.protocol=SASL_SSL
+sasl.mechanism=SCRAM-SHA-512
+sasl.username=billing
+ssl.ca.location=/etc/kafka/ca.pem
+~~~
+
+## ACL на топик
+{{kafka-acls.sh --add --allow-principal User:billing --operation Read --topic orders --group billing}} — сервис читает только свой топик своей группой.`,
+cs:`## Обобщённый случай из практики: тестовый сервис удалил продовый топик
+**Ситуация.** Кластер Kafka был общим для стендов, без аутентификации и ACL.
+
+**Что пошло не так.** Скрипт очистки тестового окружения удалил топики по шаблону, захватив продовые. Восстанавливать пришлось из источников событий.
+
+**Причина.** Нет аутентификации и разграничения прав, общий кластер.
+
+**Как исправили.** SASL/SCRAM или mTLS, ACL по принципу минимальных прав, {{delete.topic.enable}} только для администраторов, отдельные кластеры для prod ([[acl]], [[mtls]]).`});

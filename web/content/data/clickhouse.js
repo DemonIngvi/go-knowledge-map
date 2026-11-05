@@ -79,3 +79,28 @@ KB.v("clickhouse",[
   ]
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("clickhouse",{ex:`## Таблица событий
+~~~
+CREATE TABLE events (
+  ts DateTime, user_id UInt64, event LowCardinality(String), props String
+) ENGINE = MergeTree
+PARTITION BY toYYYYMM(ts)
+ORDER BY (event, user_id, ts)
+TTL ts + INTERVAL 180 DAY;
+~~~
+
+## Вставка пачками из Go
+Буфер на 10 000 строк или 1 секунду, затем один {{INSERT}} — либо {{async_insert = 1}} на сервере.
+
+## Агрегат на лету
+{{SELECT event, uniq(user_id) FROM events WHERE ts > now() - INTERVAL 1 DAY GROUP BY event}}`,
+cs:`## Обобщённый случай из практики: Too many parts
+**Ситуация.** Сервис писал каждое событие в ClickHouse отдельным INSERT — тысячи вставок в секунду.
+
+**Что пошло не так.** Вставки начали падать с ошибкой «Too many parts», затем запросы замедлились.
+
+**Причина.** Каждый INSERT создаёт новый кусок данных (part), фоновые слияния не успевали.
+
+**Как исправили.** Батчинг на стороне сервиса (или {{async_insert}}), меньше партиций (по месяцу, а не по часу), мониторинг {{system.parts}}.`});
