@@ -93,7 +93,7 @@ func (s *Service) Document(ctx context.Context, id int64) (Doc, error) {
 }
 ~~~`,
 cs:`## First American Financial: документы по порядковому номеру в ссылке
-**Источник**: [KrebsOnSecurity, май 2019](https://krebsonsecurity.com/2019/05/first-american-financial-pwned-millions-of-title-insurance-records/).
+**Источник**: [KrebsOnSecurity, май 2019 — поиск по сайту](https://krebsonsecurity.com/?s=First+American+Financial).
 
 **Ситуация.** Страховая компания отправляла клиентам ссылки на документы сделок с недвижимостью. Ссылка содержала последовательный номер документа.
 
