@@ -20,7 +20,7 @@ KB.add({
 - Часто работает в data plane, на аппаратном уровне ([[planes]]), поэтому не зависит от загрузки CPU маршрутизатора.
 
 ## Аналогия для бэкенда
-Это та же идея, что heartbeat и health check: [[tcp-keepalive]], keepalive в gRPC, outlier detection в балансировщике ([[load-balancing]]). Частая проверка лёгким сигналом отделена от тяжёлой логики, которая реагирует на отказ. Слишком агрессивные интервалы дают **ложные срабатывания** при кратковременных задержках ([[test-outcomes]]).`,
+Это та же идея, что heartbeat и health check: [[tcp|TCP keepalive]], keepalive в gRPC, outlier detection в балансировщике ([[load-balancing]]). Частая проверка лёгким сигналом отделена от тяжёлой логики, которая реагирует на отказ. Слишком агрессивные интервалы дают **ложные срабатывания** при кратковременных задержках ([[go-test|False / true positive]]).`,
  m:[
   ["RFC 5880: BFD","https://datatracker.ietf.org/doc/html/rfc5880"],
   [

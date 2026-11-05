@@ -1,0 +1,21 @@
+[
+ {"from":"dns-k8s","into":"dns-linux","t":"DNS в Linux и Kubernetes: resolv.conf, ndots, гонка A/AAAA","short":"DNS в Linux и k8s"},
+ {"from":"single-request","into":"dns-linux"},
+ {"from":"pg-fpw","into":"pg-wal","t":"WAL и full page writes","short":"WAL / FPW"},
+ {"from":"pg-multixact","into":"pg-locks","t":"Блокировки: row-level, advisory и MultiXact","short":"Блокировки / MultiXact"},
+ {"from":"kiss","into":"dry","t":"DRY и KISS: принципы простого кода","short":"DRY / KISS"},
+ {"from":"test-outcomes","into":"go-test","t":"go test: тесты, бенчмарки, фаззинг, race; ложные срабатывания","short":"go test"},
+ {"from":"wrr","into":"load-balancing","t":"Балансировка нагрузки: основы и WRR","short":"Балансировка / WRR"},
+ {"from":"aperture","into":"subsetting","t":"Subsetting и aperture: подмножества бэкендов","short":"Subsetting / aperture"},
+ {"from":"select","into":"channels","t":"Каналы и select","short":"Каналы / select"},
+ {"from":"go-workspaces","into":"go-modules","t":"Модули, пакеты, зависимости и workspaces","short":"Go modules"},
+ {"from":"isolcpus","into":"cpu-affinity","t":"Привязка к ядрам: affinity, cpuset, isolcpus, прерывания","short":"CPU affinity"},
+ {"from":"cpuset","into":"cpu-affinity"},
+ {"from":"irqbalance","into":"cpu-affinity"},
+ {"from":"adhoc","into":"clickhouse","t":"ClickHouse и ad hoc аналитика","short":"ClickHouse / ad hoc"},
+ {"from":"sasl","into":"kafka-security","t":"Безопасность Kafka: TLS, SASL, ACL"},
+ {"from":"acl","into":"rbac","t":"Права доступа: RBAC и ACL","short":"RBAC / ACL"},
+ {"from":"tcp-keepalive","into":"tcp","t":"TCP и keepalive","short":"TCP / keepalive"},
+ {"from":"qos","into":"requests-limits","t":"Requests, limits, QoS-классы и static CPU manager","short":"requests / limits / QoS"},
+ {"from":"cpu-manager","into":"requests-limits"}
+]

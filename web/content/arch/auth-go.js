@@ -17,12 +17,12 @@ KB.add({
 - Сессии с cookie для браузера: флаги {{HttpOnly}}, {{Secure}}, {{SameSite}}, защита от CSRF.
 
 ## Авторизация
-- Модели: **[[rbac]]** (роли), **ABAC** (атрибуты), **ReBAC** (связи, как Google Zanzibar, OpenFGA, SpiceDB), **[[acl]]** (списки на объект).
+- Модели: **[[rbac]]** (роли), **ABAC** (атрибуты), **ReBAC** (связи, как Google Zanzibar, OpenFGA, SpiceDB), **[[rbac|ACL]]** (списки на объект).
 - Движки политик: **Casbin** (библиотека Go), **OPA/Rego**, OpenFGA.
 - **Проверку прав объекта делайте в сервисном слое**, а не только в middleware: middleware знает маршрут, но не владельца документа ([[layered]]). Иначе получите уязвимость IDOR, первую в OWASP API Top 10.
 
 ## Реализация в Go
-Middleware в [[net-http]] или gRPC-interceptor ([[grpc]]) проверяет токен и кладёт субъект в [[context]] под ключом своего типа. Пароли хранят только хешами **argon2id** или **bcrypt** ({{golang.org/x/crypto}}). Секреты и ключи подписи лежат в [[vault]]. Для Kafka используется своя схема — [[sasl]] и [[kerberos]].`,
+Middleware в [[net-http]] или gRPC-interceptor ([[grpc]]) проверяет токен и кладёт субъект в [[context]] под ключом своего типа. Пароли хранят только хешами **argon2id** или **bcrypt** ({{golang.org/x/crypto}}). Секреты и ключи подписи лежат в [[vault]]. Для Kafka используется своя схема — [[kafka-security|SASL]] и [[kerberos]].`,
  m:[
   ["OWASP API Security Top 10","https://owasp.org/API-Security/"],
   ["Casbin","https://casbin.org/"],

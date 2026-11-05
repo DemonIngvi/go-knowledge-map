@@ -34,7 +34,7 @@ KB.add({
 Политика задаётся в **service config**: {{grpc.WithDefaultServiceConfig}} с {{loadBalancingConfig}}.
 
 ## 3. Picker
-**Выбирает соединение для каждого конкретного RPC.** Balancer создаёт новый picker при каждом изменении состояния подключений. Метод {{Pick(info)}} получает метод и metadata запроса, поэтому в нём можно реализовать [[wrr]], [[p2c]], маршрутизацию по ключу или [[canary-picker]].
+**Выбирает соединение для каждого конкретного RPC.** Balancer создаёт новый picker при каждом изменении состояния подключений. Метод {{Pick(info)}} получает метод и metadata запроса, поэтому в нём можно реализовать [[load-balancing|WRR]], [[p2c]], маршрутизацию по ключу или [[canary-picker]].
 
 ## Как включить балансировку в Kubernetes
 - **Headless Service** ({{clusterIP: None}}): DNS возвращает IP всех подов, а не один виртуальный IP.

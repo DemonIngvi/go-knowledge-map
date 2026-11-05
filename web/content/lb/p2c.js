@@ -19,10 +19,10 @@ KB.add({
 ## Варианты метрики
 - Число активных запросов (least request в Envoy использует P2C по умолчанию).
 - **EWMA задержки** (peak EWMA в Finagle и Linkerd): учитывает, что бэкенд стал медленно отвечать, и сразу отводит от него трафик.
-- С весами: в нагрузку входит вес бэкенда ([[wrr]]).
+- С весами: в нагрузку входит вес бэкенда ([[load-balancing|WRR]]).
 
 ## Где используется
-Envoy, Linkerd, Finagle, NGINX ({{random two least_conn}}), HAProxy ({{balance random(2)}}), собственные [[grpc-lb|picker]] в gRPC. Хорошо сочетается с [[aperture]] и [[subsetting]], когда у клиента ограниченный набор бэкендов.`,
+Envoy, Linkerd, Finagle, NGINX ({{random two least_conn}}), HAProxy ({{balance random(2)}}), собственные [[grpc-lb|picker]] в gRPC. Хорошо сочетается с [[subsetting|Aperture (earden?)]] и [[subsetting]], когда у клиента ограниченный набор бэкендов.`,
  m:[
   [
    "Mitzenmacher: The Power of Two Choices in Randomized Load Balancing",
@@ -104,4 +104,4 @@ cs:`## Обобщённый случай из практики: least connection
 
 **Причина.** Выбор «самого лучшего» по устаревшей информации порождает эффект стада.
 
-**Как исправили.** P2C: выбор лучшего из двух случайных почти так же хорош, но не синхронизирует балансировщики ([[aperture]]).`});
+**Как исправили.** P2C: выбор лучшего из двух случайных почти так же хорош, но не синхронизирует балансировщики ([[subsetting|Aperture (earden?)]]).`});

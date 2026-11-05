@@ -48,8 +48,8 @@ KB.add({
 - **StatefulSet**: стабильные имена и тома (базы, Kafka). **DaemonSet**: по поду на узел (агенты логов). **Job / CronJob**.
 
 ## Сеть и конфигурация
-- **Service** (ClusterIP, NodePort, LoadBalancer, headless) — стабильный адрес для набора подов ([[service-discovery]], [[dns-k8s]]). Внешний вход — Ingress или Gateway API ([[proxies]]).
-- **ConfigMap и Secret** — конфигурация и секреты вне образа, как требует [[twelve-factor]] ([[vault]]). **NetworkPolicy** — файрвол между подами ([[acl]]).
+- **Service** (ClusterIP, NodePort, LoadBalancer, headless) — стабильный адрес для набора подов ([[service-discovery]], [[dns-linux|ndots / search / FQDN]]). Внешний вход — Ingress или Gateway API ([[proxies]]).
+- **ConfigMap и Secret** — конфигурация и секреты вне образа, как требует [[twelve-factor]] ([[vault]]). **NetworkPolicy** — файрвол между подами ([[rbac|ACL]]).
 
 ## Пробы — частый источник аварий
 - **readiness**: готов ли под принимать трафик. Не прошёл — убирается из Service.
@@ -58,7 +58,7 @@ KB.add({
 - Проба бывает HTTP, gRPC, TCP (проверяет только, что порт открыт, — L4, см. [[data-bus]]) или exec.
 
 ## Остальное
-Ресурсы — [[requests-limits]], [[qos]]; масштабирование — [[hpa]]; права — [[rbac]]; PodDisruptionBudget защищает от одновременного вывода всех подов при обслуживании узлов; **graceful shutdown**: SIGTERM, затем {{terminationGracePeriodSeconds}} ([[conc-patterns]]). Практика на локальном кластере — [[k3s]].`,
+Ресурсы — [[requests-limits]], [[requests-limits|Guaranteed pods]]; масштабирование — [[hpa]]; права — [[rbac]]; PodDisruptionBudget защищает от одновременного вывода всех подов при обслуживании узлов; **graceful shutdown**: SIGTERM, затем {{terminationGracePeriodSeconds}} ([[conc-patterns]]). Практика на локальном кластере — [[k3s]].`,
  m:[
   ["Kubernetes: Concepts","https://kubernetes.io/docs/concepts/"],
   ["Kubernetes the Hard Way","https://github.com/kelseyhightower/kubernetes-the-hard-way"],

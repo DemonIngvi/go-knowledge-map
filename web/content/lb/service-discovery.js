@@ -29,7 +29,7 @@ KB.add({
 - **Client-side discovery**: клиент сам получает список из реестра и балансирует ([[grpc-lb]]).
 
 ## Реестры
-- **Kubernetes**: Service и **EndpointSlice** (список готовых подов). Попасть в список можно, только пройдя **readiness probe** ([[k8s-core]]). DNS даёт ClusterIP или, для headless-сервиса, IP подов ([[dns-k8s]]).
+- **Kubernetes**: Service и **EndpointSlice** (список готовых подов). Попасть в список можно, только пройдя **readiness probe** ([[k8s-core]]). DNS даёт ClusterIP или, для headless-сервиса, IP подов ([[dns-linux|ndots / search / FQDN]]).
 - **Consul**: реестр с health checks, DNS и HTTP API, работает и вне Kubernetes.
 - **etcd, ZooKeeper**: ключ-значение с watch и арендой (lease) — сервис регистрируется сам и продлевает аренду.
 - **xDS** (протокол Envoy): control plane рассылает клиентам и прокси списки эндпоинтов, веса и правила ([[service-mesh]], [[planes]]).

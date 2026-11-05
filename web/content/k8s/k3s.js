@@ -22,7 +22,7 @@ KB.add({
 - Выставить [[requests-limits]] и посмотреть throttling и OOMKilled.
 - Включить [[hpa]] с metrics-server и подать нагрузку ([[pandora]]).
 - Установить чарт [[helm]], собрать [[kustomize]], подключить [[argocd]].
-- Сломать DNS с помощью ndots ([[dns-k8s]]) и найти причину.
+- Сломать DNS с помощью ndots ([[dns-linux|ndots / search / FQDN]]) и найти причину.
 
 Автор видео сам для локальной разработки использует docker compose ([[docker]]), но учиться Kubernetes советует на настоящем кластере.`,
  m:[["k3s docs","https://docs.k3s.io/"],["k3d","https://k3d.io/"],["kind","https://kind.sigs.k8s.io/"]]

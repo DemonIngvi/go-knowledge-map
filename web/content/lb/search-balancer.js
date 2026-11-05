@@ -22,7 +22,7 @@ KB.add({
 - Кэш популярных запросов ([[lru]]).
 - Fan-out внутри Go-сервиса — {{errgroup}} с ограничением параллелизма ([[sync]]).
 
-Вариативность задержки ([[jitter]]) на отдельных узлах — главный враг такой схемы, поэтому поисковые узлы часто изолируют по CPU ([[isolcpus]], [[cpu-manager]]).`,
+Вариативность задержки ([[jitter]]) на отдельных узлах — главный враг такой схемы, поэтому поисковые узлы часто изолируют по CPU ([[cpu-affinity|isolcpus]], [[requests-limits|Static CPU policy]]).`,
  m:[
   ["Dean, Barroso: The Tail at Scale","https://research.google/pubs/the-tail-at-scale/"],
   [

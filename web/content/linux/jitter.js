@@ -17,8 +17,8 @@ KB.add({
 **Источники в Go-сервисе и под ним:**
 - паузы и GC-ассисты ([[gc]]), задержки [[scheduler|планировщика]];
 - **троттлинг CPU по квоте CFS** ([[requests-limits]]);
-- соседи на тех же ядрах, миграции потоков, прерывания ([[cpu-affinity]], [[irqbalance]], [[isolcpus]]);
-- блокировки в базе ([[pg-locks]]), сеть и повторные передачи ([[tcp]]), задержки DNS ([[single-request]]).
+- соседи на тех же ядрах, миграции потоков, прерывания ([[cpu-affinity]], [[cpu-affinity|irqbalance]], [[cpu-affinity|isolcpus]]);
+- блокировки в базе ([[pg-locks]]), сеть и повторные передачи ([[tcp]]), задержки DNS ([[dns-linux|single-request]]).
 
 Ищут с помощью гистограмм задержки ([[prometheus]]), [[pprof]] и трассировки Go, а на уровне ОС — [[ebpf-tools]].
 

@@ -23,7 +23,7 @@ x:`## Проблема N+1
 - копия часто нужных полей (имя покупателя в заказе — заодно и фиксация на момент покупки);
 - jsonb с вложенными данными для чтения целиком ([[pg-toast]]);
 - материализованные представления и отдельные модели чтения ([[cqrs-es]]).
-**Цена — согласованность копий**: обновлять в той же транзакции (триггер, [[plpgsql]]) или асинхронно с eventual consistency ([[cap]]). Денормализуйте, когда профиль показал проблему, а не заранее ([[kiss]]).`,
+**Цена — согласованность копий**: обновлять в той же транзакции (триггер, [[plpgsql]]) или асинхронно с eventual consistency ([[cap]]). Денормализуйте, когда профиль показал проблему, а не заранее ([[dry|KISS]]).`,
 m:[["Use The Index, Luke: JOIN и N+1","https://use-the-index-luke.com/sql/join/nested-loops-join-n1-problem"],["PostgreSQL docs: Array functions (ANY)","https://www.postgresql.org/docs/current/functions-comparisons.html"],["pgx: Batch","https://pkg.go.dev/github.com/jackc/pgx/v5#Batch"]]});
 
 // Тест

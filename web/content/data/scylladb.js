@@ -20,7 +20,7 @@ KB.add({
 **Настраиваемая (tunable consistency)**: уровни {{ONE}}, {{QUORUM}}, {{LOCAL_QUORUM}}, {{ALL}} на каждый запрос. При {{R + W > RF}} чтение видит последнюю запись. Конфликты решаются по последней записи (last write wins).
 
 ## Когда подходит
-Огромные потоки записи, временные ряды, ленты, хранение событий, где доступ всегда идёт по ключу. **Не подходит**, когда нужны транзакции, гибкие запросы и [[adhoc|ad hoc]]-аналитика — это задачи [[pg-mvcc|PostgreSQL]] и [[clickhouse]]. Go-клиент — gocql (у Scylla есть свой shard-aware форк).`,
+Огромные потоки записи, временные ряды, ленты, хранение событий, где доступ всегда идёт по ключу. **Не подходит**, когда нужны транзакции, гибкие запросы и [[clickhouse|ad hoc]]-аналитика — это задачи [[pg-mvcc|PostgreSQL]] и [[clickhouse]]. Go-клиент — gocql (у Scylla есть свой shard-aware форк).`,
  m:[
   ["ScyllaDB docs","https://docs.scylladb.com/"],
   ["ScyllaDB University (бесплатные курсы)","https://university.scylladb.com/"],

@@ -22,7 +22,7 @@ KB.add({
 - API Gateway добавляет аутентификацию ([[auth-go]]), rate limiting, трансформацию запросов.
 
 ## Что настроить
-Таймауты (подключение, ожидание ответа, idle), лимиты размера тела, буферизацию, **поддержку долгих gRPC-потоков** ([[grpc-streaming]]), передачу реального IP клиента ({{X-Forwarded-For}}, PROXY protocol). Алгоритмы распределения — [[wrr]], [[p2c]], [[load-balancing]].`,
+Таймауты (подключение, ожидание ответа, idle), лимиты размера тела, буферизацию, **поддержку долгих gRPC-потоков** ([[grpc-streaming]]), передачу реального IP клиента ({{X-Forwarded-For}}, PROXY protocol). Алгоритмы распределения — [[load-balancing|WRR]], [[p2c]], [[load-balancing]].`,
  m:[
   ["nginx documentation","https://nginx.org/en/docs/"],
   ["HAProxy documentation","https://docs.haproxy.org/"],

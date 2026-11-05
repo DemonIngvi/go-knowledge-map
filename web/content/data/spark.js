@@ -19,7 +19,7 @@ KB.add({
 - Запускается на YARN, Kubernetes или локально. API на Scala, Python (PySpark), Java, SQL.
 
 ## Связь с бэкендом
-Spark-задачи аналитиков читают ваши события из Kafka и выгрузки из баз, считают витрины и признаки для ML, отвечают на [[adhoc|ad hoc]]-вопросы на больших объёмах. Приблизительные агрегаты — {{approx_count_distinct}} на [[hll]].`,
+Spark-задачи аналитиков читают ваши события из Kafka и выгрузки из баз, считают витрины и признаки для ML, отвечают на [[clickhouse|ad hoc]]-вопросы на больших объёмах. Приблизительные агрегаты — {{approx_count_distinct}} на [[hll]].`,
  m:[
   ["Apache Spark docs","https://spark.apache.org/docs/latest/"],
   ["Spark SQL Guide","https://spark.apache.org/docs/latest/sql-programming-guide.html"]

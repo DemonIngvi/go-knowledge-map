@@ -18,7 +18,7 @@ KB.add({
 
 ## Где встречается
 - **Kafka**: {{compression.type=zstd}} у продюсера. Сжимается **весь батч**, поэтому чем больше {{linger.ms}} и {{batch.size}}, тем лучше сжатие и меньше трафик и диск ([[kafka-core]], [[kafka-clients]]).
-- PostgreSQL: {{wal_compression = zstd}} ([[pg-fpw]]), сжатие TOAST — lz4 ([[pg-toast]]), {{pg_dump}} и pg_basebackup.
+- PostgreSQL: {{wal_compression = zstd}} ([[pg-wal|FPW]]), сжатие TOAST — lz4 ([[pg-toast]]), {{pg_dump}} и pg_basebackup.
 - [[clickhouse]]: кодек {{ZSTD(level)}} для колонок.
 - HTTP: {{Content-Encoding: zstd}} поддерживают современные браузеры ([[http]]).
 - gRPC: компрессоры подключаются как кодеки ([[grpc]]).

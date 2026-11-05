@@ -26,7 +26,7 @@ KB.add({
 
 ## Особенности UDP
 - Ненадёжность и порядок — забота приложения.
-- Conntrack в Linux отслеживает и UDP «соединения» по таймауту. С этим связана гонка DNS-запросов A и AAAA ([[single-request]]).
+- Conntrack в Linux отслеживает и UDP «соединения» по таймауту. С этим связана гонка DNS-запросов A и AAAA ([[dns-linux|single-request]]).
 - В Go: {{net.ListenUDP}}, {{ReadFromUDP}}; для QUIC — библиотека quic-go.`,
  m:[
   ["RFC 768: UDP","https://datatracker.ietf.org/doc/html/rfc768"],

@@ -14,7 +14,7 @@ KB.add({
 ## Чистый Go (netgo)
 - Сам читает {{/etc/resolv.conf}}, {{/etc/hosts}} и {{nsswitch.conf}}, сам шлёт DNS-запросы.
 - **Блокирует только горутину, а не поток ОС**: тысячи одновременных резолвов не создают тысячи потоков ([[scheduler]]).
-- Поддерживает {{ndots}}, {{timeout}}, {{attempts}}, {{rotate}}, {{edns0}}, {{use-vc}}; **опцию {{single-request}} не поддерживает** ([[single-request]]).
+- Поддерживает {{ndots}}, {{timeout}}, {{attempts}}, {{rotate}}, {{edns0}}, {{use-vc}}; **опцию {{single-request}} не поддерживает** ([[dns-linux|single-request]]).
 - Используется по умолчанию в Linux, если конфигурация системы позволяет, и **всегда при {{CGO_ENABLED=0}}**.
 
 ## cgo-резолвер
@@ -27,7 +27,7 @@ KB.add({
 - Тег сборки {{netgo}}.
 - В коде: {{net.Resolver}} с полем {{PreferGo: true}} и своей функцией {{Dial}} (например, отправлять запросы на конкретный DNS-сервер).
 
-**Кэша DNS в Go нет**, как и в glibc ([[dns-linux]]): каждый новый dial резолвит заново. Долгие соединения и пулы ([[net-http]]) снижают нагрузку, ndots в Kubernetes — увеличивает ([[dns-k8s]]).`,
+**Кэша DNS в Go нет**, как и в glibc ([[dns-linux]]): каждый новый dial резолвит заново. Долгие соединения и пулы ([[net-http]]) снижают нагрузку, ndots в Kubernetes — увеличивает ([[dns-linux|ndots / search / FQDN]]).`,
  m:[
   ["Пакет net: Name Resolution","https://pkg.go.dev/net#hdr-Name_Resolution"],
   ["net.Resolver","https://pkg.go.dev/net#Resolver"]

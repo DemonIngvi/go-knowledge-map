@@ -1,27 +1,8 @@
-// go test: тесты, бенчмарки, фаззинг, race
+// go test: тесты, бенчмарки, фаззинг, race; ложные срабатывания
 
 // Статья
-KB.add({
- id:"go-test",
- t:"go test: тесты, бенчмарки, фаззинг, race",
- short:"go test",
- b:"tools",
- s:1,
- l:1,
- a:[
-  "testing",
-  "table-driven tests",
-  "табличные тесты",
-  "benchmark",
-  "fuzzing",
-  "-race",
-  "coverage",
-  "t.Run",
-  "t.Parallel",
-  "synctest",
-  "testcontainers"
- ],
- x:`Тесты в Go — функции {{TestXxx(t *testing.T)}} в файлах {{_test.go}}. Отдельный фреймворк не нужен.
+KB.add({id:"go-test",t:"go test: тесты, бенчмарки, фаззинг, race; ложные срабатывания",short:"go test",b:"tools",s:1,l:1,a:["testing","table-driven tests","табличные тесты","benchmark","fuzzing","-race","coverage","t.Run","t.Parallel","synctest","testcontainers","False positive, true positive и нестабильные тесты","False / true positive","false positive","false negative","true positive","legitimate true positive","flaky tests","ложное срабатывание"],
+x:`Тесты в Go — функции {{TestXxx(t *testing.T)}} в файлах {{_test.go}}. Отдельный фреймворк не нужен.
 
 ## Что уметь
 - **Табличные тесты**: срез кейсов и {{t.Run(name, ...)}} для каждого. Это идиоматичный стиль Go.
@@ -35,82 +16,36 @@ KB.add({
 ## Уровни тестов
 Юнит-тесты с подменой зависимостей через [[interfaces]]; интеграционные — с настоящим Postgres и Kafka в testcontainers ([[docker]]); E2E и API-тесты — [[cute]] и [[allure-bdd]]; нагрузочные — [[load-types]].
 
-Структура теста — [[test-aaa]], оценка результатов — [[test-outcomes]].`,
- m:[
-  ["Пакет testing","https://pkg.go.dev/testing"],
-  ["Go wiki: TableDrivenTests","https://go.dev/wiki/TableDrivenTests"],
-  ["Tutorial: Go Fuzzing","https://go.dev/doc/tutorial/fuzz"],
-  ["Data Race Detector","https://go.dev/doc/articles/race_detector"]
- ]
-});
+Структура теста — [[test-aaa]], оценка результатов — False / true positive.
+
+## False positive, true positive и нестабильные тесты
+Любая проверка — тест, линтер, алерт, сканер уязвимостей — даёт четыре исхода.
+
+- **True positive**: проверка сработала, и проблема действительно есть. **Legitimate true positive** — настоящее срабатывание, которое требует исправить код.
+- **False positive**: проверка сработала, а проблемы нет. Это нестабильный тест, придирка линтера, ложный алерт.
+- **True negative**: молчит, и проблем нет.
+- **False negative**: молчит, а проблема есть. **Самый опасный исход**, потому что его не видно.
+
+## False / true positive: Почему false positive тоже вредны
+Команда, которая видит много ложных срабатываний, **перестаёт доверять проверке** и начинает её игнорировать или перезапускать сборку, пока тест не позеленеет. Тогда пропускаются и настоящие ошибки. Это верно для тестов (go test), алертов ([[observability]]) и линтеров ([[go-lint]]).
+
+## False / true positive: Что делать
+- Нестабильный (flaky) тест — либо чинить, либо изолировать с задачей на починку. Частые причины: время, порядок map ([[maps]]), гонки, общие данные между тестами, внешние сервисы.
+- Алерт должен вести к действию. Если на алерт ничего не делают, он ложный.
+- Для вероятностных структур ([[bloom]]) false positive — заложенное свойство, а false negative недопустим.`,
+m:[["Пакет testing","https://pkg.go.dev/testing"],["Go wiki: TableDrivenTests","https://go.dev/wiki/TableDrivenTests"],["Tutorial: Go Fuzzing","https://go.dev/doc/tutorial/fuzz"],["Data Race Detector","https://go.dev/doc/articles/race_detector"],["Google Testing Blog: Flaky Tests","https://testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html"],["Wikipedia: False positives and false negatives","https://en.wikipedia.org/wiki/False_positives_and_false_negatives"]]});
 
 // Тест: [вопрос, верный ответ, неверный, неверный, неверный, пояснение]
 KB.q("go-test",[
- [
-  "Как в идиоматичном Go пишут набор похожих тестовых случаев?",
-  "Табличный тест: срез кейсов и t.Run для каждого",
-  "Отдельная функция на каждый кейс обязательна",
-  "Только через testify suite",
-  "Через init()",
-  "Табличные тесты — стандартный стиль Go."
- ],
- [
-  "Что делает флаг -race?",
-  "Включает детектор гонок данных во время выполнения",
-  "Запускает тесты быстрее",
-  "Проверяет дедлоки статически",
-  "Запускает тесты параллельно",
-  "Обязательно включайте его в CI."
- ],
- [
-  "Как получить число аллокаций в бенчмарке?",
-  "Флаг -benchmem или b.ReportAllocs()",
-  "go vet -allocs",
-  "GOGC=off",
-  "Только через pprof",
-  "Бенчмарки сравнивают через benchstat при нескольких прогонах."
- ]
-]);
+ ["Как в идиоматичном Go пишут набор похожих тестовых случаев?","Табличный тест: срез кейсов и t.Run для каждого","Отдельная функция на каждый кейс обязательна","Только через testify suite","Через init()","Табличные тесты — стандартный стиль Go."],
+ ["Что делает флаг -race?","Включает детектор гонок данных во время выполнения","Запускает тесты быстрее","Проверяет дедлоки статически","Запускает тесты параллельно","Обязательно включайте его в CI."],
+ ["Как получить число аллокаций в бенчмарке?","Флаг -benchmem или b.ReportAllocs()","go vet -allocs","GOGC=off","Только через pprof","Бенчмарки сравнивают через benchstat при нескольких прогонах."],
+ ["Что такое false negative?","Проверка промолчала, а проблема есть","Проверка сработала, а проблемы нет","Проверка сработала, и проблема есть","Проверка промолчала, и проблемы нет","Самый опасный исход: проблему никто не видит."],
+ ["Чем вредны частые false positive?","Команда перестаёт доверять проверке и начинает её игнорировать","Ничем","Они замедляют компиляцию","Они увеличивают покрытие","Из-за шума пропускают и настоящие ошибки."],
+ ["Какой исход недопустим для фильтра Блума?","False negative","False positive","True positive","True negative","Фильтр может ошибиться «есть», но не может ошибиться «нет»."]]);
 
 // Схемы и код к статье
-KB.v("go-test",[
- {
-  type:"code",
-  after:"Что уметь",
-  src:`
-func TestParseAmount(t *testing.T) {
-	tests := []struct {
-		name    string
-		in      string
-		want    int64
-		wantErr bool
-	}{
-		{name: "целое", in: "12", want: 1200},
-		{name: "копейки", in: "12.34", want: 1234},
-		{name: "мусор", in: "abc", wantErr: true},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			got, err := ParseAmount(tt.in) // Act
-			if tt.wantErr {
-				require.Error(t, err)
-				return
-			}
-			require.NoError(t, err)
-			assert.Equal(t, tt.want, got) // Assert
-		})
-	}
-}
-
-func BenchmarkParseAmount(b *testing.B) {
-	b.ReportAllocs()
-	for b.Loop() {
-		_, _ = ParseAmount("12.34")
-	}
-}`
- }
-]);
+KB.v("go-test",[{"type":"code","after":"Что уметь","src":"\nfunc TestParseAmount(t *testing.T) {\n\ttests := []struct {\n\t\tname    string\n\t\tin      string\n\t\twant    int64\n\t\twantErr bool\n\t}{\n\t\t{name: \"целое\", in: \"12\", want: 1200},\n\t\t{name: \"копейки\", in: \"12.34\", want: 1234},\n\t\t{name: \"мусор\", in: \"abc\", wantErr: true},\n\t}\n\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tt.Parallel()\n\t\t\tgot, err := ParseAmount(tt.in) // Act\n\t\t\tif tt.wantErr {\n\t\t\t\trequire.Error(t, err)\n\t\t\t\treturn\n\t\t\t}\n\t\t\trequire.NoError(t, err)\n\t\t\tassert.Equal(t, tt.want, got) // Assert\n\t\t})\n\t}\n}\n\nfunc BenchmarkParseAmount(b *testing.B) {\n\tb.ReportAllocs()\n\tfor b.Loop() {\n\t\t_, _ = ParseAmount(\"12.34\")\n\t}\n}"},{"type":"flow","h":230,"cap":"Четыре исхода любой проверки. Опаснее всего false negative — его не видно. Частые false positive подрывают доверие к проверке.","nodes":[["h1",196,14,230,30,"проблема есть","txt"],["h2",436,14,230,30,"проблемы нет","txt"],["v1",16,56,170,70,"проверка|сработала","txt"],["v2",16,140,170,70,"проверка|промолчала","txt"],["tp",196,56,230,70,"True positive|настоящая ошибка найдена","good"],["fp",436,56,230,70,"False positive|ложная тревога, шум","warn"],["fn",196,140,230,70,"False negative|ошибка пропущена — опасно","warn"],["tn",436,140,230,70,"True negative|всё верно","good"]]}]);
 
 // Примеры и сложный случай
 KB.ex("go-test",{ex:`## Интеграционный тест с настоящим PostgreSQL
@@ -124,7 +59,13 @@ dsn, _ := pg.ConnectionString(ctx, "sslmode=disable")
 {{func FuzzParse(f *testing.F) { f.Add("12.34"); f.Fuzz(func(t *testing.T, s string) { _, _ = Parse(s) }) }}} — находит входы, на которых функция паникует.
 
 ## Сравнение бенчмарков
-{{go test -bench=. -count=10 > old.txt}}, правка, {{> new.txt}}, {{benchstat old.txt new.txt}} — статистически значимая разница.`,
+{{go test -bench=. -count=10 > old.txt}}, правка, {{> new.txt}}, {{benchstat old.txt new.txt}} — статистически значимая разница.
+
+## Как считать нестабильность
+Тест упал 3 раза из 100 прогонов на одном коммите — это flaky, а не баг кода. Отчёт Allure с историей или простой скрипт по результатам CI покажет такие тесты.
+
+## Алерт, который можно игнорировать — плохой алерт
+Алерт «CPU > 80%» срабатывал каждую ночь во время бэкапа и ничего не требовал. Его заменили на алерт по SLO ([[slo]]).`,
 cs:`## Обобщённый случай из практики: тесты зелёные, а в проде гонка
 **Ситуация.** Кэш пользователей тестировался юнит-тестами; всё проходило годами.
 
@@ -134,4 +75,15 @@ cs:`## Обобщённый случай из практики: тесты зе�
 
 **Как исправили.**
 - {{go test -race}} в CI обязательно; тест с параллельными чтениями и записями нашёл гонку за секунды.
-- Медленные интеграционные тесты вынесены под build tag, чтобы -race не замедлял основной прогон ([[go-build]]).`});
+- Медленные интеграционные тесты вынесены под build tag, чтобы -race не замедлял основной прогон ([[go-build]]).
+
+## Обобщённый случай из практики: зелёный CI перестал что-то значить
+**Ситуация.** В проекте было около двадцати нестабильных тестов. Разработчики привыкли нажимать «перезапустить», пока сборка не позеленеет.
+
+**Что пошло не так.** Настоящая регрессия в расчёте скидок прошла в прод: упавший тест сочли очередной нестабильностью и перезапустили, на второй раз он случайно прошёл из-за гонки.
+
+**Причина.** Ложные срабатывания приучили команду игнорировать сигнал.
+
+**Как исправили.**
+- Нестабильный тест сразу помечается и переводится в карантин с задачей на починку и сроком.
+- Метрика «доля перезапусков» в CI, цель — ноль.`});

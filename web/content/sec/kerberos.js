@@ -23,7 +23,7 @@ KB.add({
 - Kerberos зависит от DNS: имя хоста в принципале должно совпадать с тем, по которому обращаются ([[dns-linux]]).
 
 ## Где встретится Go-разработчику
-- Kafka с {{SASL/GSSAPI}} ([[sasl]], [[kafka-security]]) в банках и на Hadoop-кластерах ([[hadoop]]).
+- Kafka с {{SASL/GSSAPI}} ([[kafka-security|SASL]], [[kafka-security]]) в банках и на Hadoop-кластерах ([[hadoop]]).
 - HTTP-сервисы со SPNEGO (Negotiate) в корпоративной сети.
 - Библиотека на чистом Go — {{jcmturner/gokrb5}}; librdkafka использует системный Cyrus SASL.`,
  m:[

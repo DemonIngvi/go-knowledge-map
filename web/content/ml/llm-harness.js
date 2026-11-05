@@ -24,7 +24,7 @@ x:`**Harness** — всё, что окружает модель и превра�
 - прогон на каждом изменении промпта, модели или инструментов — как регрессионные тесты в CI ([[go-test]], [[gitlab-ci]]);
 - метрики: доля успешных задач, стоимость и задержка на задачу.
 
-Без оценок любое «улучшение промпта» — это изменение наугад ([[test-outcomes]]).`,
+Без оценок любое «улучшение промпта» — это изменение наугад ([[go-test|False / true positive]]).`,
 m:[["Anthropic: Building effective agents","https://www.anthropic.com/engineering/building-effective-agents"],["Model Context Protocol","https://modelcontextprotocol.io/introduction"],["Anthropic: Define success criteria and build evaluations","https://docs.anthropic.com/en/docs/test-and-evaluate/develop-tests"]]});
 
 // Тест
