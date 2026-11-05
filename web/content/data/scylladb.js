@@ -6,7 +6,7 @@ KB.add({
  t:"ScyllaDB и Cassandra",
  short:"ScyllaDB",
  b:"data",
- s:10,
+ s:4,
  l:3,
  a:["ScyllaDB","Cassandra","wide-column","LSM","consistency level","partition key","CQL"],
  x:`**ScyllaDB** — совместимая с Apache Cassandra распределённая wide-column база на C++. Работает по модели **thread-per-core** (фреймворк Seastar): каждое ядро владеет своим кусочком данных без общих блокировок, поэтому задержки ниже, чем у Cassandra на JVM.

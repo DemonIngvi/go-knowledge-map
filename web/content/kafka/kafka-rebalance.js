@@ -6,7 +6,7 @@ KB.add({
  t:"Consumer group и ребалансировка",
  short:"Ребалансировка",
  b:"kafka",
- s:5,
+ s:3,
  l:1,
  a:[
   "rebalance",

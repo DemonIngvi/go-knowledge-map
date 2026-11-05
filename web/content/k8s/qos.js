@@ -6,7 +6,7 @@ KB.add({
  t:"QoS-классы и guaranteed pods",
  short:"Guaranteed pods",
  b:"k8s",
- s:7,
+ s:4,
  l:2,
  a:["guaranteed pods","Guaranteed","Burstable","BestEffort","QoS class","eviction","priorityClass"],
  x:`Kubernetes присваивает каждому поду **класс QoS** по тому, как заданы [[requests-limits]].

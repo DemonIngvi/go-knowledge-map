@@ -6,7 +6,7 @@ KB.add({
  t:"Виды индексов PostgreSQL",
  short:"Индексы",
  b:"pg",
- s:4,
+ s:2,
  l:1,
  a:[
   "index",

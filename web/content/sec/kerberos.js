@@ -6,7 +6,7 @@ KB.add({
  t:"Kerberos",
  short:"Kerberos",
  b:"sec",
- s:10,
+ s:5,
  l:3,
  a:["Kerberos","KDC","TGT","keytab","GSSAPI","SPNEGO","principal","Active Directory"],
  x:`**Kerberos** — сетевой протокол аутентификации с доверенной третьей стороной. Пароль никогда не передаётся по сети. Стандарт корпоративных сетей: **Active Directory построен на Kerberos**.

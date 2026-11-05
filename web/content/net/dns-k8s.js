@@ -6,7 +6,7 @@ KB.add({
  t:"ndots, search domain и FQDN",
  short:"ndots / search / FQDN",
  b:"net",
- s:6,
+ s:3,
  l:1,
  a:[
   "ndots",

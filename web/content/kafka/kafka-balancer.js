@@ -6,7 +6,7 @@ KB.add({
  t:"Балансировка в Kafka: партиционер и распределение партиций",
  short:"Kafka balancer",
  b:"kafka",
- s:5,
+ s:4,
  l:2,
  a:[
   "kafka balancer",

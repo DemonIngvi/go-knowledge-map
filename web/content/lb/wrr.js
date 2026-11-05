@@ -6,7 +6,7 @@ KB.add({
  t:"WRR: взвешенный round robin",
  short:"WRR",
  b:"lb",
- s:9,
+ s:4,
  l:2,
  a:["WRR","weighted round robin","smooth weighted round robin","веса"],
  x:`**Weighted Round Robin** — по кругу, но **бэкенд с весом 3 получает втрое больше запросов**, чем с весом 1.

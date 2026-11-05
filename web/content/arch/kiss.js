@@ -6,7 +6,7 @@ KB.add({
  t:"KISS: делай проще",
  short:"KISS",
  b:"arch",
- s:3,
+ s:1,
  l:2,
  a:["Keep It Simple","YAGNI","простота"],
  x:`**KISS (Keep It Simple, Stupid)**: самое простое работающее решение обычно лучшее. Рядом стоит **YAGNI** (You Aren't Gonna Need It): не делайте то, что «может понадобиться».

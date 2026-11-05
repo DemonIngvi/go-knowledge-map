@@ -6,7 +6,7 @@ KB.add({
  t:"ELK: Elasticsearch, Logstash, Kibana",
  short:"ELK",
  b:"obs",
- s:8,
+ s:3,
  l:2,
  a:["ELK","EFK","Logstash","Kibana","Beats","Filebeat","Fluent Bit","OpenSearch Dashboards"],
  x:`**ELK** — классический стек логирования: **Elasticsearch** хранит и индексирует, **Logstash** принимает и преобразует, **Kibana** — интерфейс для поиска и дашбордов. Вариант EFK использует Fluentd или **Fluent Bit** вместо Logstash; агенты на узлах — Filebeat или Fluent Bit.

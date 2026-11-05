@@ -6,7 +6,7 @@ KB.add({
  t:"Пакет sync и errgroup",
  short:"sync / errgroup",
  b:"go",
- s:1,
+ s:2,
  l:1,
  a:["Mutex","RWMutex","WaitGroup","Once","sync.Cond","errgroup","singleflight"],
  x:`Пакет {{sync}} даёт классические примитивы синхронизации.

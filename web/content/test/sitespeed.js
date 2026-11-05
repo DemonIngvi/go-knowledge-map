@@ -6,7 +6,7 @@ KB.add({
  t:"sitespeed.io: производительность фронтенда",
  short:"sitespeed.io",
  b:"test",
- s:10,
+ s:5,
  l:3,
  a:["sitespeed","web performance","Core Web Vitals","Lighthouse"],
  x:`**sitespeed.io** — open source набор инструментов, который **измеряет скорость веб-страниц глазами настоящего браузера**: загружает страницу в Chrome или Firefox, записывает видео и считает метрики.

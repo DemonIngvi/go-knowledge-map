@@ -6,7 +6,7 @@ KB.add({
  t:"Canary picker: канареечная маршрутизация",
  short:"Canary picker",
  b:"net",
- s:9,
+ s:4,
  l:2,
  a:[
   "canary picker",

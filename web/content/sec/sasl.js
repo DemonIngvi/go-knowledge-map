@@ -6,7 +6,7 @@ KB.add({
  t:"SASL",
  short:"SASL",
  b:"sec",
- s:5,
+ s:4,
  l:2,
  a:["SASL","Simple Authentication and Security Layer","SCRAM","PLAIN","GSSAPI","OAUTHBEARER"],
  x:`**SASL (Simple Authentication and Security Layer)** — рамка, которая **отделяет протокол приложения от способа аутентификации**. Протокол (Kafka, SMTP, IMAP, LDAP, PostgreSQL) говорит «давай аутентифицируемся через SASL», а конкретный механизм подключается отдельно.

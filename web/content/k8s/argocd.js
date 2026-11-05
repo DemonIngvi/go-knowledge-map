@@ -6,7 +6,7 @@ KB.add({
  t:"Argo CD",
  short:"Argo CD",
  b:"k8s",
- s:7,
+ s:3,
  l:2,
  a:["Argo CD","ArgoCD","arg CD","Application","sync","drift","ApplicationSet","Argo Rollouts","Flux"],
  x:`**Argo CD** — инструмент непрерывной доставки (CD) для [[gitops]]: **следит за git-репозиторием и приводит кластер в соответствие с ним**. В видео сказано, что если вы знаете Kubernetes, то Argo — по сути интерфейс, который показывает, всё у вас хорошо или всё плохо.

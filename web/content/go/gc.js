@@ -6,7 +6,7 @@ KB.add({
  t:"Сборщик мусора",
  short:"GC",
  b:"go",
- s:1,
+ s:4,
  l:1,
  a:["garbage collector","GOGC","GOMEMLIMIT","tri-color","write barrier","Green Tea GC"],
  x:`Сборщик мусора в Go — **конкурентный, неперемещающий, трёхцветный mark-and-sweep** с write barrier. Почти вся работа идёт параллельно с программой, паузы stop-the-world обычно меньше миллисекунды.

@@ -6,7 +6,7 @@ KB.add({
  t:"Модули, пакеты и зависимости",
  short:"Go modules",
  b:"tools",
- s:2,
+ s:1,
  l:1,
  a:[
   "go.mod",

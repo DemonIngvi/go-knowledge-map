@@ -6,7 +6,7 @@ KB.add({
  t:"MultiXact",
  short:"MultiXact",
  b:"pg",
- s:4,
+ s:5,
  l:2,
  a:["MultiXactId","multixact wraparound","pg_multixact","FOR SHARE"],
  x:`**MultiXact** — механизм для случая, когда **одну строку одновременно блокирует несколько транзакций**, например несколько {{FOR SHARE}} или {{FOR KEY SHARE}} от проверки внешних ключей.

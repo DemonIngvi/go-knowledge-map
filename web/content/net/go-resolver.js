@@ -6,7 +6,7 @@ KB.add({
  t:"Резолвер Go: cgo или чистый Go",
  short:"cgo-резолвер",
  b:"net",
- s:6,
+ s:4,
  l:2,
  a:["cgo резолвер","cgo resolver","netgo","GODEBUG=netdns","net.Resolver","PreferGo"],
  x:`В Go **два резолвера DNS**, и какой из них работает, влияет на поведение сервиса.

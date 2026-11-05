@@ -6,7 +6,7 @@ KB.add({
  t:"Observability: метрики, логи, трейсы",
  short:"Observability",
  b:"obs",
- s:8,
+ s:1,
  l:1,
  a:[
   "observability",

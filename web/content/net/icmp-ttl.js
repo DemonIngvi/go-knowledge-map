@@ -6,7 +6,7 @@ KB.add({
  t:"ICMP, TTL, ping и traceroute",
  short:"ICMP и TTL",
  b:"net",
- s:6,
+ s:2,
  l:2,
  a:["ICMP","icmp ttl","TTL","ping","traceroute","mtr","Time Exceeded","Destination Unreachable","hop limit"],
  x:`**ICMP** — служебный протокол L3 для сообщений об ошибках и диагностики.

@@ -6,7 +6,7 @@ KB.add({
  t:"AAA: Arrange, Act, Assert",
  short:"AAA",
  b:"test",
- s:2,
+ s:1,
  l:1,
  a:["Arrange Act Assert","Given When Then","структура теста"],
  x:`**AAA** — структура теста из трёх частей:

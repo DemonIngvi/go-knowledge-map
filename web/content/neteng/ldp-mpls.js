@@ -6,7 +6,7 @@ KB.add({
  t:"MPLS и LDP",
  short:"MPLS / LDP",
  b:"neteng",
- s:10,
+ s:5,
  l:3,
  a:["LDP","Label Distribution Protocol","MPLS","label switching","Segment Routing","VPN L3VPN"],
  x:`**MPLS (Multiprotocol Label Switching)** — технология пересылки трафика **по меткам, а не по IP-адресам**. На входе в сеть оператора пакету навешивается короткая метка, и маршрутизаторы внутри **переключают метки** по простой таблице, не разбирая IP-заголовок.

@@ -6,7 +6,7 @@ KB.add({
  t:"psql: консоль PostgreSQL",
  short:"psql",
  b:"pg",
- s:4,
+ s:2,
  l:2,
  a:["psql","\\d","\\timing","\\watch",".psqlrc"],
  x:`**psql** — штатный консольный клиент PostgreSQL. Его стоит знать хотя бы для того, чтобы быстро разобраться с базой на сервере без GUI.

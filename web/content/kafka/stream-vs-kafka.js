@@ -6,7 +6,7 @@ KB.add({
  t:"gRPC streaming или Kafka",
  short:"gRPC streaming vs Kafka",
  b:"kafka",
- s:6,
+ s:3,
  l:1,
  a:["grpc streaming kafka","stream vs broker","push vs pull"],
  x:`Обе технологии передают **поток сообщений**, но решают разные задачи.

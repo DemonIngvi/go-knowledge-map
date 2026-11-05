@@ -6,7 +6,7 @@ KB.add({
  t:"CPU affinity и taskset",
  short:"CPU affinity",
  b:"linux",
- s:10,
+ s:5,
  l:3,
  a:["cpuaffinity","cpu affinity","taskset","sched_setaffinity","привязка к ядрам","NUMA","false sharing"],
  x:`**CPU affinity** — привязка процесса или потока к определённым ядрам. По умолчанию планировщик Linux может перенести поток на любое ядро.

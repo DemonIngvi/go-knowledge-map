@@ -6,7 +6,7 @@ KB.add({
  t:"OpenTelemetry",
  short:"OpenTelemetry",
  b:"obs",
- s:8,
+ s:3,
  l:1,
  a:[
   "OpenTelemetry",

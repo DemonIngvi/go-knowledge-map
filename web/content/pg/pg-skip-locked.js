@@ -6,7 +6,7 @@ KB.add({
  t:"Блокировки записей для оптимизации: SKIP LOCKED и очереди",
  short:"SKIP LOCKED",
  b:"pg",
- s:4,
+ s:3,
  l:1,
  a:[
   "SKIP LOCKED",

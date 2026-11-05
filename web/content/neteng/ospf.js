@@ -6,7 +6,7 @@ KB.add({
  t:"OSPF",
  short:"OSPF",
  b:"neteng",
- s:10,
+ s:5,
  l:3,
  a:["OSPF","link-state","Dijkstra","area","LSA","IGP"],
  x:`**OSPF (Open Shortest Path First)** — протокол маршрутизации **внутри одной сети (IGP)**, класса **link-state**.

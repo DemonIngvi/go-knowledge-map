@@ -6,7 +6,7 @@ KB.add({
  t:"Elasticsearch и OpenSearch",
  short:"Elasticsearch",
  b:"data",
- s:10,
+ s:3,
  l:2,
  a:[
   "Elasticsearch",

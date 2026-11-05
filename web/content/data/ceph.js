@@ -6,7 +6,7 @@ KB.add({
  t:"Ceph: RADOS и RGW",
  short:"Ceph RADOS / RGW",
  b:"data",
- s:10,
+ s:5,
  l:3,
  a:["Ceph","RADOS","RGW","RADOS Gateway","OSD","CRUSH","RBD","CephFS","placement group"],
  x:`**Ceph** — распределённая программно-определяемая система хранения. Одна платформа даёт объектное, блочное и файловое хранилище.

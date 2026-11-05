@@ -6,7 +6,7 @@ KB.add({
  t:"cgo и вызов C из Go",
  short:"cgo",
  b:"go",
- s:1,
+ s:4,
  l:2,
  a:["cgo","CGO_ENABLED","import \"C\""],
  x:`cgo позволяет вызывать C-код из Go. Он нужен для обёрток вроде {{librdkafka}} в [[kafka-clients]], SQLite, системных библиотек.

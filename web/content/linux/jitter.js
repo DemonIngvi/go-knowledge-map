@@ -6,7 +6,7 @@ KB.add({
  t:"Jitter: разброс задержек и случайность в ретраях",
  short:"Jitter",
  b:"linux",
- s:8,
+ s:3,
  l:1,
  a:["jitter","exponential backoff","retry","thundering herd","tail latency","p99","retry budget"],
  x:`У слова **jitter** два значения, и оба важны.

@@ -6,7 +6,7 @@ KB.add({
  t:"pgbench: нагрузка на PostgreSQL",
  short:"pgbench",
  b:"pg",
- s:4,
+ s:3,
  l:2,
  a:["pgbench","TPS","бенчмарк базы"],
  x:`**pgbench** — встроенный в PostgreSQL инструмент нагрузочного тестирования.

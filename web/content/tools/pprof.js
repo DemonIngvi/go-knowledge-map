@@ -6,7 +6,7 @@ KB.add({
  t:"pprof: профили CPU, памяти, горутин",
  short:"pprof",
  b:"tools",
- s:8,
+ s:3,
  l:1,
  a:[
   "go tool pprof",

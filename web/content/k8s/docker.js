@@ -6,7 +6,7 @@ KB.add({
  t:"Docker и Dockerfile",
  short:"Docker",
  b:"k8s",
- s:7,
+ s:1,
  l:1,
  a:[
   "Docker",

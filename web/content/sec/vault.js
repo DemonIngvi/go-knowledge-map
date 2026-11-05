@@ -6,7 +6,7 @@ KB.add({
  t:"Vault: управление секретами",
  short:"Vault",
  b:"sec",
- s:7,
+ s:3,
  l:2,
  a:["HashiCorp Vault","OpenBao","secrets","dynamic secrets","External Secrets","sealed secrets","PKI"],
  x:`**Vault** (HashiCorp) — хранилище секретов: пароли баз, API-ключи, сертификаты, ключи подписи. После смены лицензии в 2023 году появился открытый форк **OpenBao**. В видео Vault называют просто интерфейсом, куда вписывают переменные окружения с секретами, но его возможности шире.

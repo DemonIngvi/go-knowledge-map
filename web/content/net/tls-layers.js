@@ -6,7 +6,7 @@ KB.add({
  t:"Где шифруется канал: Go, sidecar или ядро Linux",
  short:"TLS: Go / mesh / Linux",
  b:"net",
- s:6,
+ s:3,
  l:1,
  a:[
   "TLS между контейнерами",

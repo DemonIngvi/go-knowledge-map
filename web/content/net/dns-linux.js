@@ -6,7 +6,7 @@ KB.add({
  t:"DNS lookup в Linux",
  short:"DNS в Linux",
  b:"net",
- s:6,
+ s:1,
  l:1,
  a:[
   "dns look up linux",

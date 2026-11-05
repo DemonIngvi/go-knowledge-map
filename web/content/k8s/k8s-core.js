@@ -6,7 +6,7 @@ KB.add({
  t:"Kubernetes: примитивы",
  short:"Kubernetes",
  b:"k8s",
- s:7,
+ s:2,
  l:1,
  a:[
   "Kubernetes",

@@ -6,7 +6,7 @@ KB.add({
  t:"Service discovery",
  short:"Service discovery",
  b:"lb",
- s:9,
+ s:3,
  l:1,
  a:[
   "service discovery",

@@ -6,7 +6,7 @@ KB.add({
  t:"tcpdump и анализ трафика",
  short:"tcpdump",
  b:"net",
- s:6,
+ s:3,
  l:2,
  a:["tcpdump","Wireshark","pcap","tshark","ksniff","sniffing"],
  x:`**tcpdump** захватывает пакеты на интерфейсе. Это последний аргумент в споре «это сеть или это приложение».

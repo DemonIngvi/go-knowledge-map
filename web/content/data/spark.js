@@ -6,7 +6,7 @@ KB.add({
  t:"Apache Spark",
  short:"Spark",
  b:"data",
- s:10,
+ s:5,
  l:3,
  a:["Spark","Spark SQL","Structured Streaming","RDD","DataFrame","shuffle"],
  x:`**Apache Spark** — движок распределённой обработки данных. Заменил MapReduce из [[hadoop]], потому что держит промежуточные данные **в памяти** и строит оптимизированный план вычислений.

@@ -6,7 +6,7 @@ KB.add({
  t:"PL/pgSQL: процедурный язык",
  short:"PL/pgSQL",
  b:"pg",
- s:4,
+ s:3,
  l:2,
  a:["plpgsql","stored procedure","хранимые функции","триггер","DO block"],
  x:`**PL/pgSQL** — процедурный язык внутри PostgreSQL: переменные, условия, циклы, обработка исключений.

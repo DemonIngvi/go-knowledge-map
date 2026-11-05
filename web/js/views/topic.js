@@ -7,7 +7,7 @@ function renderTopic(id,mode){
   const rel=[...new Set([...t.out,...t.in])].filter(x=>BYID[x]).map(x=>BYID[x]).sort((a,c)=>a.s-c.s);
   const chip=x=>'<a href="#t-'+x.id+'" style="--h:'+BI[x.b].h+'"><span class="dot"></span>'+x.t+'</a>';
   const a=document.getElementById('art');
-  a.innerHTML='<div class="crumbs" style="--h:'+b.h+'"><span class="dot"></span><a href="#graph">'+b.name+'</a><span>·</span><a href="#plan">Этап '+t.s+': '+STAGES[t.s-1].name+'</a></div>'+
+  a.innerHTML='<div class="crumbs" style="--h:'+b.h+'"><span class="dot"></span><a href="#graph">'+b.name+'</a><span>·</span><a href="#plan">Уровень '+t.s+': '+STAGES[t.s-1].name+'</a></div>'+
    '<h1>'+t.t+'</h1><div class="a-meta"><span class="pill'+(t.l===1?' core':'')+'">'+LVS[t.l]+' '+LV[t.l]+'</span>'+(t.a&&t.a.length?'<span class="pill">также: '+esc(t.a.join(', '))+'</span>':'')+'</div>'+
    '<nav class="ttabs" aria-label="Разделы темы"><a href="#t-'+id+'"'+(mode==='theory'?' class="on" aria-current="page"':'')+'>Теория</a><a href="#q-'+id+'"'+(mode==='quiz'?' class="on" aria-current="page"':'')+'>Тест <span class="tmk st-'+st(id)+'" id="tmk">'+TMK[st(id)]+'</span></a>'+(mode==='theory'&&KB.vz[id]?'<button type="button" class="sk-btn" id="skBtn" aria-pressed="'+sketchOn+'" title="Схемы в стиле карандашного рисунка">✎ Эскиз</button>':'')+'</nav>'+
    (mode==='theory'?

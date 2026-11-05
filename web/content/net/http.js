@@ -6,7 +6,7 @@ KB.add({
  t:"HTTP/1.1, HTTP/2, HTTP/3",
  short:"HTTP 1/2/3",
  b:"net",
- s:6,
+ s:1,
  l:1,
  a:["HTTP","HTTP/1.1","HTTP/2","HTTP/3","h2c","multiplexing","HPACK","status codes","идемпотентность методов"],
  x:`## HTTP/1.1 — текстовый

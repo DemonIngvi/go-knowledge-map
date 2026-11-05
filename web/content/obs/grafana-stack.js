@@ -6,7 +6,7 @@ KB.add({
  t:"Стек Grafana: Loki, Mimir, Tempo",
  short:"Grafana / Loki / Tempo",
  b:"obs",
- s:8,
+ s:3,
  l:1,
  a:["Grafana","Loki","LogQL","Mimir","Tempo","Grafana Alloy","Promtail","LGTM","Pyroscope"],
  x:`Стек **LGTM** — Loki, Grafana, Tempo, Mimir. Компоненты в основном **написаны на Go** и хранят данные в объектном хранилище ([[s3]]). Автор видео отмечает, что этот стек почти полностью закрывает потребности и бережнее к ресурсам, чем [[elk]] на Java.

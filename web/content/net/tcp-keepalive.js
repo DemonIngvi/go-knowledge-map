@@ -6,7 +6,7 @@ KB.add({
  t:"TCP keepalive и HTTP keep-alive",
  short:"TCP keepalive",
  b:"net",
- s:6,
+ s:3,
  l:1,
  a:[
   "tcp keep alive",

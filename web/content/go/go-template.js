@@ -6,7 +6,7 @@ KB.add({
  t:"Шаблоны text/template и html/template",
  short:"go template",
  b:"go",
- s:2,
+ s:3,
  l:3,
  a:["go template","text/template","html/template","sprig"],
  x:`Пакеты {{text/template}} и {{html/template}} подставляют данные в текст: действие в двойных фигурных скобках с точкой, например «точка-Name», выводит поле Name переданной структуры. Синтаксис действий с конвейерами, условиями {{if}}, циклами {{range}} и функциями.

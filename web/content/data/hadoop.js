@@ -6,7 +6,7 @@ KB.add({
  t:"Hadoop: HDFS и YARN",
  short:"Hadoop",
  b:"data",
- s:10,
+ s:5,
  l:3,
  a:["Hadoop","HDFS","YARN","MapReduce","Hive","data lake"],
  x:`**Hadoop** — экосистема для хранения и обработки больших данных на кластерах из обычных серверов.

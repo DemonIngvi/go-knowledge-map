@@ -6,7 +6,7 @@ KB.add({
  t:"Зеркалирование Kafka: MirrorMaker и Brooklin",
  short:"Зеркалирование",
  b:"kafka",
- s:10,
+ s:5,
  l:3,
  a:[
   "brooklin",

@@ -6,7 +6,7 @@ KB.add({
  t:"OpenAPI (Swagger)",
  short:"OpenAPI / Swagger",
  b:"arch",
- s:3,
+ s:2,
  l:2,
  a:["Swagger","OpenAPI","oapi-codegen","swag","contract-first","code-first"],
  x:`**OpenAPI** (раньше назывался Swagger) — стандарт описания REST API в YAML или JSON: пути, методы, параметры, схемы тел, коды ответов, авторизация.

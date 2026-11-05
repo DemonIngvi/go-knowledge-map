@@ -6,7 +6,7 @@ KB.add({
  t:"Sphinx и Manticore: узлы поиска",
  short:"Sphinx / Manticore",
  b:"data",
- s:10,
+ s:5,
  l:3,
  a:["Sphinx","sphinx node","Manticore Search","searchd","distributed index","агент"],
  x:`**Sphinx** — поисковый движок на C++, исторически популярный в рунете (Хабр, Авито, многие форумы). Его открытое продолжение — **Manticore Search**.

@@ -6,7 +6,7 @@ KB.add({
  t:"BFD: быстрое обнаружение отказов",
  short:"BFD",
  b:"neteng",
- s:10,
+ s:5,
  l:3,
  a:["BFD","Bidirectional Forwarding Detection","fast failover"],
  x:`**BFD (Bidirectional Forwarding Detection)** — лёгкий протокол, который **за десятки миллисекунд обнаруживает, что путь до соседа перестал работать**.

@@ -22,7 +22,10 @@ window.CONTENT={
   "gc",
   "cgo",
   "net-http",
-  "go-template"
+  "go-template",
+  "go-reflect",
+  "go-json",
+  "go-iterators"
  ],
  "tools": [
   "go-modules",
@@ -33,7 +36,8 @@ window.CONTENT={
   "delve",
   "pprof",
   "profiling",
-  "starlark"
+  "starlark",
+  "go-build"
  ],
  "test": [
   "test-aaa",
@@ -56,7 +60,14 @@ window.CONTENT={
   "data-bus",
   "saga",
   "workflow-engines",
-  "outbox"
+  "outbox",
+  "twelve-factor",
+  "cap",
+  "raft",
+  "cqrs-es",
+  "rate-limiting",
+  "resilience",
+  "microservices"
  ],
  "algo": [
   "lru",
@@ -84,7 +95,10 @@ window.CONTENT={
   "pg-replication",
   "plpgsql",
   "citus",
-  "pg-go"
+  "pg-go",
+  "zero-downtime-migrations",
+  "n-plus-one",
+  "pg-partitioning"
  ],
  "data": [
   "redis",
@@ -98,7 +112,9 @@ window.CONTENT={
   "hadoop",
   "spark",
   "adhoc",
-  "zstd"
+  "zstd",
+  "cache-strategies",
+  "sharding"
  ],
  "kafka": [
   "kafka-core",
@@ -111,7 +127,8 @@ window.CONTENT={
   "kafka-mirror",
   "kafka-security",
   "kafka-clients",
-  "stream-vs-kafka"
+  "stream-vs-kafka",
+  "rabbitmq"
  ],
  "sec": [
   "oauth-jwt",
@@ -119,7 +136,8 @@ window.CONTENT={
   "acl",
   "kerberos",
   "sasl",
-  "vault"
+  "vault",
+  "owasp"
  ],
  "net": [
   "osi",
@@ -144,7 +162,9 @@ window.CONTENT={
   "canary-picker",
   "tls",
   "tls-layers",
-  "crypto"
+  "crypto",
+  "graphql",
+  "realtime"
  ],
  "neteng": [
   "planes",
@@ -164,7 +184,8 @@ window.CONTENT={
   "service-discovery",
   "search-balancer",
   "proxies",
-  "service-mesh"
+  "service-mesh",
+  "api-gateway"
  ],
  "k8s": [
   "docker",
@@ -198,6 +219,7 @@ window.CONTENT={
   "elk",
   "tracing",
   "jaeger",
-  "otel"
+  "otel",
+  "slo"
  ]
 };

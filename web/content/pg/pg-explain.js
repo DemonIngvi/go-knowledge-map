@@ -6,7 +6,7 @@ KB.add({
  t:"EXPLAIN и планировщик запросов",
  short:"EXPLAIN",
  b:"pg",
- s:4,
+ s:3,
  l:1,
  a:[
   "EXPLAIN ANALYZE",

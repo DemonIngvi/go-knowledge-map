@@ -1,0 +1,52 @@
+// Rate limiting
+
+// Статья
+KB.add({id:"rate-limiting",t:"Rate limiting: алгоритмы ограничения частоты",short:"Rate limiting",b:"arch",s:3,l:1,a:["rate limit","rate limiting","throttling","token bucket","leaky bucket","sliding window","fixed window","429","x/time/rate"],
+x:`**Rate limiting** ограничивает число запросов от клиента, к ресурсу или к внешнему API. Защищает от перегрузки, злоупотреблений и превышения чужих квот.
+
+## Алгоритмы
+- **Token bucket**: в ведро ёмкости B с постоянной скоростью r капают токены, каждый запрос забирает токен; нет токена — отказ или ожидание. **Разрешает всплески до B** при средней скорости r. Самый распространённый вариант ({{golang.org/x/time/rate}}, nginx, Envoy).
+- **Leaky bucket**: очередь, которая выпускает запросы с постоянной скоростью — сглаживает поток, всплески не проходят.
+- **Fixed window**: счётчик на интервал (минуту). Просто, но **на границе окон пропускает двойной объём**: 100 запросов в 12:00:59 и ещё 100 в 12:01:00.
+- **Sliding window log / counter**: учёт по скользящему окну — точнее, но дороже по памяти.
+
+## Локально или распределённо
+- **В процессе** ({{rate.Limiter}}): дёшево, но у 10 реплик сервиса лимит фактически ×10.
+- **Распределённо**: счётчики в [[redis]] (атомарный Lua-скрипт или {{INCR}} + {{EXPIRE}}), лимитер на шлюзе ([[api-gateway]], [[proxies]], [[service-mesh]]).
+- Ключ лимита: пользователь, API-ключ, IP, тенант, маршрут.
+
+## Ответ клиенту
+- **HTTP 429 Too Many Requests** и заголовок {{Retry-After}}; в gRPC — {{ResourceExhausted}} ([[http]], [[grpc]]).
+- Клиент повторяет с backoff и [[jitter]], иначе лимит превращается в шторм ретраев ([[resilience]]).
+
+## Исходящий лимит
+Тот же token bucket ограничивает **вызовы внешних API** из своего сервиса (квота платёжного шлюза), часто вместе с семафором на число одновременных запросов ([[conc-patterns]]). Лимит на приём сообщений — это backpressure: потребитель [[kafka-core|Kafka]] просто читает медленнее.`,
+m:[["Пакет golang.org/x/time/rate","https://pkg.go.dev/golang.org/x/time/rate"],["Cloudflare: How we built rate limiting capable of scaling to millions of domains","https://blog.cloudflare.com/counting-things-a-lot-of-different-things/"],["Stripe: Scaling your API with rate limiters","https://stripe.com/blog/rate-limiters"]]});
+
+// Тест
+KB.q("rate-limiting",[
+ ["Чем token bucket отличается от leaky bucket?","Token bucket пропускает всплески до ёмкости ведра, leaky bucket выдаёт ровный поток","Ничем","Leaky bucket разрешает всплески","Token bucket не ограничивает среднюю скорость","Средняя скорость одинаковая, поведение при всплесках разное."],
+ ["В чём недостаток фиксированного окна?","На границе окон проходит до двойного лимита","Он требует Redis","Он не считает запросы","Он медленный","Можно уложить два лимита подряд вокруг границы."],
+ ["Какой ответ HTTP вернуть при превышении лимита?","429 Too Many Requests с Retry-After","503 всегда","400 Bad Request","401 Unauthorized","Клиент должен повторить позже с backoff."]]);
+
+// Схемы и код к статье
+KB.v("rate-limiting",[{type:"flow",h:200,after:"Алгоритмы",cap:"Token bucket: токены поступают со скоростью r до ёмкости B. Запрос берёт токен; если ведро пусто — отказ 429 или ожидание.",
+ nodes:[["src",16,20,170,44,"пополнение|r = 100 токенов/с","ghost"],["b",230,70,200,70,"ведро|B = 200 токенов","acc"],["rq",16,96,170,44,"запросы"],["ok",480,40,184,44,"есть токен → обработать","good"],["no",480,110,184,44,"пусто → 429 / ждать","warn"]],
+ edges:[["src","b","","d"],["rq","b",""],["b","ok","","a"],["b","no","","w"]]},
+ {type:"code",after:"Исходящий лимит",src:`
+// не больше 50 запросов в секунду с всплеском до 100 к внешнему API
+lim := rate.NewLimiter(rate.Limit(50), 100)
+
+func (c *PayClient) Charge(ctx context.Context, req ChargeReq) error {
+	if err := lim.Wait(ctx); err != nil { // ждёт токен или отмену ctx
+		return err
+	}
+	return c.do(ctx, req)
+}
+
+// на входе: отказ вместо ожидания
+if !lim.Allow() {
+	w.Header().Set("Retry-After", "1")
+	http.Error(w, "too many requests", http.StatusTooManyRequests)
+	return
+}`}]);

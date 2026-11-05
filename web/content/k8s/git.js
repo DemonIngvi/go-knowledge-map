@@ -6,7 +6,7 @@ KB.add({
  t:"Git",
  short:"Git",
  b:"k8s",
- s:2,
+ s:1,
  l:1,
  a:[
   "git",

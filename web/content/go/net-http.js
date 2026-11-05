@@ -6,7 +6,7 @@ KB.add({
  t:"net/http, роутеры и fasthttp",
  short:"net/http",
  b:"go",
- s:1,
+ s:2,
  l:1,
  a:["http.Server","ServeMux","chi","gin","echo","fasthttp","middleware","http.Client"],
  x:`{{net/http}} — промышленный HTTP-сервер и клиент прямо в стандартной библиотеке. **Каждый запрос обрабатывается в своей горутине.**

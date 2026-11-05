@@ -6,7 +6,7 @@ KB.add({
  t:"Безопасность Kafka: TLS, SASL, ACL",
  short:"Безопасность Kafka",
  b:"kafka",
- s:5,
+ s:3,
  l:2,
  a:["sasl kafka auth","SASL_SSL","SCRAM-SHA-512","OAUTHBEARER","GSSAPI","kafka ACL","kafka-acls"],
  x:`Безопасность Kafka состоит из трёх частей: **шифрование, аутентификация, авторизация**.

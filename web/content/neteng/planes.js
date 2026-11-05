@@ -6,7 +6,7 @@ KB.add({
  t:"Data plane и control plane",
  short:"Data / control plane",
  b:"neteng",
- s:10,
+ s:4,
  l:2,
  a:["dataplane","data plane","control plane","control plabne","management plane","FIB","RIB"],
  x:`Любая сетевая (и не только сетевая) система делится на две плоскости.

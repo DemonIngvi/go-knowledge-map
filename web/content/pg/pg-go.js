@@ -6,7 +6,7 @@ KB.add({
  t:"PostgreSQL из Go: pgx, пул, транзакции",
  short:"pgx и пул",
  b:"pg",
- s:4,
+ s:2,
  l:1,
  a:["pgx","pgxpool","database/sql","sqlc","connection pool","prepared statements","транзакции в Go","миграции"],
  x:`Стандарт де-факто — **pgx** (jackc/pgx/v5): быстрый драйвер с нативным протоколом PostgreSQL, пулом {{pgxpool}}, {{COPY}}, {{LISTEN/NOTIFY}}, батчами запросов.

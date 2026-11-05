@@ -6,7 +6,7 @@ KB.add({
  t:"Паттерны конкурентности",
  short:"Паттерны конкурентности",
  b:"go",
- s:1,
+ s:2,
  l:1,
  a:["worker pool","fan-in","fan-out","pipeline","graceful shutdown","rate limit","backpressure"],
  x:`Набор приёмов, из которых собирается почти любой конкурентный код на Go.

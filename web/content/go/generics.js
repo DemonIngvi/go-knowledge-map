@@ -6,7 +6,7 @@ KB.add({
  t:"Дженерики",
  short:"Дженерики",
  b:"go",
- s:1,
+ s:2,
  l:2,
  a:["generics","type parameters","constraints","comparable"],
  x:`С Go 1.18 функции и типы могут иметь **параметры типов**: {{func Map[T, U any](s []T, f func(T) U) []U}}.

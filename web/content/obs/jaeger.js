@@ -6,7 +6,7 @@ KB.add({
  t:"Jaeger",
  short:"Jaeger",
  b:"obs",
- s:8,
+ s:3,
  l:2,
  a:["Jaeger","Zipkin","trace UI"],
  x:`**Jaeger** — система распределённого трейсинга, созданная в Uber. Проект CNCF, **написан на Go**.

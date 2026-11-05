@@ -6,7 +6,7 @@ KB.add({
  t:"Subsetting: подмножества бэкендов",
  short:"Subsetting",
  b:"lb",
- s:9,
+ s:5,
  l:2,
  a:["subsetting","subsettings","deterministic subsetting","connection fan-out"],
  x:`**Проблема**: 1000 клиентов и 1000 бэкендов при полной связности — **миллион соединений**. Каждое соединение стоит памяти, TLS-рукопожатий, health checks и keepalive ([[tcp-keepalive]]). При выкатке все клиенты переподключаются к каждому новому экземпляру.

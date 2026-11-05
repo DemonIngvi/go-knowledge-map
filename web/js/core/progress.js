@@ -6,12 +6,16 @@ try{SR=JSON.parse(localStorage.getItem('gokb-sr')||'{}')||{};}catch(e){SR={};}
 try{const old=JSON.parse(localStorage.getItem('gokb-done')||'[]');if(old.length){old.forEach(id=>{if(!SR[id])SR[id]={b:0,due:Date.now(),last:Date.now(),n:0};});localStorage.removeItem('gokb-done');}}catch(e){}
 // хранилище: localStorage всегда + progress.json через gokb-server, если страница открыта с него
 let STORE='local',storeErr='',putTimer=null;
+// личные планы обучения: [{id, name, ids, created, updated, deleted?}]
+let PLANS=[];try{PLANS=JSON.parse(localStorage.getItem('gokb-plans')||'[]')||[];}catch(e){PLANS=[];}
+const savePlans=()=>{try{localStorage.setItem('gokb-plans',JSON.stringify(PLANS));}catch(e){}saveSR();};
+function mergePlans(a,b){const m={};[...a,...b].forEach(p=>{if(!m[p.id]||(p.updated||0)>(m[p.id].updated||0))m[p.id]=p;});return Object.values(m).sort((x,y)=>x.created-y.created);}
 const saveSR=()=>{try{localStorage.setItem('gokb-sr',JSON.stringify(SR));}catch(e){}if(STORE==='file'){clearTimeout(putTimer);putTimer=setTimeout(pushServer,400);}};
-async function pushServer(){try{const r=await fetch('api/progress',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({version:1,updated:new Date().toISOString(),sr:SR})});if(!r.ok)throw new Error('HTTP '+r.status);storeErr='';}catch(e){storeErr='Не удалось записать progress.json: '+e.message+'. Сервер остановлен? Прогресс пока сохранён в браузере.';}updStore();}
+async function pushServer(){try{const r=await fetch('api/progress',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({version:1,updated:new Date().toISOString(),sr:SR,plans:PLANS})});if(!r.ok)throw new Error('HTTP '+r.status);storeErr='';}catch(e){storeErr='Не удалось записать progress.json: '+e.message+'. Сервер остановлен? Прогресс пока сохранён в браузере.';}updStore();}
 function mergeSR(a,b){const o=Object.assign({},a);for(const k in b){if(!o[k]||(b[k].last||0)>(o[k].last||0))o[k]=b[k];}return o;}
 async function loadServer(){if(!/^https?:$/.test(location.protocol)){updStore();return;}
   try{const r=await fetch('api/progress',{cache:'no-store'});if(!r.ok||!(r.headers.get('content-type')||'').includes('json'))throw 0;const j=await r.json();if(!j||typeof j.sr!=='object'||!j.sr)throw 0;
-    STORE='file';const merged=mergeSR(j.sr,SR);const changed=JSON.stringify(merged)!==JSON.stringify(j.sr);SR=merged;try{localStorage.setItem('gokb-sr',JSON.stringify(SR));}catch(e){}
+    STORE='file';const merged=mergeSR(j.sr,SR);const mp=mergePlans(j.plans||[],PLANS);const changed=JSON.stringify(merged)!==JSON.stringify(j.sr)||JSON.stringify(mp)!==JSON.stringify(j.plans||[]);SR=merged;PLANS=mp;try{localStorage.setItem('gokb-plans',JSON.stringify(PLANS));}catch(e){}try{localStorage.setItem('gokb-sr',JSON.stringify(SR));}catch(e){}
     if(changed)pushServer();refreshAll();if(!location.hash.startsWith('#q-')&&location.hash!=='#session')route();}catch(e){STORE='local';}
   updStore();}
 function updStore(){const el=document.getElementById('storeBadge');if(!el)return;

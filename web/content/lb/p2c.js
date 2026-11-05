@@ -6,7 +6,7 @@ KB.add({
  t:"P2C: сила двух случайных выборов",
  short:"P2C",
  b:"lb",
- s:9,
+ s:4,
  l:1,
  a:["P2C","power of two choices","power of two random choices","least request","EWMA"],
  x:`**Power of Two Choices**: для каждого запроса **выбираем двух случайных бэкендов и отправляем тому, у кого меньше нагрузка** (активных запросов, оценка задержки).

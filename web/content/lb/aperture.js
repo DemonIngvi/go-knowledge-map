@@ -6,7 +6,7 @@ KB.add({
  t:"Aperture: окно балансировки",
  short:"Aperture (earden?)",
  b:"lb",
- s:9,
+ s:5,
  l:3,
  a:["earden","aperture","deterministic aperture","Finagle"],
  x:`В вашем списке было слово «earden» рядом с WRR, P2C и subsetting. Вероятнее всего, имелся в виду **Aperture** — алгоритм балансировки из Finagle (Twitter). Если это что-то другое, напишите, и я поправлю статью.

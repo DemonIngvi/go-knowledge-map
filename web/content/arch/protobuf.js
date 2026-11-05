@@ -6,7 +6,7 @@ KB.add({
  t:"Protocol Buffers",
  short:"Protobuf",
  b:"arch",
- s:3,
+ s:2,
  l:1,
  a:["protobuf","proto3","protoc","buf","wire format","varint","field number","reserved"],
  x:`**Protocol Buffers** — язык описания схем и **компактный бинарный формат** сериализации от Google. Основа [[grpc]], часто используется для событий в Kafka ([[kafka-core]]).

@@ -6,7 +6,7 @@ KB.add({
  t:"S3: объектное хранилище",
  short:"S3",
  b:"data",
- s:7,
+ s:1,
  l:1,
  a:["S3","object storage","MinIO","presigned URL","multipart upload","bucket"],
  x:`**S3** — API объектного хранилища Amazon, которое стало **стандартом хранения файлов**. Его реализуют MinIO, [[ceph|Ceph RGW]], Yandex Object Storage, VK Cloud, SeaweedFS.

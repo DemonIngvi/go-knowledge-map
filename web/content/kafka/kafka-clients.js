@@ -6,7 +6,7 @@ KB.add({
  t:"Kafka-клиенты для Go: librdkafka и другие",
  short:"Kafka в Go",
  b:"kafka",
- s:5,
+ s:2,
  l:1,
  a:[
   "confluent kafka",

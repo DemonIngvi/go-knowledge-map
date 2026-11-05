@@ -6,7 +6,7 @@ KB.add({
  t:"Nginx, HAProxy, Envoy: прокси и шлюзы",
  short:"Nginx / HAProxy",
  b:"lb",
- s:7,
+ s:2,
  l:2,
  a:["nginx","HAProxy","Envoy","reverse proxy","API gateway","Ingress","Gateway API","Traefik","TLS termination"],
  x:`**Обратный прокси** принимает запросы клиентов и передаёт их бэкендам: балансировка, TLS-терминация, маршрутизация, лимиты, кэш, сжатие.

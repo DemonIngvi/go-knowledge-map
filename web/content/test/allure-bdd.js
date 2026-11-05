@@ -6,7 +6,7 @@ KB.add({
  t:"Allure-go и BDD",
  short:"allure-go / BDD",
  b:"test",
- s:2,
+ s:3,
  l:2,
  a:["allure-go","BDD","Allure","Given When Then","gherkin","godog"],
  x:`**BDD** (Behaviour-Driven Development) описывает поведение системы сценариями на языке предметной области: **Given** (дано) — **When** (когда) — **Then** (тогда). Это та же структура [[test-aaa]], только понятная аналитику и QA.

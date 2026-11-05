@@ -6,7 +6,7 @@ KB.add({
  t:"cute: тесты HTTP API на Go",
  short:"cute",
  b:"test",
- s:2,
+ s:3,
  l:3,
  a:["ozontech/cute","API-тесты","e2e"],
  x:`**cute** — библиотека Ozon для **декларативных тестов HTTP API** на Go с отчётами Allure ([[allure-bdd]]).

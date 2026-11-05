@@ -6,7 +6,7 @@ KB.add({
  t:"Блокировки: row-level и advisory",
  short:"Блокировки",
  b:"pg",
- s:4,
+ s:3,
  l:1,
  a:[
   "row level lock",

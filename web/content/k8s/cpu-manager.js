@@ -6,7 +6,7 @@ KB.add({
  t:"Static CPU manager policy",
  short:"Static CPU policy",
  b:"k8s",
- s:10,
+ s:5,
  l:3,
  a:[
   "static cpu policy",

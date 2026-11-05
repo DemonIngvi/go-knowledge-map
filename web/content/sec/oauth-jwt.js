@@ -6,7 +6,7 @@ KB.add({
  t:"OAuth 2.0, OpenID Connect и JWT",
  short:"OAuth / JWT",
  b:"sec",
- s:3,
+ s:2,
  l:1,
  a:[
   "OAuth",

@@ -6,7 +6,7 @@ KB.add({
  t:"cgroups и namespaces",
  short:"cgroups / namespaces",
  b:"k8s",
- s:7,
+ s:3,
  l:1,
  a:[
   "cgroups",

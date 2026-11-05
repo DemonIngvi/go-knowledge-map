@@ -6,7 +6,7 @@ KB.add({
  t:"gRPC streaming",
  short:"gRPC streaming",
  b:"net",
- s:6,
+ s:3,
  l:1,
  a:[
   "server streaming",

@@ -6,7 +6,7 @@ KB.add({
  t:"single-request и гонка запросов A/AAAA",
  short:"single-request",
  b:"net",
- s:6,
+ s:4,
  l:2,
  a:["single request","single-request","single-request-reopen","conntrack race","DNS 5 seconds delay"],
  x:`## Проблема

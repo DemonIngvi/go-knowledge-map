@@ -6,7 +6,7 @@ KB.add({
  t:"Балансировка в gRPC: resolver, balancer, picker",
  short:"resolver / balancer / picker",
  b:"net",
- s:9,
+ s:4,
  l:1,
  a:[
   "resolver",

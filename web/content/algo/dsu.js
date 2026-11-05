@@ -6,7 +6,7 @@ KB.add({
  t:"DSU: система непересекающихся множеств",
  short:"DSU (dss)",
  b:"algo",
- s:9,
+ s:5,
  l:3,
  a:["dss","DSU","Disjoint Set Union","Union-Find"],
  x:`В вашем списке был термин «dss». Рядом с LRU, trie и HyperLogLog он, вероятно, означает **DSU (Disjoint Set Union, Union-Find)** — систему непересекающихся множеств. Если имелось в виду другое, напишите, и я поправлю статью.

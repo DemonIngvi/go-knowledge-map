@@ -6,7 +6,7 @@ KB.add({
  t:"RBAC: доступ на основе ролей",
  short:"RBAC",
  b:"sec",
- s:3,
+ s:2,
  l:2,
  a:[
   "RBAC",

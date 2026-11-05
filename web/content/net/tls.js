@@ -6,7 +6,7 @@ KB.add({
  t:"TLS",
  short:"TLS",
  b:"net",
- s:6,
+ s:2,
  l:1,
  a:[
   "TLS",

@@ -75,7 +75,7 @@ BLOCKS.forEach(b=>{const c=BP[b.id];
   el('text',{x:c.x,y:c.y-c.r+38,class:'g-hcount','data-b':b.id},gL).textContent=bsize[b.id]+' '+plural(bsize[b.id],'тема','темы','тем');
   el('text',{x:c.x,y:c.y+c.r+18,class:'g-hstat','data-b':b.id},gL);
   ci.addEventListener('pointerenter',()=>{if(!filterSet)focusBlock(b.id);});ci.addEventListener('pointerleave',()=>{if(!filterSet)clearFocus();tip.textContent=defTip;});
-  ci.addEventListener('click',()=>{if(!moved)zoomTo(c.x,c.y,c.r*2.8);});});
+  ci.addEventListener('dblclick',e=>{e.preventDefault();zoomTo(c.x,c.y,c.r*2.8);});});
 
 // связи тем и сами темы
 const edgeEls=edges.map(([i,j])=>{const a=nodes[i],c=nodes[j];const same=a.t.b===c.t.b;
@@ -85,7 +85,7 @@ const nodeEls=nodes.map(n=>{const g=el('g',{class:'g-node l'+n.t.l+(st(n.t.id)!=
 const adj=nodes.map(()=>new Set());edges.forEach(([i,j])=>{adj[i].add(j);adj[j].add(i);});
 
 // ---------- подсветка ----------
-const tip=document.getElementById('gtip');const defTip='Наведите на тему или блок. Щелчок по блоку приближает его, по теме — открывает статью.';tip.textContent=defTip;
+const tip=document.getElementById('gtip');const defTip='Наведите на тему или блок. Щелчок по теме открывает статью, двойной щелчок по блоку приближает его.';tip.textContent=defTip;
 function focusNodes(set,blocks){svg.classList.add('focus');
   nodeEls.forEach((g,i)=>g.classList.toggle('hl',set.has(i)));
   edgeEls.forEach((p,k)=>{const[i,j]=edges[k];p.classList.toggle('hl',set.has(i)&&set.has(j));});
@@ -103,9 +103,9 @@ nodeEls.forEach((g,i)=>{
   g.addEventListener('pointerenter',()=>{const s=new Set([i,...adj[i]]);focusNodes(s,new Set([...s].map(k=>nodes[k].t.b)));
     edgeEls.forEach((p,k)=>{const[a,b]=edges[k];p.classList.toggle('hl',a===i||b===i);});
     const t=nodes[i].t;const SL={new:'не изучено',ok:'свежо, повторить через '+(SR[t.id]?rel(SR[t.id].due-Date.now()):''),soon:'повторить в течение суток',due:'пора повторить',fail:'тест не сдан'};
-    tip.innerHTML='<b>'+t.t+'</b> · '+BI[t.b].name+' · этап '+t.s+' · связей: '+adj[i].size+' · '+SL[st(t.id)];
-    g.classList.add('hot');showCard(i,SL[st(t.id)]);});
-  g.addEventListener('pointerleave',()=>{clearFocus();tip.textContent=defTip;hideCard();g.classList.remove('hot');});
+    tip.innerHTML='<b>'+t.t+'</b> · '+BI[t.b].name+' · уровень '+t.s+' · связей: '+adj[i].size+' · '+SL[st(t.id)];
+    g.classList.add('hot');labelNeighbours(i);showCard(i,SL[st(t.id)]);});
+  g.addEventListener('pointerleave',()=>{clearFocus();tip.textContent=defTip;hideCard();g.classList.remove('hot');nodeEls.forEach(x=>x.classList.remove('nolab'));});
   g.addEventListener('pointermove',e=>moveCard(e));
   g.addEventListener('click',()=>{if(moved)return;location.hash='t-'+nodes[i].t.id;});
   g.addEventListener('keydown',e=>{if(e.key==='Enter')location.hash='t-'+nodes[i].t.id;});});
@@ -149,10 +149,15 @@ ribOn.onchange=applyRibbons;ribThr.oninput=applyRibbons;applyRibbons();
 // ---------- карточка-подсказка у курсора ----------
 const gcard=document.getElementById('gcard'),gshell=svg.parentNode;
 function showCard(i,status){const t=nodes[i].t;const nb=[...adj[i]].map(k=>nodes[k].t).sort((a,b)=>a.s-b.s);
-  gcard.innerHTML='<b>'+t.t+'</b><span class="gc-meta" style="--h:'+BI[t.b].h+'"><span class="dot"></span>'+BI[t.b].name+' · этап '+t.s+' · '+LV[t.l]+'</span><span class="gc-st">'+status+'</span>'+
+  gcard.innerHTML='<b>'+t.t+'</b><span class="gc-meta" style="--h:'+BI[t.b].h+'"><span class="dot"></span>'+BI[t.b].name+' · уровень '+t.s+' · '+LV[t.l]+'</span><span class="gc-st">'+status+'</span>'+
     (nb.length?'<span class="gc-h">Связано ('+nb.length+'):</span><span class="gc-list">'+nb.slice(0,8).map(x=>esc(x.short||x.t)).join(' · ')+(nb.length>8?' и ещё '+(nb.length-8):'')+'</span>':'');
   gcard.hidden=false;}
 function moveCard(e){if(gcard.hidden)return;const r=gshell.getBoundingClientRect();let x=e.clientX-r.left+16,y=e.clientY-r.top+16;
   if(x+gcard.offsetWidth>r.width-8)x=e.clientX-r.left-gcard.offsetWidth-16;if(y+gcard.offsetHeight>r.height-8)y=e.clientY-r.top-gcard.offsetHeight-16;
   gcard.style.left=Math.max(8,x)+'px';gcard.style.top=Math.max(8,y)+'px';}
 function hideCard(){gcard.hidden=true;}
+// подписи соседей без наложений: только из других блоков, не ближе 70 px к теме и 46 px друг к другу
+function labelNeighbours(i){const k=parseFloat(svg.style.getPropertyValue('--k'))||1;const p=nodes[i];const placed=[[p.x,p.y]];
+  [...adj[i]].map(j=>({j,d:Math.hypot(nodes[j].x-p.x,nodes[j].y-p.y)/k})).sort((a,b)=>b.d-a.d).forEach(({j,d})=>{
+    const q=nodes[j];const sameBlock=q.t.b===p.t.b;const crowded=placed.some(([x,y])=>Math.hypot(q.x-x,q.y-y)/k<46);
+    const hide=sameBlock||d<70||crowded;nodeEls[j].classList.toggle('nolab',hide);if(!hide)placed.push([q.x,q.y]);});}

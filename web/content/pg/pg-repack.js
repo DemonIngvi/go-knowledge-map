@@ -6,7 +6,7 @@ KB.add({
  t:"pg_repack и CLUSTER",
  short:"pg_repack",
  b:"pg",
- s:4,
+ s:5,
  l:2,
  a:["pgrepack","pg_repack","CLUSTER","pg_squeeze","bloat","REINDEX CONCURRENTLY"],
  x:`**pg_repack** — расширение, которое **убирает bloat таблиц и индексов без длительной блокировки**, в отличие от {{VACUUM FULL}} и {{CLUSTER}}.

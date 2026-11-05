@@ -6,7 +6,7 @@ KB.add({
  t:"Kafka: устройство",
  short:"Kafka",
  b:"kafka",
- s:5,
+ s:2,
  l:1,
  a:[
   "Apache Kafka",

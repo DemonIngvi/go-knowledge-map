@@ -6,7 +6,7 @@ KB.add({
  t:"go test: тесты, бенчмарки, фаззинг, race",
  short:"go test",
  b:"tools",
- s:2,
+ s:1,
  l:1,
  a:[
   "testing",

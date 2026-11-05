@@ -6,7 +6,7 @@ KB.add({
  t:"Service mesh: Istio и Envoy",
  short:"Istio / mesh",
  b:"lb",
- s:7,
+ s:4,
  l:2,
  a:[
   "Istio",

@@ -6,7 +6,7 @@ KB.add({
  t:"Redis: кэш и структуры данных",
  short:"Redis",
  b:"data",
- s:5,
+ s:1,
  l:1,
  a:[
   "Redis",

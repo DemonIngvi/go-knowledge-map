@@ -6,7 +6,7 @@ KB.add({
  t:"Citus: шардирование PostgreSQL",
  short:"Citus",
  b:"pg",
- s:10,
+ s:5,
  l:3,
  a:["Citus","sharding","шардирование","distributed table","reference table","Postgres-XL"],
  x:`**Citus** — расширение, которое превращает PostgreSQL в **распределённую базу**: таблицы шардируются по ключу между worker-узлами, а координатор планирует запросы.

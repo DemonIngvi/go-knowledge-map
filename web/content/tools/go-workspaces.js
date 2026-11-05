@@ -6,7 +6,7 @@ KB.add({
  t:"Go workspaces (go.work)",
  short:"go workspaces",
  b:"tools",
- s:2,
+ s:3,
  l:2,
  a:["go.work","go workspaces","go work use","монорепозиторий"],
  x:`Workspace (Go 1.18+) позволяет **разрабатывать несколько модулей одновременно** без директив {{replace}} в go.mod.

@@ -6,7 +6,7 @@ KB.add({
  t:"Helm",
  short:"Helm",
  b:"k8s",
- s:7,
+ s:2,
  l:1,
  a:["Helm","chart","values.yaml","helm upgrade","helm rollback","helmfile","OCI chart"],
  x:`**Helm** — пакетный менеджер Kubernetes. **Чарт** — набор шаблонов манифестов плюс {{values.yaml}} с параметрами. Шаблоны пишутся на [[go-template|Go templates]] с функциями Sprig.

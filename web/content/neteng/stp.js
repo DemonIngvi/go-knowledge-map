@@ -6,7 +6,7 @@ KB.add({
  t:"STP: протокол связующего дерева",
  short:"STP",
  b:"neteng",
- s:10,
+ s:5,
  l:3,
  a:["STP","Spanning Tree Protocol","RSTP","MSTP","broadcast storm","петля L2"],
  x:`**STP (Spanning Tree Protocol)** защищает L2-сеть от **петель**. В Ethernet-кадре нет TTL ([[icmp-ttl]]), поэтому широковещательный кадр в кольце из коммутаторов размножается бесконечно, и **широковещательный шторм за секунды кладёт всю сеть** ([[mac-arp]]).

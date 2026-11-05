@@ -6,7 +6,7 @@ KB.add({
  t:"BGP",
  short:"BGP",
  b:"neteng",
- s:10,
+ s:5,
  l:2,
  a:[
   "BGP",

@@ -6,7 +6,7 @@ KB.add({
  t:"gRPC",
  short:"gRPC",
  b:"net",
- s:6,
+ s:2,
  l:1,
  a:[
   "gRPC",

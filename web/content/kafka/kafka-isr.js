@@ -6,7 +6,7 @@ KB.add({
  t:"Репликация Kafka: лидер и ISR",
  short:"ISR",
  b:"kafka",
- s:5,
+ s:4,
  l:1,
  a:[
   "ISR",

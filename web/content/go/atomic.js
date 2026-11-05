@@ -6,7 +6,7 @@ KB.add({
  t:"Атомарные операции",
  short:"atomic",
  b:"go",
- s:1,
+ s:3,
  l:2,
  a:["sync/atomic","CAS","compare-and-swap","atomic.Int64"],
  x:`Пакет {{sync/atomic}} выполняет неделимые операции над одной переменной без блокировки: {{Add}}, {{Load}}, {{Store}}, {{Swap}}, {{CompareAndSwap}}.

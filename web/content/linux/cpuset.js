@@ -6,7 +6,7 @@ KB.add({
  t:"cpuset",
  short:"cpuset",
  b:"linux",
- s:10,
+ s:5,
  l:3,
  a:["cpuset","cpuseret","cpuset.cpus","cpuset.mems","cgroup cpuset"],
  x:`**cpuset** — контроллер [[cgroups]], который задаёт **набор ядер ({{cpuset.cpus}}) и узлов памяти NUMA ({{cpuset.mems}})** для группы процессов. Это [[cpu-affinity]], но для целой группы и с наследованием дочерними процессами.

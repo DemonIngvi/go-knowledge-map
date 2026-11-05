@@ -6,7 +6,7 @@ KB.add({
  t:"VictoriaMetrics",
  short:"VictoriaMetrics",
  b:"obs",
- s:8,
+ s:4,
  l:2,
  a:["VictoriaMetrics","vmagent","vmalert","VictoriaLogs","MetricsQL"],
  x:`**VictoriaMetrics** — хранилище временных рядов, **написанное на Go**. По словам автора видео, сейчас оно распространено повсеместно. Его автор, Александр Валялкин, известен и как создатель **fasthttp** — самого быстрого HTTP-сервера на Go ([[net-http]]).

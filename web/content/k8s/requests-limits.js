@@ -6,7 +6,7 @@ KB.add({
  t:"Requests и limits",
  short:"requests / limits",
  b:"k8s",
- s:7,
+ s:3,
  l:1,
  a:[
   "requests",

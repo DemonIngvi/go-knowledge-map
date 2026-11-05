@@ -6,7 +6,7 @@ KB.add({
  t:"Redis Pub/Sub и Streams",
  short:"Redis Pub/Sub",
  b:"data",
- s:5,
+ s:2,
  l:2,
  a:["Pub/Sub","PUBLISH","SUBSCRIBE","Redis Streams","XADD","consumer group"],
  x:`## Pub/Sub

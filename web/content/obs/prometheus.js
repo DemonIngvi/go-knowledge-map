@@ -6,7 +6,7 @@ KB.add({
  t:"Prometheus и метрики в Go",
  short:"Prometheus",
  b:"obs",
- s:8,
+ s:2,
  l:1,
  a:[
   "Prometheus",

@@ -1,6 +1,7 @@
 // Сессия повторения: тесты по устаревшим темам подряд
 let SESS=null;
-function startSession(ids){SESS={ids:ids||staleList().map(t=>t.id),i:0,res:[],done:false};}
+function startSession(ids,title){SESS={ids:ids||staleList().map(t=>t.id),i:0,res:[],done:false,title:title||'Повторение'};}
+function launchSession(ids,title){startSession(ids,title);if(location.hash==='#session')renderSession();else location.hash='session';}
 function renderSession(){const box=document.getElementById('sess');
   if(!SESS||SESS.done)startSession();
   const n=SESS.ids.length;
@@ -16,7 +17,7 @@ function renderSession(){const box=document.getElementById('sess');
     const ag=document.getElementById('sessAgain');if(ag)ag.onclick=e=>{e.preventDefault();startSession();renderSession();};
     renderBanner();return;}
   const id=SESS.ids[SESS.i],t=BYID[id],b=BI[t.b],x=st(id);
-  box.innerHTML='<div class="sess-top"><span class="stat">Повторение · тема '+(SESS.i+1)+' из '+n+'</span><button class="btn" id="sessEnd" type="button">Завершить</button></div>'+
+  box.innerHTML='<div class="sess-top"><span class="stat">'+esc(SESS.title)+' · тема '+(SESS.i+1)+' из '+n+'</span><button class="btn" id="sessEnd" type="button">Завершить</button></div>'+
     '<div class="bar"><i style="width:'+(SESS.i/n*100)+'%"></i></div>'+
     '<div class="crumbs" style="--h:'+b.h+'"><span class="dot"></span>'+b.name+'</div><h1 class="sess-h">'+t.t+'</h1>'+
     '<p class="stat sess-st">'+(x==='fail'?'Прошлый тест не сдан ('+SR[id].score+')':x==='due'?'Устарело '+rel(Date.now()-SR[id].due)+' назад':'Срок через '+rel(SR[id].due-Date.now()))+'</p>'+

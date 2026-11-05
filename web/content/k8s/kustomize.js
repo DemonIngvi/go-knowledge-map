@@ -6,7 +6,7 @@ KB.add({
  t:"Kustomize",
  short:"Kustomize",
  b:"k8s",
- s:7,
+ s:3,
  l:2,
  a:["Kustomize","kubectl apply -k","overlay","patch","kustomization.yaml"],
  x:`**Kustomize** собирает манифесты Kubernetes **без шаблонов**: берёт обычные YAML-файлы (base) и накладывает на них **патчи** для окружений (overlays). В видео упоминается, что Kustomize встроен в kubectl ({{kubectl apply -k}}), поэтому задумывался как способ по умолчанию, но популярнее оказался [[helm]].

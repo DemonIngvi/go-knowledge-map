@@ -6,7 +6,7 @@ KB.add({
  t:"DLQ и ретраи сообщений",
  short:"DLQ",
  b:"kafka",
- s:5,
+ s:3,
  l:1,
  a:["DLQ","dead letter queue","retry topic","poison pill","отравленное сообщение"],
  x:`**DLQ (Dead Letter Queue)** — отдельный топик для сообщений, которые **не удалось обработать** после нескольких попыток.

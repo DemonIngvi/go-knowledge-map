@@ -6,7 +6,7 @@ KB.add({
  t:"TCP",
  short:"TCP",
  b:"net",
- s:6,
+ s:1,
  l:1,
  a:[
   "TCP/IP",

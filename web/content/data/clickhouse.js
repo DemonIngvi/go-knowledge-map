@@ -6,7 +6,7 @@ KB.add({
  t:"ClickHouse: колоночная аналитика",
  short:"ClickHouse",
  b:"data",
- s:10,
+ s:3,
  l:2,
  a:["ClickHouse","колоночная база","OLAP","MergeTree","ReplacingMergeTree","materialized view"],
  x:`**ClickHouse** — колоночная СУБД для аналитики (OLAP), созданная в Яндексе. Читает миллиарды строк в секунду.

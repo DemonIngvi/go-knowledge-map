@@ -6,7 +6,7 @@ KB.add({
  t:"Temporal и Camunda: движки бизнес-процессов",
  short:"Temporal / Camunda",
  b:"arch",
- s:9,
+ s:4,
  l:2,
  a:["Temporal","Camunda","Zeebe","BPMN","workflow engine","durable execution","Cadence"],
  x:`Движки процессов нужны, когда **процесс растянут во времени**: много статусов, ожидания часами и днями, ретраи, ручные шаги. Пример из видео — оформление кредита.

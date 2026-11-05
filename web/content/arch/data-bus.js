@@ -6,7 +6,7 @@ KB.add({
  t:"Шина данных (data bus)",
  short:"Data bus",
  b:"arch",
- s:5,
+ s:3,
  l:2,
  a:["data-bus","шина данных","event bus","event-driven","health checker","TCP checker","data bus checker"],
  x:`**Шина данных** — общий канал обмена событиями между сервисами. Обычно это [[kafka-core]] с договорённостями поверх: формат событий ([[protobuf]] и реестр схем), именование топиков, владельцы, ретенция, права ([[kafka-security]]).

@@ -6,7 +6,7 @@ KB.add({
  t:"IS-IS",
  short:"IS-IS",
  b:"neteng",
- s:10,
+ s:5,
  l:3,
  a:["IS-IS","isis","Intermediate System to Intermediate System","link-state"],
  x:`**IS-IS (Intermediate System to Intermediate System)** — протокол маршрутизации класса **link-state**, как и [[ospf]]: каждый узел знает полную карту сети и считает кратчайшие пути алгоритмом Дейкстры.

@@ -6,7 +6,7 @@ KB.add({
  t:"Transactional Outbox и Inbox",
  short:"Outbox",
  b:"arch",
- s:5,
+ s:3,
  l:1,
  a:["outbox","transactional outbox","inbox","dual write","CDC","идемпотентность"],
  x:`**Проблема двойной записи (dual write)**: сервис сохраняет заказ в PostgreSQL и публикует событие в Kafka. Если упасть между двумя операциями, данные и события разойдутся. Распределённой транзакции между базой и Kafka нет.
