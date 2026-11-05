@@ -221,5 +221,21 @@ window.CONTENT={
   "jaeger",
   "otel",
   "slo"
+ ],
+ "ml": [
+  "ml-basics",
+  "llm-basics",
+  "llm-go",
+  "llm-harness",
+  "guardrails",
+  "rag",
+  "vector-search",
+  "ai-memory"
+ ],
+ "py": [
+  "python-basics",
+  "python-concurrency",
+  "pandas",
+  "df-alternatives"
  ]
 };

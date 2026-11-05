@@ -63,7 +63,6 @@ svg.focus .g-rib,svg.focus .g-ribn,svg.focus .g-zone,svg.focus .g-hcount,svg.foc
 svg.focus .g-rib.hl,svg.focus .g-ribn.hl,svg.focus .g-zone.hl,svg.focus .g-hcount.hl,svg.focus .g-hstat.hl{opacity:1}
 svg.focus .g-rib.hl{stroke:hsl(var(--h) 60% 50%/.75)}
 svg.focus .g-edge.hl{display:inline}
-svg.focus.far .g-node.hl text{display:inline}
 .zchip .zdot{width:12px;height:12px;border-radius:3px;background:hsl(var(--zh) 45% 55%)}
 .zchip{font-weight:600}
 .g-rib input[type=range]{width:110px;vertical-align:middle;accent-color:var(--accent)}
@@ -85,11 +84,7 @@ svg.memmap .g-zone[data-m="due"]{fill:color-mix(in srgb,var(--m-due) 8%,transpar
 .mx th.top{writing-mode:vertical-rl;transform:rotate(180deg);text-align:left;height:110px;padding:4px 0}
 .mx td.zl{border-left:2px solid var(--fg)}.mx td.zt{border-top:2px solid var(--fg)}
 
-/* подсказки без приближения: подписи и кружки наведённой темы и соседей в постоянном экранном размере */
-svg.focus .g-node.hl text{display:inline;font-size:calc(12.5px * var(--k,1));stroke-width:calc(3.4px * var(--k,1))}
-svg.focus .g-node.hl circle{opacity:1;r:max(6px,calc(5px * var(--k,1)))}
-svg.focus .g-node.hot text{font-size:calc(15px * var(--k,1));font-weight:700}
-svg.focus .g-node.hot circle{r:max(9px,calc(8px * var(--k,1)));stroke:var(--fg);stroke-width:calc(2px * var(--k,1))}
+/* подсказка у курсора; подписи тем видны только при приближении */
 .gcard{position:absolute;z-index:3;pointer-events:none;max-width:320px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:0 10px 28px rgba(0,0,0,.16);display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.4}
 .gcard b{font-size:14.5px}
 .gc-meta{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:12.5px}

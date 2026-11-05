@@ -25,3 +25,11 @@
 .mp-n{font:600 11px var(--f-mono);color:var(--muted);min-width:16px}
 .mp-act{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px}
 .mp-card .st-topics{grid-column:auto}
+/* подгруппы по зонам внутри уровня */
+.st-zones{grid-column:2;display:grid;gap:10px}
+.st-zone{border-left:3px solid hsl(var(--zh) 45% 50%);padding:2px 0 2px 12px}
+.st-zh{display:flex;align-items:center;gap:8px;font:700 12px var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:hsl(var(--zh) 40% var(--zl-l,42%));margin-bottom:6px}
+.st-zh .zdot{width:10px;height:10px;border-radius:3px;background:hsl(var(--zh) 45% 55%)}
+.st-zc{font:500 11px var(--f-mono);color:var(--muted);text-transform:none;letter-spacing:0}
+.st-zone .st-topics{grid-column:auto}
+@media (max-width:860px){.st-zones{grid-column:1}}

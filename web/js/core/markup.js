@@ -4,6 +4,8 @@ function inline(s){
   s=esc(s);
   s=s.replace(/\{\{(.+?)\}\}/g,(m,c)=>'<code>'+c+'</code>');
   s=s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  // внешняя ссылка [текст](https://…)
+  s=s.replace(/(^|[^\[])\[([^\[\]]+)\]\((https?:\/\/[^\s)]+)\)/g,(x,p,txt,u)=>p+'<a href="'+u+'" target="_blank" rel="noopener">'+txt+'</a>');
   s=s.replace(/\[\[([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g,(m,id,txt)=>{const t=BYID[id];if(!t){console.warn('нет темы',id);return txt||id;}return '<a class="x" href="#t-'+id+'">'+(txt||t.t)+'</a>';});
   return s;
 }

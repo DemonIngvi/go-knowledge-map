@@ -86,3 +86,31 @@ if errors.As(err, &pgErr) && pgErr.Code == "40001" {
 }`
  }
 ]);
+
+// Примеры и сложный случай
+KB.ex("errors",{ex:`## Ошибка с контекстом на каждом уровне
+{{repo: get user 42: pgx: no rows}} → {{service: load profile: user 42: not found}}. По сообщению сразу видно путь, а {{errors.Is(err, ErrNotFound)}} по-прежнему работает.
+
+## Перевод в HTTP-код в одном месте
+~~~
+switch {
+case errors.Is(err, ErrNotFound):    http.Error(w, "not found", 404)
+case errors.Is(err, ErrConflict):    http.Error(w, "conflict", 409)
+default:
+	slog.Error("unexpected", "err", err)
+	http.Error(w, "internal error", 500)
+}
+~~~
+
+## Recover в своих горутинах
+{{go func() { defer func() { if r := recover(); r != nil { slog.Error("panic", "r", r) } }(); work() }()}}`,
+cs:`## Обобщённый случай из практики: panic в фоновой горутине убил весь сервис
+**Ситуация.** HTTP-сервис был защищён recover-middleware. Для отправки уведомлений обработчик запускал {{go notify(order)}}.
+
+**Что пошло не так.** На заказе без адреса {{notify}} разыменовала nil — и упал **весь процесс** вместе со всеми текущими запросами. Kubernetes перезапустил под, а повторная доставка того же события роняла его снова.
+
+**Причина.** Recover работает только в своей горутине. Middleware защищал горутину обработчика, а не порождённую.
+
+**Как исправили.**
+- Обёртка для фоновых задач с recover, логом и метрикой.
+- Фоновая работа вынесена в очередь с повторами и DLQ, чтобы «ядовитое» сообщение не крутилось бесконечно ([[kafka-dlq]]).`});

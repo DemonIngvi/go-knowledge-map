@@ -16,7 +16,7 @@ function renderNav(q){
   });
   markNav();
 }
-function markNav(){const cur=(location.hash||'').replace(/^#[tq]-/,'');nav.querySelectorAll('a').forEach(a=>a.toggleAttribute('aria-current',a.dataset.id===cur)||a.removeAttribute('aria-current'));nav.querySelectorAll('a[data-id="'+cur+'"]').forEach(a=>a.setAttribute('aria-current','page'));}
+function markNav(){const cur=(location.hash||'').replace(/^#[tqec]-/,'');nav.querySelectorAll('a').forEach(a=>a.toggleAttribute('aria-current',a.dataset.id===cur)||a.removeAttribute('aria-current'));nav.querySelectorAll('a[data-id="'+cur+'"]').forEach(a=>a.setAttribute('aria-current','page'));}
 document.getElementById('q').addEventListener('input',e=>renderNav(e.target.value));
 document.getElementById('menuBtn').onclick=()=>document.body.classList.toggle('nav-open');
 nav.addEventListener('click',e=>{if(e.target.closest('a'))document.body.classList.remove('nav-open');});

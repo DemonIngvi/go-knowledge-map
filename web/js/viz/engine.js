@@ -88,15 +88,17 @@ function gantt(d){const W=d.w||680,L=d.lw||130,R=14,T=d.title?30:14,rh=d.rh||28;
 // ---------- код ----------
 const KW={go:'break case chan const continue default defer else fallthrough for func go goto if import interface map package range return select struct switch type var',
   sql:'select from where and or not in is null update set insert into values delete returning order by limit for skip locked nowait begin commit rollback create index on concurrently table join left inner group having as with distinct exists',
+  py:'def return if elif else for while in not and or is None True False import from as with class try except finally raise async await yield lambda pass break continue global nonlocal assert del',
   yaml:'',sh:''};
+const PYBI='print len range list dict set tuple int str float bool open sum min max sorted enumerate zip isinstance super self';
 const BUILTIN='append cap close copy delete len make new panic recover print println nil true false iota error string int int64 bool byte rune any';
-function hl(src,lang){const kw=new Set((KW[lang]||'').split(' ').filter(Boolean)),bi=new Set(lang==='go'?BUILTIN.split(' '):[]);
-  const re=lang==='sql'?/(--[^\n]*)|('(?:[^'])*')|(\$\d+|\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)|([\s\S])/g:lang==='yaml'||lang==='sh'?/(#[^\n]*)|("(?:\\.|[^"\\])*"|'[^']*')|(\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_.-]*:(?=\s|$))|([\s\S])/g:/(\/\/[^\n]*)|("(?:\\.|[^"\\\n])*"|`[^`]*`|'(?:\\.|[^'\\])')|(\b\d+(?:\.\d+)?(?:ms|s)?\b)|([A-Za-z_][A-Za-z0-9_]*)|([\s\S])/g;
+function hl(src,lang){const kw=new Set((KW[lang]||'').split(' ').filter(Boolean)),bi=new Set(lang==='go'?BUILTIN.split(' '):lang==='py'?PYBI.split(' '):[]);
+  const re=lang==='py'?/(#[^\n]*)|("""[\s\S]*?"""|'''[\s\S]*?'''|f?"(?:\.|[^"\\n])*"|f?'(?:\.|[^'\\n])*')|(\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)|([\s\S])/g:lang==='sql'?/(--[^\n]*)|('(?:[^'])*')|(\$\d+|\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)|([\s\S])/g:lang==='yaml'||lang==='sh'?/(#[^\n]*)|("(?:\\.|[^"\\])*"|'[^']*')|(\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_.-]*:(?=\s|$))|([\s\S])/g:/(\/\/[^\n]*)|("(?:\\.|[^"\\\n])*"|`[^`]*`|'(?:\\.|[^'\\])')|(\b\d+(?:\.\d+)?(?:ms|s)?\b)|([A-Za-z_][A-Za-z0-9_]*)|([\s\S])/g;
   let out='',m;while((m=re.exec(src))){if(m[1])out+='<span class="c-cm">'+esc(m[1])+'</span>';else if(m[2])out+='<span class="c-st">'+esc(m[2])+'</span>';else if(m[3])out+='<span class="c-nu">'+esc(m[3])+'</span>';
-    else if(m[4]){const w=m[4];if(lang==='yaml'||lang==='sh')out+='<span class="c-kw">'+esc(w)+'</span>';else if(kw.has(lang==='sql'?w.toLowerCase():w))out+='<span class="c-kw">'+esc(w)+'</span>';else if(bi.has(w))out+='<span class="c-bi">'+esc(w)+'</span>';else if(lang==='go'&&src[re.lastIndex]==='(')out+='<span class="c-fn">'+esc(w)+'</span>';else out+=esc(w);}
+    else if(m[4]){const w=m[4];if(lang==='yaml'||lang==='sh')out+='<span class="c-kw">'+esc(w)+'</span>';else if(kw.has(lang==='sql'?w.toLowerCase():w))out+='<span class="c-kw">'+esc(w)+'</span>';else if(bi.has(w))out+='<span class="c-bi">'+esc(w)+'</span>';else if((lang==='go'||lang==='py')&&src[re.lastIndex]==='(')out+='<span class="c-fn">'+esc(w)+'</span>';else out+=esc(w);}
     else out+=esc(m[5]);}
   return out;}
-function code(d){const lang=d.lang||'go';return '<div class="code"><div class="code-h"><span>'+({go:'Go',sql:'SQL',yaml:'YAML',sh:'shell'}[lang]||lang)+'</span><button type="button" class="code-copy">Копировать</button></div><pre><code>'+hl(d.src.replace(/^\n/,'').replace(/\s+$/,''),lang)+'</code></pre></div>';}
+function code(d){const lang=d.lang||'go';return '<div class="code"><div class="code-h"><span>'+({go:'Go',py:'Python',sql:'SQL',yaml:'YAML',sh:'shell'}[lang]||lang)+'</span><button type="button" class="code-copy">Копировать</button></div><pre><code>'+hl(d.src.replace(/^\n/,'').replace(/\s+$/,''),lang)+'</code></pre></div>';}
 
 function render(d){const inner=d.type==='flow'?flow(d):d.type==='seq'?seq(d):d.type==='chart'?chart(d):d.type==='gantt'?gantt(d):d.type==='code'?code(d):'';
   return '<figure class="viz viz-'+d.type+'">'+(d.type==='code'?inner:'<div class="vz-wrap">'+inner+'</div>')+(d.cap?'<figcaption>'+d.cap+'</figcaption>':'')+'</figure>';}

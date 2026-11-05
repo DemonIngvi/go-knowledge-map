@@ -42,3 +42,6 @@ svg.onlypath .t-node:not(.on),svg.onlypath .t-edge:not(.on){display:none}
 .tp-actions{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
 .tp-save{display:flex;gap:8px;margin:6px 0 0}
 .tp-save input{flex:1;min-width:0;font:14px var(--f-body);padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+.t-edge.tr{stroke-opacity:.09}
+svg.pathmode .t-edge.tr.on{stroke-opacity:.55;stroke-width:1.4}
+.t-num{font:600 9.5px var(--f-mono);fill:var(--muted);pointer-events:none}

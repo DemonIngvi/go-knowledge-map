@@ -82,8 +82,7 @@
       <h1 class="view-h">Дерево знаний</h1>
       <p class="lead">Темы разложены по уровням глубины, слева направо: от фундамента к экспертизе. Стрелка ведёт от темы, которую нужно знать раньше, к теме, которая на неё опирается. Щёлкните тему, чтобы подсветить маршрут; двойной щелчок открывает статью.</p>
       <div class="t-tools">
-        <div id="tmode" role="group" aria-label="Режим"><button type="button" data-m="to" aria-pressed="true">Маршрут к теме</button><button type="button" data-m="from" aria-pressed="false">Что открывает тема</button><button type="button" data-m="ab" aria-pressed="false">Путь A → B</button></div>
-        <label class="stat" style="display:inline"><input type="checkbox" id="tAll"> все предпосылки</label>
+        <div id="tmode" role="group" aria-label="Режим"><button type="button" data-m="to" aria-pressed="true">Маршрут к теме</button><button type="button" data-m="all" aria-pressed="false">Все предпосылки темы</button><button type="button" data-m="multi" aria-pressed="false">Несколько тем</button></div>
         <label class="stat" style="display:inline"><input type="checkbox" id="tOnly"> только маршрут</label>
         <label class="stat" style="display:inline"><input type="checkbox" id="tCore"> только ядро</label>
         <button type="button" class="btn" id="tClear">Сбросить выбор</button><button type="button" class="btn" id="tfit">Показать всё</button>
@@ -96,7 +95,7 @@
 
     <section class="view" id="v-plan" hidden>
       <h1 class="view-h">План обучения</h1>
-      <p class="lead">Пять уровней глубины по спиральной программе: каждый уровень проходит все области — от общих понятий к внутреннему устройству и тонкой настройке. Уровни 1–3 — то, что ждут от middle/senior Go-разработчика; 4 — внутреннее устройство для сильного senior; 5 — экспертиза, которую берут по мере надобности. Отметки ставятся по результатам тестов.</p>
+      <p class="lead">Пять уровней глубины по спиральной программе: каждый уровень проходит все области — от общих понятий к внутреннему устройству и тонкой настройке. Уровни 1–3 — то, что ждут от middle/senior Go-разработчика; 4 — внутреннее устройство для сильного senior; 5 — экспертиза, которую берут по мере надобности. Внутри уровня темы сгруппированы по зонам и пронумерованы в порядке изучения: каждая тема идёт после своих предпосылок. Отметки ставятся по результатам тестов.</p>
       <div class="keys"><span><b>●</b> ядро — спрашивают на собеседованиях</span><span>○ важно в работе</span><span>· кругозор</span></div>
       <div class="my-plans" id="myPlans"></div>
       <h2 class="mp-h">Общий план по уровням</h2>
@@ -124,6 +123,7 @@
 </div>
 <script src="js/core/kb.js"></script>
 <script src="content/manifest.js"></script>
+<script src="content/prereq.js"></script>
 <script src="js/loader.js"></script>
 </body>
 </html>

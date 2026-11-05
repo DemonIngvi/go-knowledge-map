@@ -6,6 +6,8 @@ function show(v){['graph','tree','plan','terms','review','session','topic'].forE
 function route(){const h=location.hash.slice(1);
   if(h.startsWith('t-')){show('topic');renderTopic(h.slice(2),'theory');window.scrollTo(0,0);}
   else if(h.startsWith('q-')){show('topic');renderTopic(h.slice(2),'quiz');window.scrollTo(0,0);}
+  else if(h.startsWith('e-')){show('topic');renderTopic(h.slice(2),'ex');window.scrollTo(0,0);}
+  else if(h.startsWith('c-')){show('topic');renderTopic(h.slice(2),'case');window.scrollTo(0,0);}
   else if(h==='session'){show('session');renderSession();window.scrollTo(0,0);document.title='Повторение — Карта знаний Go-бэкенда';}
   else if(h==='plan'){show('plan');renderPlan();document.title='Карта знаний Go-бэкенда';}
   else if(h==='terms'){show('terms');document.title='Карта знаний Go-бэкенда';}

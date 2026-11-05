@@ -6,7 +6,8 @@ function renderPlan(){
     const MK={ok:'✓',soon:'◔',due:'↻',fail:'✗'};
     const d=document.createElement('div');d.className='stage';
     d.innerHTML='<div class="stage-n">'+String(s.n).padStart(2,'0')+'</div><h3>'+s.name+'</h3><div class="meta"><span>'+s.w+'</span><span>'+ts.length+' тем</span><span>ядро: '+ts.filter(t=>t.l===1).length+'</span><span>свежих '+dn+'/'+ts.length+'</span>'+(sl?'<span style="color:var(--warn)">устарело '+sl+'</span>':'')+'</div><div><p>'+s.goal+'</p><div class="bar"><i style="width:'+(ts.length?dn/ts.length*100:0)+'%"></i></div></div>'+
-    '<div class="st-topics">'+ts.map(t=>{const x=st(t.id);return '<a href="#t-'+t.id+'" class="l'+t.l+(x!=='new'?' st-'+x:'')+'" style="--h:'+BI[t.b].h+'"><span class="dot"></span>'+LVS[t.l]+' '+t.t+(MK[x]?' <span class="mk">'+MK[x]+'</span>':'')+'</a>';}).join('')+'</div>';
+    '<div class="st-zones">'+ZONES.map(z=>{const zt=topoOrder(ts.filter(t=>ZB[t.b]===z.id).map(t=>T.indexOf(t))).map(i=>T[i]);if(!zt.length)return '';const zf=zt.filter(t=>isFresh(t.id)).length;
+      return '<div class="st-zone" style="--zh:'+z.h+'"><div class="st-zh"><span class="zdot"></span>'+z.name+'<span class="st-zc">'+zt.length+' · изучено '+zf+'</span></div><div class="st-topics">'+zt.map((t,k)=>{const x=st(t.id);return '<a href="#t-'+t.id+'" class="l'+t.l+(x!=='new'?' st-'+x:'')+'" style="--h:'+BI[t.b].h+'"><span class="mp-n">'+(k+1)+'</span><span class="dot"></span>'+LVS[t.l]+' '+t.t+(MK[x]?' <span class="mk">'+MK[x]+'</span>':'')+'</a>';}).join('')+'</div></div>';}).join('')+'</div>';
     box.appendChild(d);});
 }
 
