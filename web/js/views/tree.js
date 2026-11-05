@@ -1,7 +1,7 @@
 // Дерево знаний по уровням глубины 1→5 слева направо (большой уровень делится на подстолбцы).
 // Ребро «предпосылка → тема»: связанная тема более раннего этапа (в одном этапе — ядро раньше кругозора).
 // Транзитивные рёбра убраны, чтобы оставался читаемый маршрут.
-const TR={built:false,mode:'to',sel:null,selB:null,onlyPath:false,coreOnly:false,all:false,multi:new Set()};
+const TR={vert:(()=>{try{return localStorage.getItem('gokb-tree-vert')==='1';}catch(e){return false;}})(),built:false,mode:'to',sel:null,selB:null,onlyPath:false,coreOnly:false,all:false,multi:new Set()};
 function ensurePrereq(){if(!TR.par){const r=buildPrereq();TR.par=r.par;TR.kid=r.kid;TR.main=r.main;TR.mkid=r.mkid;TR.trans=r.trans;}}
 // порядок изучения внутри набора тем: каждая тема после всех своих предпосылок, затем по уровню и важности
 function topoOrder(ids){ensurePrereq();const S=new Set(ids),indeg={},ZO=ZONES.map(z=>z.id);
@@ -49,24 +49,41 @@ function initTree(){
       if(li===0)return;
       const bc=i=>{const p=[...par[i]].filter(x=>posY[x]!==undefined);return p.length?p.reduce((q,x)=>q+posY[x],0)/p.length:posY[i];};
       L.sort((a,b)=>zcmp(a,b)||bc(a)-bc(b)||T[a].b.localeCompare(T[b].b));L.forEach((i,k)=>posY[i]=k);});}
-  // группа зоны целиком в одном подстолбце; не влезла — следующий подстолбец
-  const P={},groups=[],colX=[],subs=[];TR.num={};let cx=PAD,maxH=0;
-  layers.forEach((L,li)=>{colX.push(cx);let col=0,y=0;
+  const P={},groups=[],boxes=[];TR.num={};
+  const place=(seg,gx,gy,rows)=>{seg.forEach((i,k)=>{P[i]={x:gx+Math.floor(k/rows)*CW,y:gy+GH+(k%rows)*RH};TR.num[i]=k+1;});};
+  if(!TR.vert){
+  // горизонтально: уровни — столбцы слева направо; группа зоны целиком в одном подстолбце, не влезла — следующий
+  let cx=PAD,maxH=0;
+  layers.forEach((L,li)=>{const x0=cx;let col=0,y=0;
     ZORD.map(z=>L.filter(i=>zoneOf(i)===z)).filter(g=>g.length).map(seg=>topoOrder(seg)).forEach(seg=>{const h=GH+seg.length*RH+GG;if(y>0&&y+h>MAXH){col++;y=0;}
-      const gx=cx+col*CW,gy=PAD+40+y;groups.push({z:zoneOf(seg[0]),x:gx,y:gy,n:seg.length});
-      seg.forEach((i,k)=>{P[i]={x:gx,y:gy+GH+k*RH};TR.num[i]=k+1;});y+=h;maxH=Math.max(maxH,y);});
-    subs.push(col+1);cx+=(col+1)*CW+40;});
-  TR.P=P;TR.dims={w:cx-40-CW+NW+PAD,h:PAD+40+maxH+PAD};
+      const gx=cx+col*CW,gy=PAD+40+y;groups.push({z:zoneOf(seg[0]),x:gx,y:gy,n:seg.length,c:1,t:seg.length});place(seg,gx,gy,seg.length);y+=h;maxH=Math.max(maxH,y);});
+    boxes.push({x0,wd:col*CW+NW});cx+=(col+1)*CW+40;});
+  TR.dims={w:cx-40-CW+NW+PAD,h:PAD+40+maxH+PAD};
+  boxes.forEach((b,li)=>{b.x=b.x0-14;b.y=PAD-26;b.w=b.wd+28;b.h=TR.dims.h-PAD;b.lx=b.x0+b.wd/2;b.ly=PAD-4;b.anchor='middle';});
+  }else{
+  // вертикально: уровни — строки сверху вниз, зоны — постоянные столбцы; в ячейке до VR тем в столбце, дальше перенос
+  const VR=10,LW=150,cells=layers.map(L=>ZORD.map(z=>topoOrder(L.filter(i=>zoneOf(i)===z))));
+  const zc=ZORD.map((z,zi)=>Math.max(1,...cells.map(r=>Math.ceil(r[zi].length/VR))));
+  const zx=[];let x=PAD+LW;zc.forEach((c,zi)=>{zx.push(x);x+=c*CW+30;});
+  let y=PAD;cells.forEach((row,li)=>{const rows=Math.min(VR,Math.max(1,...row.map(c=>c.length)));const h=40+GH+rows*RH+GG;
+    row.forEach((seg,zi)=>{if(!seg.length)return;const r=Math.min(VR,seg.length);groups.push({z:ZORD[zi],x:zx[zi],y:y+40,n:r,c:Math.ceil(seg.length/VR),t:seg.length});place(seg,zx[zi],y+40,VR);});
+    boxes.push({x:PAD-14,y:y,w:x-30-PAD+28-CW+NW,h:h,lx:PAD,ly:y+26,anchor:'start'});y+=h+20;});
+  TR.dims={w:x-30-CW+NW+PAD,h:y+PAD};
+  ZORD.forEach((z,zi)=>{boxes.zl=boxes.zl||[];boxes.zl.push({x:zx[zi],z});});
+  }
+  TR.P=P;
   const mk=(n,a,p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
   svgT.innerHTML='';const root=mk('g',{},svgT),gS=mk('g',{},root),gE=mk('g',{},root),gN=mk('g',{},root);
-  STAGES.forEach((st,li)=>{const x=colX[li],wd=(subs[li]-1)*CW+NW;mk('rect',{x:x-14,y:PAD-26,width:wd+28,height:TR.dims.h-PAD,rx:14,class:'t-col'},gS);
-    const t=mk('text',{x:x+wd/2,y:PAD-4,class:'t-stage'},gS);t.textContent='Уровень '+st.n;
-    const t2=mk('text',{x:x+wd/2,y:PAD+14,class:'t-stage2'},gS);t2.textContent=st.name;});
-  groups.forEach(g=>{const z=ZI[g.z];const r=mk('rect',{x:g.x-7,y:g.y,width:NW+14,height:GH+g.n*RH-2,rx:10,class:'t-grp'},gS);r.style.setProperty('--zh',z.h);
-    const t=mk('text',{x:g.x+2,y:g.y+18,class:'t-glabel'},gS);t.textContent=z.name+' · '+g.n;t.style.setProperty('--zh',z.h);});
+  STAGES.forEach((st,li)=>{const b=boxes[li];mk('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:14,class:'t-col'},gS);
+    const t=mk('text',{x:b.lx,y:b.ly,class:'t-stage','text-anchor':b.anchor},gS);t.textContent='Уровень '+st.n;
+    const t2=mk('text',{x:b.lx,y:b.ly+18,class:'t-stage2','text-anchor':b.anchor},gS);t2.textContent=st.name;});
+  (boxes.zl||[]).forEach(z=>{const t=mk('text',{x:z.x,y:PAD-12,class:'t-glabel'},gS);t.textContent=ZI[z.z].name;t.style.setProperty('--zh',ZI[z.z].h);});
+  groups.forEach(g=>{const z=ZI[g.z];const r=mk('rect',{x:g.x-7,y:g.y,width:(g.c-1)*CW+NW+14,height:GH+g.n*RH-2,rx:10,class:'t-grp'},gS);r.style.setProperty('--zh',z.h);
+    const t=mk('text',{x:g.x+2,y:g.y+18,class:'t-glabel'},gS);t.textContent=(TR.vert?'':z.name+' · ')+g.t;t.style.setProperty('--zh',z.h);});
   TR.edgeEls=[];
   T.forEach((t,j)=>par[j].forEach(i=>{const isMain=main[j]===i,isTr=TR.trans.has(i+'|'+j);const a=P[i],b=P[j];let d;
-    if(a.x===b.x){const x=a.x+NW,y1=a.y+NH/2,y2=b.y+NH/2,bx=x+16+Math.min(70,Math.abs(y2-y1)*.12);d='M'+x+','+y1+' C'+bx+','+y1+' '+bx+','+y2+' '+x+','+y2;}
+    if(TR.vert&&T[i].s!==T[j].s){const x1=a.x+NW/2,y1=a.y+NH,x2=b.x+NW/2,y2=b.y,my=(y1+y2)/2;d='M'+x1+','+y1+' C'+x1+','+my+' '+x2+','+my+' '+x2+','+y2;}
+    else if(a.x===b.x){const x=a.x+NW,y1=a.y+NH/2,y2=b.y+NH/2,bx=x+16+Math.min(70,Math.abs(y2-y1)*.12);d='M'+x+','+y1+' C'+bx+','+y1+' '+bx+','+y2+' '+x+','+y2;}
     else{const fwd=a.x<b.x,x1=fwd?a.x+NW:a.x,x2=fwd?b.x:b.x+NW,y1=a.y+NH/2,y2=b.y+NH/2,mx=(x1+x2)/2;d='M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2;}
     const p=mk('path',{d,class:'t-edge'+(isMain?' main':'')+(isTr?' tr':'')},gE);TR.edgeEls.push({p,i,j,isMain});}));
   TR.nodeEls=T.map((t,i)=>{const g=mk('g',{class:'t-node l'+t.l,transform:'translate('+P[i].x+','+P[i].y+')',tabindex:0,role:'button','aria-label':t.t},gN);g.style.setProperty('--h',BI[t.b].h);
@@ -80,7 +97,7 @@ function initTree(){
   // масштаб и перетаскивание
   const full={x:0,y:0,w:TR.dims.w,h:TR.dims.h};let vb={...full};
   const set=()=>svgT.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);
-  TR.fitH=()=>{const r=svgT.getBoundingClientRect();const asp=(r.width||1200)/(r.height||600);vb={x:0,y:0,h:full.h,w:Math.min(full.w,full.h*asp)};set();};
+  TR.fitH=()=>{const r=svgT.getBoundingClientRect();const asp=(r.width||1200)/(r.height||600);vb=TR.vert?{x:0,y:0,w:full.w,h:Math.min(full.h,full.w/asp)}:{x:0,y:0,h:full.h,w:Math.min(full.w,full.h*asp)};set();};
   TR.fit=()=>{vb={...full};set();};TR.fitH();
   svgT.addEventListener('wheel',e=>{e.preventDefault();TR.touched=true;const r=svgT.getBoundingClientRect();const s=Math.max(vb.w/r.width,vb.h/r.height);const ox=(r.width*s-vb.w)/2,oy=(r.height*s-vb.h)/2;
     const px=vb.x-ox+(e.clientX-r.left)*s,py=vb.y-oy+(e.clientY-r.top)*s;const f=e.deltaY>0?1.15:1/1.15;const nw=Math.min(full.w*1.3,Math.max(300,vb.w*f));const k=nw/vb.w;
@@ -94,7 +111,10 @@ function initTree(){
   document.querySelectorAll('#tmode button').forEach(b=>b.onclick=()=>{TR.mode=b.dataset.m;TR.sel=null;TR.selB=null;TR.multi=new Set();
     document.querySelectorAll('#tmode button').forEach(x=>x.setAttribute('aria-pressed',x===b));paintTree();});
   document.getElementById('tOnly').onchange=e=>{TR.onlyPath=e.target.checked;paintTree();};
+  document.getElementById('tOne').onchange=e=>{TR.oneLink=e.target.checked;paintTree();};
   document.getElementById('tCore').onchange=e=>{TR.coreOnly=e.target.checked;paintTree();};
+  const vb_=document.getElementById('tVert');vb_.setAttribute('aria-pressed',TR.vert);vb_.onclick=()=>{TR.vert=!TR.vert;try{localStorage.setItem('gokb-tree-vert',TR.vert?'1':'0');}catch(e){}
+    const old=document.getElementById('tsvg');old.replaceWith(old.cloneNode(false));TR.built=false;TR.touched=false;renderTree();};
   document.getElementById('tClear').onclick=()=>{TR.sel=null;TR.selB=null;TR.multi=new Set();paintTree();};}
 
 const ancestors=(i,full)=>{if(!full){const s=new Set([i]);let x=i;while(TR.main[x]>=0){x=TR.main[x];s.add(x);}return s;}const s=new Set([i]),st=[i];while(st.length){const x=st.pop();TR.par[x].forEach(p=>{if(!s.has(p)){s.add(p);st.push(p);}});}return s;};
@@ -113,7 +133,11 @@ function paintTree(){
   svgT.classList.toggle('pathmode',!!set);svgT.classList.toggle('onlypath',!!set&&TR.onlyPath);
   TR.nodeEls.forEach((g,i)=>{const t=T[i];const x=st(t.id);g.classList.remove('st-ok','st-soon','st-due','st-fail');if(x!=='new')g.classList.add('st-'+x);
     g.classList.toggle('on',!!set&&set.has(i));g.classList.toggle('sel',TR.multi.has(i));g.classList.toggle('dim-core',TR.coreOnly&&t.l!==1);});
-  TR.edgeEls.forEach(e=>e.p.classList.toggle('on',!!set&&set.has(e.i)&&set.has(e.j)&&(TR.mode!=='to'||e.isMain)));
+  // п.3 плана: в режимах «все предпосылки» и «несколько тем» можно оставить одну связь на пару блоков (ближайшие уровни, затем главная)
+  const one=TR.oneLink&&TR.mode!=='to'&&set,keep=new Map();
+  if(one)TR.edgeEls.forEach(e=>{if(!(set.has(e.i)&&set.has(e.j)))return;const bi=T[e.i].b,bj=T[e.j].b;if(bi===bj)return;const k=bi+'>'+bj,sc=(T[e.j].s-T[e.i].s)*10-(e.isMain?5:0)-(TR.trans.has(e.i+'|'+e.j)?0:3);const c=keep.get(k);if(!c||sc<c.sc)keep.set(k,{e,sc});});
+  const kept=new Set([...keep.values()].map(x=>x.e));
+  TR.edgeEls.forEach(e=>e.p.classList.toggle('on',!!set&&set.has(e.i)&&set.has(e.j)&&(TR.mode!=='to'||e.isMain)&&(!one||T[e.i].b===T[e.j].b||kept.has(e))));
   const panel=document.getElementById('tpanel');
   if(!set){panel.innerHTML='<p class="stat">'+(TR.mode==='multi'?'Щёлкайте темы — каждая добавляется к выбору, подсвечиваются все их предпосылки. Повторный щелчок убирает тему.':TR.mode==='all'?'Щёлкните тему — подсветятся все темы нижних уровней (и более базовые на том же), которые нужно закрыть перед ней. Ctrl+щелчок добавляет цели.':'Щёлкните тему — подсветится маршрут от начальных тем до неё. Ctrl+щелчок добавляет ещё цели: маршрут построится ко всем сразу.')+'</p><p class="stat">Двойной щелчок открывает статью.</p>';return;}
   const list=topoOrder([...set]).map(i=>T[i]).filter(t=>!TR.coreOnly||t.l===1);
