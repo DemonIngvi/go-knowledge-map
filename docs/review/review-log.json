@@ -1,0 +1,167 @@
+{
+ "total_topics": 184,
+ "limit_note": "прошлый упор в 5-часовой лимит: около 3,1 млн по счётчику агентов (пилот + волны 1–3 этапа «Язык»); сброс в 13:00 МСК",
+ "window_start_tokens": 2690000,
+ "accepted": [
+  "channels",
+  "pg-vacuum",
+  "kafka-delivery",
+  "go-basics",
+  "slices",
+  "maps",
+  "interfaces",
+  "errors",
+  "strings",
+  "structs",
+  "go-json",
+  "generics",
+  "go-iterators",
+  "go-reflect",
+  "go-template",
+  "cgo",
+  "go-modules",
+  "go-libs",
+  "go-lint",
+  "go-build",
+  "hll",
+  "dry",
+  "trie",
+  "delve",
+  "atomic",
+  "python-concurrency",
+  "goroutines",
+  "dsu",
+  "conc-patterns",
+  "sync",
+  "python-basics"
+ ],
+ "tokens": {
+  "channels": {
+   "ed": 80838,
+   "ver": 71333
+  },
+  "pg-vacuum": {
+   "ed": 80030,
+   "ver": 74021
+  },
+  "kafka-delivery": {
+   "ed": 84280,
+   "ver": 70246
+  },
+  "go-basics": {
+   "ed": 70186,
+   "ver": 62617
+  },
+  "slices": {
+   "ed": 65993,
+   "ver": 59222
+  },
+  "maps": {
+   "ed": 81882,
+   "ver": 70851
+  },
+  "interfaces": {
+   "ed": 69121,
+   "ver": 58416
+  },
+  "errors": {
+   "ed": 69424,
+   "ver": 57420
+  },
+  "strings": {
+   "ed": 65910,
+   "ver": 55880
+  },
+  "structs": {
+   "ed": 68728,
+   "ver": 58217
+  },
+  "go-json": {
+   "ed": 82085,
+   "ver": 66446
+  },
+  "generics": {
+   "ed": 74296,
+   "ver": 62991
+  },
+  "go-iterators": {
+   "ed": 76763,
+   "ver": 63774
+  },
+  "go-reflect": {
+   "ed": 79576,
+   "ver": 71520
+  },
+  "go-template": {
+   "ed": 81285,
+   "ver": 67764
+  },
+  "cgo": {
+   "ed": 86650,
+   "ver": 65769
+  },
+  "go-modules": {
+   "ed": 73623,
+   "ver": 64738
+  },
+  "go-libs": {
+   "ed": 78313,
+   "ver": 67712
+  },
+  "go-lint": {
+   "ed": 80469,
+   "ver": 78417
+  },
+  "go-build": {
+   "ed": 95183,
+   "ver": 74688
+  },
+  "delve": {
+   "ed": 93685,
+   "ver": 70000
+  },
+  "dry": {
+   "ed": 71621,
+   "ver": 59135
+  },
+  "hll": {
+   "ed": 76429,
+   "ver": 67373
+  },
+  "dsu": {
+   "ed": 69772,
+   "ver": 61202
+  },
+  "trie": {
+   "ed": 67595,
+   "ver": 68000
+  },
+  "python-basics": {
+   "ed": 69186,
+   "ver": 63161
+  },
+  "atomic": {
+   "ed": 65384,
+   "ver": 49227
+  },
+  "python-concurrency": {
+   "ed": 66000,
+   "ver": 50733
+  },
+  "goroutines": {
+   "ed": 66000,
+   "ver": 46057
+  },
+  "conc-patterns": {
+   "ed": 71374,
+   "ver": 50904
+  },
+  "sync": {
+   "ed": 73371,
+   "ver": 49107
+  },
+  "context": {
+   "ed": 74654
+  }
+ }
+}
