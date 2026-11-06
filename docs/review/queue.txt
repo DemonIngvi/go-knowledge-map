@@ -1,0 +1,159 @@
+# Очередь этапов A, B, C (порядок — этапы пути). Формат: этап<TAB>название<TAB>блок/id
+2	CPU / IO	go/goroutines
+2	CPU / IO	go/sync
+2	CPU / IO	go/context
+2	CPU / IO	go/conc-patterns
+2	CPU / IO	go/atomic
+2	CPU / IO	py/python-concurrency
+2	CPU / IO	go/scheduler
+2	CPU / IO	go/memory
+2	CPU / IO	go/gc
+2	CPU / IO	tools/pprof
+2	CPU / IO	tools/profiling
+2	CPU / IO	linux/cpu-affinity
+2	CPU / IO	linux/ebpf-tools
+3	Базы данных	pg/pg-indexes
+3	Базы данных	pg/pg-go
+3	Базы данных	pg/n-plus-one
+3	Базы данных	pg/psql
+3	Базы данных	pg/pg-explain
+3	Базы данных	pg/pg-isolation
+3	Базы данных	pg/pg-locks
+3	Базы данных	pg/pg-skip-locked
+3	Базы данных	pg/zero-downtime-migrations
+3	Базы данных	pg/plpgsql
+3	Базы данных	pg/pgbench
+3	Базы данных	pg/pg-replication
+3	Базы данных	pg/pg-mvcc
+3	Базы данных	pg/pg-btree
+3	Базы данных	pg/pg-wal
+3	Базы данных	pg/pg-toast
+3	Базы данных	pg/pg-partitioning
+3	Базы данных	pg/pg-repack
+3	Базы данных	arch/cap
+3	Базы данных	data/sharding
+3	Базы данных	arch/raft
+3	Базы данных	data/scylladb
+3	Базы данных	pg/citus
+3	Базы данных	py/pandas
+3	Базы данных	data/clickhouse
+3	Базы данных	data/elastic
+3	Базы данных	py/df-alternatives
+3	Базы данных	data/sphinx
+3	Базы данных	data/hadoop
+3	Базы данных	data/spark
+4	Git	k8s/git
+5	HTTP + API	net/osi
+5	HTTP + API	net/ip
+5	HTTP + API	net/tcp
+5	HTTP + API	net/dns-linux
+5	HTTP + API	net/udp
+5	HTTP + API	net/icmp-ttl
+5	HTTP + API	net/ipv6
+5	HTTP + API	net/mac-arp
+5	HTTP + API	net/tcpdump
+5	HTTP + API	net/packet-path
+5	HTTP + API	net/go-resolver
+5	HTTP + API	net/http
+5	HTTP + API	net/rest
+5	HTTP + API	go/net-http
+5	HTTP + API	net/grpc
+5	HTTP + API	arch/protobuf
+5	HTTP + API	arch/openapi
+5	HTTP + API	net/realtime
+5	HTTP + API	net/grpc-streaming
+5	HTTP + API	net/graphql
+5	HTTP + API	arch/layered
+5	HTTP + API	arch/contracts
+5	HTTP + API	arch/microservices
+5	HTTP + API	arch/twelve-factor
+5	HTTP + API	arch/ulid
+5	HTTP + API	neteng/planes
+5	HTTP + API	neteng/bgp
+5	HTTP + API	neteng/ospf
+5	HTTP + API	neteng/isis
+5	HTTP + API	neteng/ldp-mpls
+5	HTTP + API	neteng/stp
+5	HTTP + API	neteng/bfd
+6	Docker	k8s/docker
+6	Docker	k8s/cgroups
+7	Брокеры	kafka/kafka-core
+7	Брокеры	kafka/kafka-clients
+7	Брокеры	kafka/kafka-rebalance
+7	Брокеры	kafka/kafka-dlq
+7	Брокеры	kafka/kafka-isr
+7	Брокеры	kafka/kafka-balancer
+7	Брокеры	kafka/kafka-virtual
+7	Брокеры	kafka/kafka-mirror
+7	Брокеры	kafka/rabbitmq
+7	Брокеры	kafka/stream-vs-kafka
+7	Брокеры	arch/outbox
+7	Брокеры	arch/saga
+7	Брокеры	arch/data-bus
+7	Брокеры	arch/cqrs-es
+7	Брокеры	arch/workflow-engines
+8	Тестирование	tools/go-test
+8	Тестирование	test/test-aaa
+8	Тестирование	test/allure-bdd
+8	Тестирование	test/cute
+8	Тестирование	test/load-types
+8	Тестирование	test/pandora
+8	Тестирование	test/sitespeed
+9	Кэширование	data/redis
+9	Кэширование	data/redis-pubsub
+9	Кэширование	algo/lru
+9	Кэширование	data/cache-strategies
+9	Кэширование	algo/bloom
+10	CI/CD	k8s/gitlab-ci
+10	CI/CD	tools/starlark
+11	S3	data/s3
+11	S3	data/zstd
+11	S3	data/ceph
+12	Авторизация	sec/oauth-jwt
+12	Авторизация	arch/auth-go
+12	Авторизация	sec/rbac
+12	Авторизация	sec/kerberos
+12	Авторизация	sec/owasp
+12	Авторизация	net/crypto
+12	Авторизация	net/tls
+12	Авторизация	net/tls-layers
+12	Авторизация	sec/vault
+12	Авторизация	kafka/kafka-security
+13	Мониторинг / Логи	obs/observability
+13	Мониторинг / Логи	obs/prometheus
+13	Мониторинг / Логи	obs/tracing
+13	Мониторинг / Логи	obs/grafana-stack
+13	Мониторинг / Логи	obs/otel
+13	Мониторинг / Логи	obs/slo
+13	Мониторинг / Логи	obs/elk
+13	Мониторинг / Логи	obs/jaeger
+13	Мониторинг / Логи	obs/victoriametrics
+14	Прокси	lb/load-balancing
+14	Прокси	lb/proxies
+14	Прокси	lb/service-discovery
+14	Прокси	lb/api-gateway
+14	Прокси	arch/rate-limiting
+14	Прокси	linux/jitter
+14	Прокси	arch/resilience
+14	Прокси	net/grpc-lb
+14	Прокси	lb/p2c
+14	Прокси	net/canary-picker
+14	Прокси	lb/subsetting
+14	Прокси	lb/search-balancer
+15	Kubernetes	k8s/k8s-core
+15	Kubernetes	k8s/k3s
+15	Kubernetes	k8s/requests-limits
+15	Kubernetes	k8s/hpa
+15	Kubernetes	k8s/helm
+15	Kubernetes	k8s/kustomize
+15	Kubernetes	k8s/argocd
+15	Kubernetes	k8s/gitops
+15	Kubernetes	lb/service-mesh
+17	AI / LLM	ml/llm-basics
+17	AI / LLM	ml/ml-basics
+17	AI / LLM	ml/llm-go
+17	AI / LLM	ml/rag
+17	AI / LLM	ml/guardrails
+17	AI / LLM	ml/vector-search
+17	AI / LLM	ml/llm-harness
+17	AI / LLM	ml/ai-memory
