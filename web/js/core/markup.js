@@ -11,9 +11,16 @@ function inline(s){
 }
 function md(src){
   const out=[];
-  src.trim().split(/\n\s*\n/).forEach(blk=>{
-    const lines=blk.split('\n').map(l=>l.trim());
-    if(lines[0].startsWith('~~~')){out.push('<pre><code>'+esc(blk.trim().split('\n').slice(1,-1).join('\n'))+'</code></pre>');return;}
+  // блоки: по пустым строкам; блок кода ~~~ … ~~~ берётся целиком — с пустыми строками внутри и без пустой строки перед ним
+  const blocks=[];let cur=[];const L=src.trim().split('\n');
+  for(let i=0;i<L.length;i++){const t=L[i].trim();
+    if(t.startsWith('~~~')){if(cur.length){blocks.push(cur);cur=[];}const code=[];i++;while(i<L.length&&!L[i].trim().startsWith('~~~')){code.push(L[i]);i++;}blocks.push({code:code.join('\n')});continue;}
+    if(!t){if(cur.length){blocks.push(cur);cur=[];}continue;}
+    cur.push(L[i]);}
+  if(cur.length)blocks.push(cur);
+  blocks.forEach(blk=>{
+    if(blk.code!==undefined){out.push('<pre><code>'+esc(blk.code)+'</code></pre>');return;}
+    const lines=blk.map(l=>l.trim());
     if(lines[0].startsWith('## ')){out.push('<h3>'+inline(lines[0].slice(3))+'</h3>');lines.shift();if(!lines.length)return;}
     if(lines.every(l=>l.startsWith('|'))){
       const rows=lines.filter(l=>!/^\|[\s|:-]+\|$/.test(l)).map(l=>l.replace(/^\||\|$/g,'').split('|').map(c=>c.trim()));
